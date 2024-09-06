@@ -71,6 +71,15 @@ blueprint:
             - domain:
                 - media_player
           multiple: false
+    music_mode_timeout:
+      name: Music Mode Timeout
+      description: Time to wait before turning music mode off after musicplayer_device is paused.
+      selector:
+        duration:
+      default:
+        hours: 00
+        minutes: 05
+        seconds: 00
 trigger:
   - platform: state
     entity_id:
@@ -104,6 +113,13 @@ trigger:
       - !input musicplayer_device
     to: playing
     id: music_start
+  - platform: state
+    entity_id:
+      - !input musicplayer_device
+    to: idle
+    from: playing
+    for: !input music_mode_timeout
+    id: music_stop
 variables:
   satellite: !input satellite
   dashboard: !input dashboard
@@ -274,4 +290,22 @@ action:
             data:
               entity_id: !input satellite
               mode: music
+      - conditions:
+          - condition: trigger
+            id:
+              - music_stop
+          - condition: state
+            entity_id: !input satellite
+            attribute: mode
+            state: music
+        sequence:
+          - service: browser_mod.navigate
+            data:
+              path: "{{ home }}"
+            target:
+              device_id: "{{device_id(display)}}"
+          - action: python_script.set_state
+            data:
+              entity_id: !input satellite
+              mode: normal
 mode: parallel
