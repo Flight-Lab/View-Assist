@@ -1,0 +1,197 @@
+blueprint:
+  name: View Assist Extras - Volume control Assist & Broadcast
+  description:
+    Decreases music volume when triggered by wake-word or broadcast, raises
+    music volume when TTS ends. Must make new automation for each device. Requires
+    the use of separate and unique media_players for mediaplayer_device (recommend
+    using a reliable media_player that does not go unavailable) and musicplayer_device
+    variables in View Assist device config. (View Assist Extras - Volume control Assist
+    & Broadcast v 1.0.1)
+  domain: automation
+  source_url: https://gist.github.com/Flight-Lab/ed20af4f6f7a4a5258a668317ae61671
+  author: Flab
+  input:
+    wake:
+      name: wake
+      description: The above View Assist device entity wake sensor (example sensor.viewassist_living_room_wake)
+      selector:
+        entity:
+          filter:
+            - domain:
+                - sensor
+          multiple: false
+    stt:
+      name: STT
+      description: The above View Assist device entity STT sensor (example sensor.viewassist_living_room_stt)
+      selector:
+        entity:
+          filter:
+            - domain:
+                - sensor
+          multiple: false
+    tts:
+      name: TTS
+      description: The above View Assist device entity TTS sensor (example sensor.viewassist_living_room_tts)
+      selector:
+        entity:
+          filter:
+            - domain:
+                - sensor
+          multiple: false
+    mediaplayer_device:
+      name: mediaplayer_device
+      description: The media_player used for TTS playback.
+      selector:
+        entity:
+          filter:
+            - domain:
+                - media_player
+          multiple: false
+    musicplayer_device:
+      name: musicplayer_device
+      description: The media_player used for music playback.
+      selector:
+        entity:
+          filter:
+            - domain:
+                - media_player
+          multiple: false
+    broadcast:
+      name: Broadcast Automation
+      description: The Automation used for broadcast. (example automation.view_assist_broadcast)
+      selector:
+        entity:
+          filter:
+            - domain:
+                - automation
+          multiple: false
+      default: automation.view_assist_broadcast
+alias: View Assist Extras - Volume control Assist & Broadcast
+description: ""
+trigger:
+  - alias: wake word
+    platform: state
+    entity_id:
+      - !input wake
+    to: end
+    from: start
+    id: wake
+  - alias: stt end
+    platform: state
+    entity_id:
+      - !input stt
+    to: vad-end
+    id: stt end
+  - alias: silence
+    platform: state
+    entity_id:
+      - !input stt
+    from:
+    to: no-text-recognized
+    id: silence
+  - platform: state
+    entity_id:
+      - !input broadcast
+    attribute: current
+    id: broadcast
+    alias: broadcast
+condition: []
+action:
+  - choose:
+      - conditions:
+          - condition: and
+            conditions:
+              - condition: trigger
+                id:
+                  - wake
+              - condition: state
+                entity_id: !input musicplayer_device
+                state: playing
+        sequence:
+          - action: media_player.volume_set
+            metadata: {}
+            data:
+              volume_level: 0.5
+            target:
+              entity_id: !input musicplayer_device
+      - conditions:
+          - condition: and
+            conditions:
+              - condition: trigger
+                id:
+                  - silence
+              - condition: state
+                entity_id: !input musicplayer_device
+                state: playing
+        sequence:
+          - action: media_player.volume_set
+            metadata: {}
+            data:
+              volume_level: 1
+            target:
+              entity_id: !input musicplayer_device
+      - conditions:
+          - condition: and
+            conditions:
+              - condition: trigger
+                id:
+                  - stt end
+              - condition: state
+                entity_id: !input musicplayer_device
+                state: playing
+        sequence:
+          - sequence:
+              - wait_for_trigger:
+                  - platform: state
+                    entity_id:
+                      - !input tts
+                    from:
+                    to: end
+              - wait_for_trigger:
+                  - platform: state
+                    entity_id:
+                      - !input mediaplayer_device
+                    from: playing
+                    to: idle
+              - action: media_player.volume_set
+                metadata: {}
+                data:
+                  volume_level: 1
+                target:
+                  entity_id: !input musicplayer_device
+      - conditions:
+          - condition: and
+            conditions:
+              - condition: trigger
+                id:
+                  - broadcast
+              - condition: state
+                entity_id: !input musicplayer_device
+                state: playing
+        sequence:
+          - sequence:
+              - wait_for_trigger:
+                  - platform: state
+                    entity_id:
+                      - !input mediaplayer_device
+                    from:
+                    to: playing
+              - action: media_player.volume_set
+                metadata: {}
+                data:
+                  volume_level: 0.5
+                target:
+                  entity_id: !input musicplayer_device
+              - wait_for_trigger:
+                  - platform: state
+                    entity_id:
+                      - !input mediaplayer_device
+                    from: playing
+                    to: idle
+              - action: media_player.volume_set
+                metadata: {}
+                data:
+                  volume_level: 1
+                target:
+                  entity_id: !input musicplayer_device
+mode: restart
