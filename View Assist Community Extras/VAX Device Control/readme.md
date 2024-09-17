@@ -14,7 +14,7 @@
 
 <summary>AirReceiver Setup:</summary>
 
-1) In AirReceiver settings, make sure both Airplay <sub>IOS Media Receiver</sub> and AirTunes Audio <sub>AirPort Express Speaker</sub> are selected. The media_player entity we want to use is only made when both of these are checked. [✓]
+1) In AirReceiver settings, make sure both Airplay <sub>IOS Media Receiver</sub> and AirTunes Audio <sub>AirPort Express Speaker</sub> are selected. The media_player entity we want to use is only made when both of these are checked.
 (You do not need the other options selected for this but they will not harm anything if you choose to).
 
 3) Scroll down and select Advanced Settings.
