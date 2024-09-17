@@ -16,7 +16,7 @@
 
 <details>
 
-<summary>other Confirmed Working Media Players:</summary>
+<summary>Other Confirmed Working Media Players:</summary>
 
 * [Fully Kiosk Browser](https://play.google.com/store/apps/details?id=de.ozerov.fully&hl=en_US) media player (exposed by Music Assistant) 
 > [!WARNING]
