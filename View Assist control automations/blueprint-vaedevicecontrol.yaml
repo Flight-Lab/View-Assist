@@ -82,32 +82,43 @@ blueprint:
             - domain:
                 - switch
           multiple: false
-    mediaplayer_device:
-      name: mediaplayer_device
-      description: The media_player used for TTS playback.
-      selector:
-        entity:
-          filter:
-            - domain:
-                - media_player
-    musicplayer_device:
-      name: musicplayer_device
-      description: The media_player used for music playback.
-      selector:
-        entity:
-          filter:
-            - domain:
-                - media_player
-          multiple: false
-    music_mode_timeout:
-      name: Music Mode Timeout
-      description: Time to wait before turning music mode off after musicplayer_device is paused.
-      selector:
-        duration:
-      default:
-        hours: 00
-        minutes: 05
-        seconds: 00
+    extras:
+      name: Extras
+      icon: mdi:exclamation-thick
+      collapsed: true
+      input:
+        popup_intent:
+          name: Pop-Up Intent
+          description: Uses Browsermod pop up to display entity control instead of switching to the intent view.
+          selector:
+            boolean: {}
+          default: false
+        mediaplayer_device:
+          name: mediaplayer_device
+          description: The media_player used for TTS playback.
+          selector:
+            entity:
+              filter:
+                - domain:
+                    - media_player
+        musicplayer_device:
+          name: musicplayer_device
+          description: The media_player used for music playback.
+          selector:
+            entity:
+              filter:
+                - domain:
+                    - media_player
+              multiple: false
+        music_mode_timeout:
+          name: Music Mode Timeout
+          description: Time to wait before turning music mode off after musicplayer_device is paused. Leave set to 0 if no timeout desired.
+          selector:
+            duration:
+          default:
+            hours: 00
+            minutes: 00
+            seconds: 00
 trigger:
   - platform: state
     entity_id:
@@ -159,6 +170,7 @@ variables:
   micdevice: !input micdevice
   intent: !input intent
   intent_view: !input intent_view
+  popup_intent: !input popup_intent
   mediaplayer_device: !input mediaplayer_device
   musicplayer_device: !input musicplayer_device
   music_mode_timeout: !input music_mode_timeout
@@ -283,6 +295,23 @@ action:
             enabled: true
           - if:
               - condition: template
+                value_template: "{{ popup_intent != true }}"
+              - condition: template
+                value_template: >-
+                  {% if 'id' in
+                  state_attr(intent,
+                  'intent_output')['response']['data']['success'][0] %} true {%
+                  else %} false {% endif %}
+            then:
+              - service: browser_mod.navigate
+                data:
+                  path: "{{ intent_view }}"
+                target:
+                  device_id: "{{device_id(display)}}"
+          - if:
+              - condition: template
+                value_template: "{{ popup_intent != false }}"
+              - condition: template
                 value_template:
                   "{% if 'id' in state_attr(intent, 'intent_output')['response']['data']['success'][0]
                   %} true {% else %} false {% endif %}"
@@ -310,6 +339,8 @@ action:
           - condition: trigger
             id:
               - music_start
+          - condition: template
+            value_template: "{{ mediaplayer_device != musicplayer_device }}"
           - condition: state
             entity_id: !input satellite
             attribute: mode
@@ -328,6 +359,10 @@ action:
           - condition: trigger
             id:
               - music_stop
+          - condition: template
+            value_template: "{{ music_mode_timeout != 0 }}"
+          - condition: template
+            value_template: "{{ mediaplayer_device != musicplayer_device }}"
           - condition: state
             entity_id: !input satellite
             attribute: mode
