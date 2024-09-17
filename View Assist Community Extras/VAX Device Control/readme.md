@@ -52,5 +52,7 @@ Setting the AirTunes Audio Latency to 0(ms) in step \#3 allows for more responsi
 * The ability to use a toggle to choose between default intent view and @mr.picc010's intent pop-up. (intent pop-up uses BrowserMod)
 
 **Checks if separate media_players are used in Extras inputs and automatically enables the following features:** 
-* Set music mode and navigate to music view when media player used for musicplayer_device starts playing music. Previously this only happened when playing music using the play music voice command, now this functions when music playback is started from any trigger.
+* Set music mode and navigate to music view when the musicplayer_device starts playing. Previously this only happened when playing music using the play music voice command, now this functions when music playback is started from any trigger.
 * Music Mode/View timeout sets normal mode and returns to default home page when music playback has been stopped for a set amount of time. Previously, this would only happen when using the "stop music" voice command. This feature can be disabled by setting music timeout to 0.
+
+<!--  -->
