@@ -2,11 +2,11 @@ blueprint:
   name: View Assist Extras - Control display & audio template
   description:
     This is used as a base for setting up display control on a View Assist
-    Satellite (View Assist control v 1.2.1.E)
-    Inludes edits to
-    enable intent pop up,
-    set music mode when musicplayer_device playing,
-    set normal mode when musicplayer_device idle for set duration,
+    Satellite (View Assist control v 1.2.1 E 1.0.0)
+    Inludes edits that enable extra options.
+    Toggle intent pop up or intent view.
+    Set music mode when musicplayer_device playing.
+    Set normal mode when musicplayer_device idle for set duration.
   domain: automation
   #  source_url:
   author: Flab
