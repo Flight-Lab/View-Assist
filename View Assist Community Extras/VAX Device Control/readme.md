@@ -1,5 +1,5 @@
 # View Assist Extras Device Control
-### Controls Device Display & Audio
+ **Controls Device Display & Audio**
 
 > [!CAUTION] 
 > ## **This is an edited version of Dinki's View Assist Device Control Automation. This version includes community made features and is __not__ supported by Dinki and the View Assist team.**
