@@ -23,7 +23,7 @@
 
 5) Check AirTunes UI [✓]
 
-The media player entity we want to use will be created by the Music Assistant integration and will be called `media_player.lenovostarview_(last 3 digits of device ip)_audio`
+The media player entity we want to use will be created by the Music Assistant integration and will be called `media_player.lenovostarview_(last 3 digits of device ip)_audio`  
 ex. `media_player.lenovostarview_180_audio`
 This media player has volume controls separate from the android device volume controls, just like the Snapcast media player.
 Setting the AirTunes Audio Latency to 0(ms) in step \#3 allows for more responsive feeling TTS.
