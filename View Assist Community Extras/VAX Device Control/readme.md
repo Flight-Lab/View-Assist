@@ -12,6 +12,20 @@
 * **mediaplayer_device:** [AirReceiver](https://play.google.com/store/apps/details?id=com.softmedia.receiver&hl=en_US) audio (only exposed by Music Assistant) **$2.99**
 <details>
 
+<summary>AirReceiver Setup:</summary>
+1) In AirReceiver settings, make sure both Airplay <sub>IOS Media Receiver</sub> and AirTunes Audio <sub>AirPort Express Speaker</sub> are selected. The media_player entity we want to use is only made when both of these are checked [✓]. (You do not need the other options selected for this but they will not harm anything if you choose to).
+2) Scroll down and select Advanced Settings.
+3) Set AirTunes Audio Latency (ms) to 0(ms)
+4) Check AirTunes UI [✓]
+
+The media player entity we want to use will be created by the Music Assistant Add On and will be called `media_player.lenovostarview_(last 3 digits of your ip)_audio`
+ex. `media_player.lenovostarview_180_audio`
+This media player has volume controls separate from the android device volume controls, just like the Snapcast media player.
+Setting the AirTunes Audio Latency to 0(ms) in step \#3 allows for more responsive feeling TTS.
+
+</details>
+<details>
+
 <summary>Other Confirmed Working Media Players:</summary>
 
 * [Fully Kiosk Browser](https://play.google.com/store/apps/details?id=de.ozerov.fully&hl=en_US) media player (exposed by Music Assistant) 
