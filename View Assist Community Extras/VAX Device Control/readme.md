@@ -12,7 +12,7 @@
 * **mediaplayer_device:** [AirReceiver](https://play.google.com/store/apps/details?id=com.softmedia.receiver&hl=en_US) audio (only exposed by Music Assistant) **$2.99**
 
 > [!IMPORTANT]
-> Remember to use the same media player in Stream Assist that you use in your View Assist configuration for mediaplayer_device
+> Remember to make this change in your View Assist configuration file and use the same mediaplayer_device media_player in Stream Assist.
 
 <details>
 
