@@ -5,7 +5,7 @@
 > ## **This is an edited version of Dinki's View Assist Device Control Automation. This version includes community made features and is __not__ supported by Dinki and the View Assist team.**
 
 > [!IMPORTANT]
-> Most of the new features REQUIRE mediaplayer_device and musicplayer_device to use separate media_player entities. These media players should be stable, remain available, and display reliable state changes between idle & playing. Some features rely on using media_player state change as trigger. 
+> Most of the extra features REQUIRE mediaplayer_device and musicplayer_device to use separate media_player entities. These features rely on using media_player state change as trigger, so the media players should be stable, remain available, and display reliable state changes between idle & playing.
 
 ## Recommended Media Players:
 * **musicplayer_device:** [Snapcast](https://play.google.com/store/apps/details?id=de.badaix.snapcast&hl=en_US) (only exposed by Music Assistant) **FREE**
