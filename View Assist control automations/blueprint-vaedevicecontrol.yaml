@@ -1,5 +1,5 @@
 blueprint:
-  name: TEST - View Assist Extras - Control display & audio template
+  name: View Assist Extras - Control display & audio template
   description:
     This is used as a base for setting up display control on a View Assist
     Satellite (View Assist control v 1.2.1.E)
@@ -89,7 +89,7 @@ blueprint:
       input:
         popup_intent:
           name: Pop-Up Intent
-          description: Uses Browsermod pop up to display entity control instead of switching to the intent view.
+          description: Displays entity more info using BrowserMod pop-up instead of switching to the intent view.
           selector:
             boolean: {}
           default: false
