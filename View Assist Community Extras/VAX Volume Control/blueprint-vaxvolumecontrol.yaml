@@ -111,14 +111,11 @@ action:
       initial_volume: "{{ state_attr('media_player.snap_pyramid', 'volume_level') }}"
   - choose:
       - conditions:
-          - condition: and
-            conditions:
-              - condition: trigger
-                id:
-                  - wake
-              - condition: state
-                entity_id: !input musicplayer_device
-                state: playing
+          - condition: trigger
+            id: wake
+          - condition: state
+            entity_id: !input musicplayer_device
+            state: playing
         sequence:
           - action: media_player.volume_set
             metadata: {}
@@ -127,14 +124,11 @@ action:
             target:
               entity_id: !input musicplayer_device
       - conditions:
-          - condition: and
-            conditions:
-              - condition: trigger
-                id:
-                  - silence
-              - condition: state
-                entity_id: !input musicplayer_device
-                state: playing
+          - condition: trigger
+            id: silence
+          - condition: state
+            entity_id: !input musicplayer_device
+            state: playing
         sequence:
           - action: media_player.volume_set
             metadata: {}
@@ -143,24 +137,19 @@ action:
             target:
               entity_id: !input musicplayer_device
       - conditions:
-          - condition: and
-            conditions:
-              - condition: trigger
-                id:
-                  - stt end
-              - condition: state
-                entity_id: !input musicplayer_device
-                state: playing
+          - condition: trigger
+            id: stt end
+          - condition: state
+            entity_id: !input musicplayer_device
+            state: playing
         sequence:
           - sequence:
               - wait_for_trigger:
                   - platform: state
-                    entity_id:
-                      - !input mediaplayer_device
+                    entity_id: !input mediaplayer_device
                     from: playing
                     to: idle
-                timeout:
-                  input! TTS_timeout
+                timeout: input! TTS_timeout
               - action: media_player.volume_set
                 metadata: {}
                 data:
@@ -168,20 +157,16 @@ action:
                 target:
                   entity_id: !input musicplayer_device
       - conditions:
-          - condition: and
-            conditions:
-              - condition: trigger
-                id:
-                  - broadcast
-              - condition: state
-                entity_id: !input musicplayer_device
-                state: playing
+          - condition: trigger
+            id: broadcast
+          - condition: state
+            entity_id: !input musicplayer_device
+            state: playing
         sequence:
           - sequence:
               - wait_for_trigger:
                   - platform: state
-                    entity_id:
-                      - !input mediaplayer_device
+                    entity_id: !input mediaplayer_device
                     from:
                     to: playing
               - action: media_player.volume_set
@@ -192,8 +177,7 @@ action:
                   entity_id: !input musicplayer_device
               - wait_for_trigger:
                   - platform: state
-                    entity_id:
-                      - !input mediaplayer_device
+                    entity_id: !input mediaplayer_device
                     from: playing
                     to: idle
               - action: media_player.volume_set
