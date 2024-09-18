@@ -3,10 +3,9 @@ blueprint:
   description:
     Decreases music volume when triggered by wake-word or broadcast, raises
     music volume when TTS ends. Must make new automation for each device. Requires
-    the use of separate and unique media_players for mediaplayer_device (recommend
-    using a reliable media_player that does not go unavailable) and musicplayer_device
-    variables in View Assist device config. (View Assist Extras - Volume control Assist
-    & Broadcast v 1.0.2)
+    the use of separate and unique media_players for mediaplayer_device and musicplayer_device
+    entities in View Assist device config. (View Assist Extras - Volume control Assist
+    & Broadcast v 1.0.3)
   domain: automation
   source_url: https://gist.github.com/Flight-Lab/ed20af4f6f7a4a5258a668317ae61671
   author: Flab
