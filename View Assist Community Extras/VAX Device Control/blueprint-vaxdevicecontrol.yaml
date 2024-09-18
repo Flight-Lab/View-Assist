@@ -93,6 +93,16 @@ blueprint:
           selector:
             boolean: {}
           default: false
+        popup_intent_timeout:
+          name: Pop-Up Intent Timeout
+          description: How long for intent pop-up to stay on screen.
+          selector:
+            duration:
+          default:
+            hours: 0
+            minutes: 0
+            seconds: 10
+            milliseconds: 0
         mediaplayer_device:
           name: mediaplayer_device
           description: The media_player used for TTS playback.
@@ -174,6 +184,7 @@ variables:
   mediaplayer_device: !input mediaplayer_device
   musicplayer_device: !input musicplayer_device
   music_mode_timeout: !input music_mode_timeout
+  popup_intent_timeout: !input popup_intent_timeout
 action:
   - choose:
       - conditions:
@@ -295,13 +306,9 @@ action:
             enabled: true
           - if:
               - condition: template
-                value_template: "{{ popup_intent != true }}"
-              - condition: template
-                value_template: >-
-                  {% if 'id' in
-                  state_attr(intent,
-                  'intent_output')['response']['data']['success'][0] %} true {%
-                  else %} false {% endif %}
+                value_template: 
+                  "{{ popup_intent != true and 
+                  'id' in state_attr(intent, 'intent_output')['response']['data']['success'][0] }}"
             then:
               - service: browser_mod.navigate
                 data:
@@ -310,11 +317,9 @@ action:
                   device_id: "{{device_id(display)}}"
           - if:
               - condition: template
-                value_template: "{{ popup_intent != false }}"
-              - condition: template
                 value_template:
-                  "{% if 'id' in state_attr(intent, 'intent_output')['response']['data']['success'][0]
-                  %} true {% else %} false {% endif %}"
+                  "{{ popup_intent != false and 
+                  'id' in state_attr(intent, 'intent_output')['response']['data']['success'][0] }}"
             then:
               - service: browser_mod.more_info
                 data:
@@ -325,11 +330,7 @@ action:
                     'intent_output')['response']['data']['success'][0]['id']}}
                 target:
                   device_id: "{{device_id(display)}}"
-              - delay:
-                  hours: 0
-                  minutes: 0
-                  seconds: 10
-                  milliseconds: 0
+              - delay:  !input popup_intent_timeout
               - service: browser_mod.close_popup
                 metadata: {}
                 data: {}
@@ -360,9 +361,8 @@ action:
             id:
               - music_stop
           - condition: template
-            value_template: "{{ music_mode_timeout != 0 }}"
-          - condition: template
-            value_template: "{{ mediaplayer_device != musicplayer_device }}"
+            value_template: 
+              "{{ music_mode_timeout != 0 and mediaplayer_device != musicplayer_device }}"
           - condition: state
             entity_id: !input satellite
             attribute: mode
