@@ -107,7 +107,7 @@ trigger:
 condition: []
 action:
   - variables:
-      initial_volume: "{{ state_attr('!input musicplayer_device', 'volume_level') }}"
+      initial_volume: "{{ state_attr('input.musicplayer_device', 'volume_level') }}"
   - choose:
       - conditions:
           - condition: trigger
