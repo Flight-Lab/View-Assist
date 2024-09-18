@@ -66,7 +66,8 @@ blueprint:
                 - automation
           multiple: false
       default: automation.view_assist_broadcast
-    tts_timeout: TTS Timeout
+    tts_timeout: 
+      name: TTS Timeout
       description: How long to wait after TTS failure for volume to reset. Setting too short may cut off long TTS responses.
       selector:
         duration:
