@@ -148,7 +148,7 @@ action:
                     entity_id: !input mediaplayer_device
                     from: playing
                     to: idle
-                timeout: input! tts_timeout
+                timeout: !input tts_timeout
               - action: media_player.volume_set
                 metadata: {}
                 data:
