@@ -107,6 +107,8 @@ trigger:
     alias: broadcast
 condition: []
 action:
+  - variables:
+      initial_volume: "{{ state_attr('media_player.snap_pyramid', 'volume_level') }}"
   - choose:
       - conditions:
           - condition: and
@@ -121,7 +123,7 @@ action:
           - action: media_player.volume_set
             metadata: {}
             data:
-              volume_level: 0.5
+              volume_level: "{{ initial_volume | float * 0.5 }}"
             target:
               entity_id: !input musicplayer_device
       - conditions:
@@ -137,7 +139,7 @@ action:
           - action: media_player.volume_set
             metadata: {}
             data:
-              volume_level: 1
+              volume_level: "{{ initial_volume }}"
             target:
               entity_id: !input musicplayer_device
       - conditions:
@@ -162,7 +164,7 @@ action:
               - action: media_player.volume_set
                 metadata: {}
                 data:
-                  volume_level: 1
+                  volume_level: "{{ initial_volume }}"
                 target:
                   entity_id: !input musicplayer_device
       - conditions:
@@ -185,7 +187,7 @@ action:
               - action: media_player.volume_set
                 metadata: {}
                 data:
-                  volume_level: 0.5
+                  volume_level: "{{ initial_volume | float * 0.5 }}"
                 target:
                   entity_id: !input musicplayer_device
               - wait_for_trigger:
@@ -197,7 +199,7 @@ action:
               - action: media_player.volume_set
                 metadata: {}
                 data:
-                  volume_level: 1
+                  volume_level: "{{ initial_volume }}"
                 target:
                   entity_id: !input musicplayer_device
 mode: restart
