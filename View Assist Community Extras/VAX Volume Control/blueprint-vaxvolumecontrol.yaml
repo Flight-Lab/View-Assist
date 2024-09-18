@@ -162,27 +162,26 @@ action:
             entity_id: !input musicplayer_device
             state: playing
         sequence:
-          - sequence:
-              - wait_for_trigger:
-                  - platform: state
-                    entity_id: !input mediaplayer_device
-                    from:
-                    to: playing
-              - action: media_player.volume_set
-                metadata: {}
-                data:
-                  volume_level: "{{ initial_volume | float * 0.5 }}"
-                target:
-                  entity_id: !input musicplayer_device
-              - wait_for_trigger:
-                  - platform: state
-                    entity_id: !input mediaplayer_device
-                    from: playing
-                    to: idle
-              - action: media_player.volume_set
-                metadata: {}
-                data:
-                  volume_level: "{{ initial_volume }}"
-                target:
-                  entity_id: !input musicplayer_device
+          - wait_for_trigger:
+              - platform: state
+                entity_id: !input mediaplayer_device
+                from:
+                to: playing
+          - action: media_player.volume_set
+            metadata: {}
+            data:
+              volume_level: "{{ initial_volume | float * 0.5 }}"
+            target:
+              entity_id: !input musicplayer_device
+          - wait_for_trigger:
+              - platform: state
+                entity_id: !input mediaplayer_device
+                from: playing
+                to: idle
+          - action: media_player.volume_set
+            metadata: {}
+            data:
+              volume_level: "{{ initial_volume }}"
+            target:
+              entity_id: !input musicplayer_device
 mode: restart
