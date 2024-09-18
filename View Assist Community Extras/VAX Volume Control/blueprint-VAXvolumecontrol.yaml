@@ -95,7 +95,6 @@ trigger:
     platform: state
     entity_id:
       - !input stt
-    from:
     to: no-text-recognized
     id: silence
   - platform: state
@@ -104,10 +103,12 @@ trigger:
     attribute: current
     id: broadcast
     alias: broadcast
+variables:
+  musicplayer_device: !input musicplayer_device
 condition: []
 action:
   - variables:
-      initial_volume: "{{ state_attr(input.musicplayer_device, 'volume_level') }}"
+      initial_volume: "{{ state_attr(musicplayer_device, 'volume_level') }}"
   - choose:
       - conditions:
           - condition: trigger
