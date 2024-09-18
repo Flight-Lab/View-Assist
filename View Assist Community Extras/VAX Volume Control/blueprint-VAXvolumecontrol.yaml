@@ -107,7 +107,7 @@ trigger:
 condition: []
 action:
   - variables:
-      initial_volume: "{{ state_attr('input.musicplayer_device', 'volume_level') }}"
+      initial_volume: "{{ state_attr(input.musicplayer_device, 'volume_level') }}"
   - choose:
       - conditions:
           - condition: trigger
@@ -142,19 +142,18 @@ action:
             entity_id: !input musicplayer_device
             state: playing
         sequence:
-          - sequence:
-              - wait_for_trigger:
-                  - platform: state
-                    entity_id: !input mediaplayer_device
-                    from: playing
-                    to: idle
-                timeout: !input tts_timeout
-              - action: media_player.volume_set
-                metadata: {}
-                data:
-                  volume_level: "{{ initial_volume }}"
-                target:
-                  entity_id: !input musicplayer_device
+          - wait_for_trigger:
+              - platform: state
+                entity_id: !input mediaplayer_device
+                from: playing
+                to: idle
+            timeout: !input tts_timeout
+          - action: media_player.volume_set
+            metadata: {}
+            data:
+              volume_level: "{{ initial_volume }}"
+            target:
+              entity_id: !input musicplayer_device
       - conditions:
           - condition: trigger
             id: broadcast
