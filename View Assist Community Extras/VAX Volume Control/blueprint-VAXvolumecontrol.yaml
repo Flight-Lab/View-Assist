@@ -116,7 +116,7 @@ action:
             state: playing
         sequence:
           - variables:
-              initial_volume: "{{ state_attr('musicplayer_device', 'volume_level') }}"
+              initial_volume: "{{ state_attr(musicplayer_device, 'volume_level') }}"
           - action: media_player.volume_set
             metadata: {}
             data:
@@ -131,7 +131,7 @@ action:
             state: playing
         sequence:
           - variables:
-              lowered_volume: "{{ state_attr('musicplayer_device', 'volume_level') }}"
+              lowered_volume: "{{ state_attr(musicplayer_device, 'volume_level') }}"
           - action: media_player.volume_set
             metadata: {}
             data:
@@ -146,7 +146,7 @@ action:
             state: playing
         sequence:
           - variables:
-              lowered_volume: "{{ state_attr('musicplayer_device', 'volume_level') }}"
+              lowered_volume: "{{ state_attr(musicplayer_device, 'volume_level') }}"
           - wait_for_trigger:
               - platform: state
                 entity_id: !input mediaplayer_device
@@ -167,7 +167,7 @@ action:
             state: playing
         sequence:
           - variables:
-              initial_volume: "{{ state_attr('musicplayer_device', 'volume_level') }}"
+              initial_volume: "{{ state_attr(musicplayer_device, 'volume_level') }}"
           - wait_for_trigger:
               - platform: state
                 entity_id: !input mediaplayer_device
