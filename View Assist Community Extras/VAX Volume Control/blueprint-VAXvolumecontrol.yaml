@@ -80,22 +80,26 @@ description: ""
 trigger:
   - alias: wake word
     platform: state
-    entity_id: !input wake
+    entity_id: 
+      - !input wake
     to: end
     from: start
     id: wake
   - alias: stt end
     platform: state
-    entity_id: !input stt
+    entity_id: 
+      - !input stt
     to: vad-end
     id: stt end
   - alias: silence
     platform: state
-    entity_id: !input stt
+    entity_id: 
+      - !input stt
     to: no-text-recognized
     id: silence
   - platform: state
-    entity_id: !input broadcast
+    entity_id: 
+      - !input broadcast
     attribute: current
     id: broadcast
     alias: broadcast
