@@ -15,7 +15,7 @@
 <summary>AirReceiver Setup:</summary>
 
 1) In AirReceiver settings, make sure both Airplay <sub>IOS Media Receiver</sub> and AirTunes Audio <sub>AirPort Express Speaker</sub> are selected. The media_player entity we want to use is only made when both of these are checked.
-(You do not need the other options selected for this but they will not harm anything if you choose to).
+(You do not need the other options selected for this but they will not harm anything if you choose to. I do, however, recommend unchecking them as they will create even more media player entities. One even creates a media server.)
 
 3) Scroll down and select Advanced Settings.
 
@@ -25,7 +25,7 @@
 
 The media player entity we want to use will be created by the Music Assistant integration and will be called `media_player.lenovostarview_(last 3 digits of device ip)_audio`  
 ex. `media_player.lenovostarview_180_audio`  
-This media player has volume controls separate from the android device volume controls, just like the Snapcast media player.
+This media player has volume controls independent from the android device volume controls, just like the Snapcast media player.
 Setting the AirTunes Audio Latency to 0(ms) in step \#3 allows for a more responsive feeling TTS.
 
 </details>
