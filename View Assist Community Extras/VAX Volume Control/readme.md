@@ -1,5 +1,6 @@
 # Music Volume Control during Assist & Broadcast
 **What this blueprint does:**
+
 When Assist or Broadcast is triggered while music playback is occuring, music volume is stored and decreased by 50% and returns to initial music volume when no STT is detected or when TTS ends.
 
 > [!WARNING]
