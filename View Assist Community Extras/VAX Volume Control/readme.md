@@ -6,7 +6,7 @@ When Assist or Broadcast is triggered while music playback is occuring, music vo
 > This blueprint will eventually be merged into VAX Device Control
 
 > [!important]
-> REQUIRES the mediaplayer_device and musicplayer_device in your View Assist device config file to use separate media_player entities. These features rely on using media_player state change as a trigger, so the media players must also be stable, remain available, and display reliable state changes between idle & playing. Remember to also use the mediaplayer_device media_player in Stream Assist
+> REQUIRES the mediaplayer_device and musicplayer_device in your View Assist device config file to use separate media_player entities. These features rely on using media_player state change as a trigger, so the media players must also be stable, remain available, and display reliable state changes between idle & playing. Remember to also use the mediaplayer_device media_player in Stream Assist.
 >
 > Must make new automation for each device. 
 
