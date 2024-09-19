@@ -2,7 +2,7 @@
  **Controls Device Display & Audio**
 
 > [!CAUTION] 
-> ## **This is an edited version of Dinki's View Assist Device Control Automation. This version includes community made features and is __not__ supported by Dinki and the View Assist team.**
+> ## **This is an edited version of Dinki's View Assist Device Control Automation. This version includes community made features and is __NOT__ supported by Dinki and the View Assist team.**
 
 > [!IMPORTANT]
 > Most of the extra features REQUIRE the mediaplayer_device and musicplayer_device in your View Assist device config file to use separate media_player entities. These features rely on using media_player state change as a trigger, so the media players must also be stable, remain available, and display reliable state changes between idle & playing. Remember to also use the mediaplayer_device media_player in Stream Assist.
@@ -45,6 +45,8 @@ Setting the AirTunes Audio Latency to 0(ms) in step \#3 allows for a more respon
 
 </details>
 
+> [!note]
+>All features are opt-in. Leaving them untouched is esentially the same as using the stock View Assist Device Control blueprint.
 
 ## New section of blueprint input page labeled Extras contains:
 
@@ -55,4 +57,4 @@ Setting the AirTunes Audio Latency to 0(ms) in step \#3 allows for a more respon
 * Set music mode and navigate to music view when the musicplayer_device starts playing. Previously this only happened when playing music using the play music voice command, now this functions when music playback is started from any trigger.
 * Music Mode/View timeout sets normal mode and returns to default home page when music playback has been stopped for a set amount of time. Previously, this would only happen when using the "stop music" voice command. This feature can be disabled by setting music timeout to 0.
 
-<!-- [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=htts://) -->
+<!-- [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://) -->
