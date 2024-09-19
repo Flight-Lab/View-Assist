@@ -5,7 +5,7 @@ blueprint:
     music volume when TTS ends. Must make new automation for each device. Requires
     the use of separate and unique media_players for mediaplayer_device and musicplayer_device
     entities in View Assist device config. (View Assist Extras - Volume control Assist
-    & Broadcast v 1.0.3)
+    & Broadcast v 1.1.0)
   domain: automation
   source_url: https://gist.github.com/Flight-Lab/ed20af4f6f7a4a5258a668317ae61671
   author: Flab
