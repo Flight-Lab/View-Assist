@@ -45,10 +45,10 @@ Setting the AirTunes Audio Latency to 0(ms) in step \#3 allows for a more respon
 
 </details>
 
+## New section of blueprint input page labeled Extras contains:  
 > [!note]
 >All features are opt-in. Leaving them untouched is esentially the same as using the stock View Assist Device Control blueprint.
 
-## New section of blueprint input page labeled Extras contains:
 
 **Extra features that do not require separate media_players:**
 * The ability to use a toggle to choose between default intent view and @mr.picc010's intent pop-up. (intent pop-up uses BrowserMod)
