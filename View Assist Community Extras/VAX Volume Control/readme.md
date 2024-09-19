@@ -15,7 +15,7 @@ When Assist or Broadcast is triggered while music playback is occuring, music vo
 * **mediaplayer_device:** [AirReceiver](https://play.google.com/store/apps/details?id=com.softmedia.receiver&hl=en_US) audio (only exposed by Music Assistant) **$2.99**
 <details>
 
-<summary>**AirReceiver Setup:**</summary>
+<summary>AirReceiver Setup:</summary>
 
 1) In AirReceiver settings, make sure both Airplay <sub>IOS Media Receiver</sub> and AirTunes Audio <sub>AirPort Express Speaker</sub> are selected. The media_player entity we want to use is only made when both of these are checked.
 (You do not need the other options selected for this but they will not harm anything if you choose to).
