@@ -3,7 +3,7 @@
 When Assist or Broadcast is triggered while music playback is occuring, music volume is stored and decreased by 50% and returns to initial music volume when no STT is detected or when TTS ends.
 
 > [!WARNING]
-> This blueprint will eventually be merged into VAX Device Control
+> This blueprint will eventually be merged into [VAX Device Control](https://github.com/Flight-Lab/View-Assist/blob/Extras/View%20Assist%20Community%20Extras/VAX%20Device%20Control/readme.md)
 
 > [!important]
 > REQUIRES the mediaplayer_device and musicplayer_device in your View Assist device config file to use separate media_player entities. These features rely on using media_player state change as a trigger, so the media players must also be stable, remain available, and display reliable state changes between idle & playing. Remember to also use the mediaplayer_device media_player in Stream Assist.
