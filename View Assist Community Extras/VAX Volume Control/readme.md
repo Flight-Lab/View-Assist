@@ -2,6 +2,9 @@
 **What this blueprint does:**  
 When Assist or Broadcast is triggered while music playback is occuring, music volume is stored and decreased by 50% and returns to initial music volume when no STT is detected or when TTS ends.
 
+> [!CAUTION] 
+> ## **This is __NOT__ an official View Assist blueprint and therefor is __NOT__ supported by Dinki and the View Assist team.**
+
 > [!WARNING]
 > This blueprint will eventually be merged into [VAX Device Control](https://github.com/Flight-Lab/View-Assist/blob/Extras/View%20Assist%20Community%20Extras/VAX%20Device%20Control/readme.md)
 
