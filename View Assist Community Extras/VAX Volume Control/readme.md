@@ -7,7 +7,7 @@
 > This blueprint will eventually be merged into [VAX Device Control](https://github.com/Flight-Lab/View-Assist/blob/Extras/View%20Assist%20Community%20Extras/VAX%20Device%20Control/readme.md)
 
 ## Functionality Overview:  
-When Assist or Broadcast are triggered during music playback, the music volume is reduced by 50%.  
+When triggered by wake word or the Broadcast automation during music playback, the music volume is reduced by 50%.  
 If no speech-to-text (STT) is detected or when text-to-speech (TTS) finishes, the volume is reset to its original level.  
 \*Must make new automation for each device.\*
 
