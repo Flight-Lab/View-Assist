@@ -1,6 +1,4 @@
 # Music Volume Control during Assist & Broadcast
-**What this blueprint does:**  
-When Assist or Broadcast are triggered while music playback is occuring, music volume is stored and decreased by 50% and returns to initial music volume when no STT is detected or when TTS ends.
 
 > [!CAUTION] 
 > ## **This is __NOT__ an official View Assist blueprint and therefor is __NOT__ supported by Dinki and the View Assist team.**
@@ -8,10 +6,14 @@ When Assist or Broadcast are triggered while music playback is occuring, music v
 > [!WARNING]
 > This blueprint will eventually be merged into [VAX Device Control](https://github.com/Flight-Lab/View-Assist/blob/Extras/View%20Assist%20Community%20Extras/VAX%20Device%20Control/readme.md)
 
+## Functionality Overview:  
+When Assist or Broadcast are triggered during music playback, the music volume is reduced by 50%. If no speech-to-text (STT) is detected or when text-to-speech (TTS) finishes, the volume is reset to its original level.
+
 > [!important]
-> REQUIRES the mediaplayer_device and musicplayer_device in your View Assist device config file to use separate media_player entities. These features rely on using media_player state change as a trigger, so the media players must also be stable, remain available, and display reliable state changes between idle & playing. Remember to also use the mediaplayer_device media_player in Stream Assist.
+> ## Prerequisites:
+> To use this blueprint, the mediaplayer_device and musicplayer_device must be separate media_player entities in your View Assist device configuration. These features rely on state changes as triggers, so media players must be stable, always available, and display reliable state changes between idle and playing. Remember to also use the mediaplayer_device media_player in Stream Assist.
 >
-> Must make new automation for each device. 
+> Must make new automation for each device.
 
 ## Recommended Media Players:
 * **musicplayer_device:** [Snapcast](https://play.google.com/store/apps/details?id=de.badaix.snapcast&hl=en_US) (only exposed by Music Assistant) **FREE**
@@ -23,11 +25,11 @@ When Assist or Broadcast are triggered while music playback is occuring, music v
 1) In AirReceiver settings, make sure both Airplay <sub>IOS Media Receiver</sub> and AirTunes Audio <sub>AirPort Express Speaker</sub> are selected. The media_player entity we want to use is only made when both of these are checked.
 (I recommend unchecking the other options as they will create even more media player entities. One even creates a media server.)
 
-3) Scroll down and select Advanced Settings.
+2) Scroll down and select Advanced Settings.
 
-4) Set AirTunes Audio Latency (ms) to 0(ms)
+3) Set AirTunes Audio Latency (ms) to 0(ms)
 
-5) Check AirTunes UI [✓]
+4) Check AirTunes UI [✓]
 
 The media player entity we want to use will be created by the Music Assistant integration and will be called `media_player.lenovostarview_(last 3 digits of device ip)_audio`  
 ex. `media_player.lenovostarview_180_audio`  
