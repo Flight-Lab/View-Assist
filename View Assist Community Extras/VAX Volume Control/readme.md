@@ -21,7 +21,7 @@ When Assist or Broadcast are triggered while music playback is occuring, music v
 <summary>AirReceiver Setup:</summary>
 
 1) In AirReceiver settings, make sure both Airplay <sub>IOS Media Receiver</sub> and AirTunes Audio <sub>AirPort Express Speaker</sub> are selected. The media_player entity we want to use is only made when both of these are checked.
-(You do not need the other options selected for this but they will not harm anything if you choose to. I do, however, recommend unchecking them as they will create even more media player entities. One even creates a media server.)
+(I recommend unchecking the other options as they will create even more media player entities. One even creates a media server.)
 
 3) Scroll down and select Advanced Settings.
 
