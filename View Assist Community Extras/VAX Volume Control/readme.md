@@ -1,19 +1,17 @@
+# Music Volume Control during Assist & Broadcast
+
 > [!CAUTION] 
 > ## **This is __NOT__ an official View Assist blueprint and therefor is __NOT__ supported by Dinki and the View Assist team.**
 
 > [!WARNING]
 > This blueprint will eventually be merged into [VAX Device Control](https://github.com/Flight-Lab/View-Assist/blob/Extras/View%20Assist%20Community%20Extras/VAX%20Device%20Control/readme.md)
 
-# Music Volume Control during Assist & Broadcast
-
 ## Functionality Overview:  
 When Assist or Broadcast are triggered during music playback, the music volume is reduced by 50%. If no speech-to-text (STT) is detected or when text-to-speech (TTS) finishes, the volume is reset to its original level.
+\*Must make new automation for each device.\*
 
-> [!important]
-> ## Prerequisites:
-> To use this blueprint, the mediaplayer_device and musicplayer_device must be separate media_player entities in your View Assist device configuration. These features rely on state changes as triggers, so media players must be stable, always available, and display reliable state changes between idle and playing. Remember to also use the mediaplayer_device media_player in Stream Assist.
->
-> Must make new automation for each device.
+## Prerequisites:
+To use this blueprint, the mediaplayer_device and musicplayer_device must be separate media_player entities in your View Assist device configuration. These features rely on state changes as triggers, so media players must be stable, always available, and display reliable state changes between idle and playing. Remember to also use the mediaplayer_device media_player in Stream Assist.
 
 ## Recommended Media Players:
 * **musicplayer_device:** [Snapcast](https://play.google.com/store/apps/details?id=de.badaix.snapcast&hl=en_US) (only exposed by Music Assistant) **FREE**
@@ -31,7 +29,7 @@ When Assist or Broadcast are triggered during music playback, the music volume i
 
 4) Check AirTunes UI [✓]
 
-The media player entity we want to use will be created by the Music Assistant integration and will be called `media_player.lenovostarview_(last 3 digits of device ip)_audio`  
+The media player entity we want to use will be created by the Music Assistant integration and will be named `media_player.lenovostarview_(last 3 digits of device ip)_audio`  
 ex. `media_player.lenovostarview_180_audio`  
 This media player has volume controls independent from the android device volume controls, just like the Snapcast media player.
 Setting the AirTunes Audio Latency to 0(ms) in step \#3 allows for a more responsive feeling TTS.
