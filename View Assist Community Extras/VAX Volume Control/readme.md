@@ -1,10 +1,10 @@
-# Music Volume Control during Assist & Broadcast
-
 > [!CAUTION] 
 > ## **This is __NOT__ an official View Assist blueprint and therefor is __NOT__ supported by Dinki and the View Assist team.**
 
 > [!WARNING]
 > This blueprint will eventually be merged into [VAX Device Control](https://github.com/Flight-Lab/View-Assist/blob/Extras/View%20Assist%20Community%20Extras/VAX%20Device%20Control/readme.md)
+
+# Music Volume Control during Assist & Broadcast
 
 ## Functionality Overview:  
 When Assist or Broadcast are triggered during music playback, the music volume is reduced by 50%. If no speech-to-text (STT) is detected or when text-to-speech (TTS) finishes, the volume is reset to its original level.
