@@ -116,6 +116,12 @@ blueprint:
       description: Requires mediaplayer_device and musicplayer_device to use different media players in View Assist device config.
       collapsed: true
       input:
+        music_mode_auto:
+          name: Auto Music Mode
+          description: Automatically enter music mode when musicplayer_device is playing.
+          selector:
+            boolean: {}
+          default: false
         mediaplayer_device:
           name: mediaplayer_device
           description: The media_player used for TTS playback.
@@ -356,7 +362,8 @@ action:
             id:
               - music_start
           - condition: template
-            value_template: "{{ state_attr('satellite', 'mediaplayer_device')
+            value_template: "{{ "{{ music_mode_auto != false
+              and state_attr('satellite', 'mediaplayer_device')
               != state_attr('satellite', 'musicplayer_device') }}"
           - condition: state
             entity_id: !input satellite
@@ -377,8 +384,7 @@ action:
             id:
               - music_stop
           - condition: template
-            value_template: 
-              "{{ music_mode_timeout != 0
+            value_template: "{{ music_mode_timeout != 0
               and state_attr('satellite', 'mediaplayer_device')
               != state_attr('satellite', 'musicplayer_device') }}"
           - condition: state
