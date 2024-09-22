@@ -362,9 +362,7 @@ action:
             id:
               - music_start
           - condition: template
-            value_template: "{{ music_mode_auto != false
-              and state_attr('satellite', 'mediaplayer_device')
-              != state_attr('satellite', 'musicplayer_device') }}"
+            value_template: "{{ music_mode_auto != false and !input mediaplayer_device != !input musicplayer_device }}"
           - condition: state
             entity_id: !input satellite
             attribute: mode
@@ -384,9 +382,7 @@ action:
             id:
               - music_stop
           - condition: template
-            value_template: "{{ music_mode_timeout != 0
-              and state_attr('satellite', 'mediaplayer_device')
-              != state_attr('satellite', 'musicplayer_device') }}"
+            value_template: "{{ music_mode_timeout != 0 and !input mediaplayer_device != !input musicplayer_device }}"
           - condition: state
             entity_id: !input satellite
             attribute: mode
