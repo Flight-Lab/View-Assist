@@ -362,7 +362,7 @@ action:
             id:
               - music_start
           - condition: template
-            value_template: "{{ "{{ music_mode_auto != false
+            value_template: "{{ music_mode_auto != false
               and state_attr('satellite', 'mediaplayer_device')
               != state_attr('satellite', 'musicplayer_device') }}"
           - condition: state
