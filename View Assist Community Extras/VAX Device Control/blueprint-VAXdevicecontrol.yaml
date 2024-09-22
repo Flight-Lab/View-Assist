@@ -54,6 +54,15 @@ blueprint:
             - domain:
                 - sensor
           multiple: false
+    micdevice:
+      name: Mic device
+      description: The microphone entity to unmute on HA start/restart. (example switch.viewassist_living_room_mic)
+      selector:
+        entity:
+          filter:
+            - domain:
+                - switch
+          multiple: false
     dashboard:
       name: Dashboard
       description: The base dashboard for View Assist (do not include trailing slash)
@@ -80,17 +89,8 @@ blueprint:
       selector:
         boolean: {}
       default: true
-    micdevice:
-      name: Mic device
-      description: The microphone entity to unmute on HA start/restart. (example switch.viewassist_living_room_mic)
-      selector:
-        entity:
-          filter:
-            - domain:
-                - switch
-          multiple: false
-    extras:
-      name: Extras
+    extras_stock:
+      name: __Extras__ - Stock Config
       icon: mdi:exclamation-thick
       collapsed: true
       input:
@@ -110,6 +110,12 @@ blueprint:
             minutes: 0
             seconds: 10
             milliseconds: 0
+    extras_mediaplayers:
+      name: __Extras__ - Dual Media Players
+      icon: mdi:volume-high
+      description: Requires mediaplayer_device and musicplayer_device to use different media players in View Assist device config.
+      collapsed: true
+      input:
         mediaplayer_device:
           name: mediaplayer_device
           description: The media_player used for TTS playback.
@@ -118,6 +124,8 @@ blueprint:
               filter:
                 - domain:
                     - media_player
+              multiple: false
+          default: null
         musicplayer_device:
           name: musicplayer_device
           description: The media_player used for music playback.
@@ -127,6 +135,7 @@ blueprint:
                 - domain:
                     - media_player
               multiple: false
+          default: null
         music_mode_timeout:
           name: Music Mode Timeout
           description: Time to wait before turning music mode off after musicplayer_device is paused. Leave set to 0 if no timeout desired.
@@ -183,8 +192,8 @@ variables:
   display: !input display
   home: !input home
   music: !input music
-  micunmute: !input micunmute
   micdevice: !input micdevice
+  micunmute: !input micunmute
   intent: !input intent
   intent_view: !input intent_view
   popup_intent: !input popup_intent
