@@ -109,7 +109,6 @@ blueprint:
             hours: 0
             minutes: 0
             seconds: 10
-            milliseconds: 0
     extras_mediaplayers:
       name: __Extras__ - Dual Media Players
       icon: mdi:volume-high
@@ -142,14 +141,20 @@ blueprint:
                     - media_player
               multiple: false
           default: null
+        music_mode_timeout_switch:
+          name: Music Mode Timeout Toggle
+          description: Toggle music mode timeout on or off.
+          selector:
+            boolean: {}
+          default: false
         music_mode_timeout:
-          name: Music Mode Timeout
+          name: Music Mode Timeout Length
           description: Time to wait before turning music mode off after musicplayer_device is paused. Leave set to 0 if no timeout desired.
           selector:
             duration:
           default:
             hours: 00
-            minutes: 00
+            minutes: 05
             seconds: 00
 trigger:
   - platform: state
@@ -207,6 +212,7 @@ variables:
   musicplayer_device: !input musicplayer_device
   music_mode_auto: !input music_mode_auto
   music_mode_timeout: !input music_mode_timeout
+  music_mode_timeout_switch: !input music_mode_timeout_switch
 action:
   - choose:
       - conditions:
@@ -363,7 +369,7 @@ action:
             id:
               - music_start
           - condition: template
-            value_template: "{{ music_mode_auto != false and mediaplayer_device != musicplayer_device }}"
+            value_template: "{{ music_mode_auto == true and mediaplayer_device != musicplayer_device }}"
           - condition: state
             entity_id: !input satellite
             attribute: mode
@@ -383,7 +389,7 @@ action:
             id:
               - music_stop
           - condition: template
-            value_template: "{{ music_mode_timeout != 0 and mediaplayer_device != musicplayer_device }}"
+            value_template: "{{ music_mode_timeout_switch == true and mediaplayer_device != musicplayer_device }}"
           - condition: state
             entity_id: !input satellite
             attribute: mode
