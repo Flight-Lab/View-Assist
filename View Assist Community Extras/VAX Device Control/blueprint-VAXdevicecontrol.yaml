@@ -200,7 +200,6 @@ variables:
   mediaplayer_device: !input mediaplayer_device
   musicplayer_device: !input musicplayer_device
   music_mode_timeout: !input music_mode_timeout
-  popup_intent_timeout: !input popup_intent_timeout
 action:
   - choose:
       - conditions:
