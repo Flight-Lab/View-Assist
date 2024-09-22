@@ -13,7 +13,7 @@ blueprint:
 
     - Set normal mode when musicplayer_device idle for set duration
   domain: automation
-  #  source_url:
+  source_url: https://gist.github.com/Flight-Lab/fdcd3bb8392a994304929115b8f2526e
   author: Flab
   homeassistant:
     min_version: 2024.6.0
