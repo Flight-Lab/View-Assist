@@ -1,15 +1,17 @@
 # Music Volume Control during Assist & Broadcast
 
 > [!CAUTION] 
-> ## **This is __NOT__ an official View Assist blueprint and therefor is __NOT__ supported by Dinki and the View Assist team.**
+> ## **This is __NOT__ an official View Assist blueprint and therefor is NOT supported by Dinki and the View Assist team.**
 
 > [!WARNING]
 > This blueprint will eventually be merged into [VAX Device Control](https://github.com/Flight-Lab/View-Assist/blob/Extras/View%20Assist%20Community%20Extras/VAX%20Device%20Control/readme.md)
 
 ## Functionality Overview:  
 When triggered by wake word or the Broadcast automation during music playback, the music volume is reduced by 50%.  
-If no speech-to-text (STT) is detected or when text-to-speech (TTS) finishes, the volume is reset to its original level.  
-\*Must make new automation for each device.\*
+If no speech-to-text (STT) is detected or when text-to-speech (TTS) finishes, the volume is reset to its original level. 
+
+* Includes option to play a notification sound when STT is not detected and ceases listening. Notification sound does not play when musicplayer_device is playing, because the music volume ducking acts as this signifier.
+**\*Must make new automation for each device.\***
 
 ## Prerequisites:
 To use this blueprint, the mediaplayer_device and musicplayer_device must be separate media_player entities in your View Assist device configuration. These features rely on state changes as triggers, so media players must be stable, always available, and display reliable state changes between idle and playing. Remember to also use the mediaplayer_device media_player in Stream Assist.
