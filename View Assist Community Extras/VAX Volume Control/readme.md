@@ -11,6 +11,7 @@ When triggered by wake word or the Broadcast automation during music playback, t
 If no speech-to-text (STT) is detected or when text-to-speech (TTS) finishes, the volume is reset to its original level. 
 
 * Includes option to play a notification sound when STT is not detected and ceases listening. Notification sound does not play when musicplayer_device is playing, because the music volume ducking acts as this signifier.  
+
 **\*Must make new automation for each device.\***
 
 ## Prerequisites:
