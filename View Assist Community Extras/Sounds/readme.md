@@ -1,4 +1,4 @@
-wake.mp3 and tts_silence.mp3 were pulled from [this sound pack](https://pixabay.com/sound-effects/menu-buttom-pack-190019/) by [Liécio Rodriguez](https://pixabay.com/users/liecio-3298866/) via [Pixabay](https://pixabay.com/service/license-summary/) 
+wake.mp3 and stt_silence.mp3 were pulled from [this sound pack](https://pixabay.com/sound-effects/menu-buttom-pack-190019/) by [Liécio Rodriguez](https://pixabay.com/users/liecio-3298866/) via [Pixabay](https://pixabay.com/service/license-summary/) 
 
 <!-- 
 Other potential sounds: 
