@@ -55,14 +55,3 @@ Setting the AirTunes Audio Latency to 0(ms) in step \#3 allows for a more respon
 </details>
 
 [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://gist.github.com/Flight-Lab/ed20af4f6f7a4a5258a668317ae61671)
-
-end.mp3 was pulled from [this sound pack](https://pixabay.com/sound-effects/menu-buttom-pack-190019/) by [Liécio Rodriguez](https://pixabay.com/users/liecio-3298866/) via [Pixabay](https://pixabay.com/service/license-summary/) 
-
-<!-- 
-Other potential sounds: 
-https://pixabay.com/sound-effects/90s-game-ui-1-185094/  
-https://pixabay.com/sound-effects/90s-game-ui-10-185103/  
-https://pixabay.com/sound-effects/click-buttons-ui-menu-sounds-effects-button-13-205396/
-Audio Editor:
-https://audiomass.co/
---> 
