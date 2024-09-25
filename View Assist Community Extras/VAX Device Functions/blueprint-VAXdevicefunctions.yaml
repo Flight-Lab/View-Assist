@@ -502,7 +502,7 @@ action:
             target:
               entity_id: "{{ target_timer_device }}"
             data: {}           
-          - set_conversation_response: Music stopped           
+          - set_conversation_response: Music stopped
 variables:
   modes: !input modes
   views: !input views
@@ -517,5 +517,5 @@ variables:
   target_mediaplayer_device: "{{ state_attr(target_satellite_device, 'mediaplayer_device') }}"
   target_musicplayer_device: "{{ state_attr(target_satellite_device, 'musicplayer_device') }}"
   target_adb_device: "{{ state_attr(target_satellite_device, 'adb_device') }}"
-  target_timer_device: "{{ state_attr(target_satellite_device, 'timer_device') }}"    
-  target_satellite_device_type: "{{ state_attr(target_satellite_device, 'type') }}"              
+  target_timer_device: "{{ state_attr(target_satellite_device, 'timer_device') }}"
+  target_satellite_device_type: "{{ state_attr(target_satellite_device, 'type') }}"
