@@ -2,7 +2,7 @@ blueprint:
   name: View Assist Extras - Device Functions
   description: Various device functions for the View Assist Satellites  
     VAX edition
-    (View Assist devicefunctions v 1.2.2 E 0.0.4)
+    (View Assist devicefunctions v 1.2.2 E 0.0.5)
   domain: automation
   source_url: https://gist.github.com/Flight-Lab/054a12df123f8b179feb4af7d90443c8
   author: flab
@@ -203,8 +203,9 @@ action:
                     sequence:
                       - if:
                           - condition: template
-                            value_template: >-
-                              "{% if target_satellite_device_type == 'audio_only'%}
+                            value_template: |-
+                              "
+                              {% if target_satellite_device_type == 'audio_only'%}
                                 true
                               {% else %}
                                 false
@@ -234,8 +235,9 @@ action:
         sequence:
           - if:
               - condition: template
-                value_template: >-
-                  "{% if target_satellite_device_type != 'audio_only'%}
+                value_template: |-
+                  "
+                  {% if target_satellite_device_type != 'audio_only'%}
                     true
                   {% else %}
                     false
@@ -263,7 +265,8 @@ action:
           - service: media_player.volume_set
             data:
               volume_level: |-
-                "{% if trigger.id == 'set_volume' %} 
+                "
+                {% if trigger.id == 'set_volume' %} 
                   {% if trigger.slots.level.endswith('%') %}
                     {{ (trigger.slots.level |replace('%',' ') | int)/100 }}
                   {% else %}
@@ -281,8 +284,9 @@ action:
           - condition: template
             value_template: "{{target_musicplayer_device != target_mediaplayer_device}}"
         sequence:
-          - service: >-
-              "{% if trigger.slots.up_down == 'down' or trigger.slots.increase_decrease == 'decrease' or trigger.slots.raise_lower == 'lower' %}
+          - service: |-
+              "
+              {% if trigger.slots.up_down == 'down' or trigger.slots.increase_decrease == 'decrease' or trigger.slots.raise_lower == 'lower' %}
                 media_player.volume_down
               {% endif %}
               {% if trigger.slots.up_down == 'up' or trigger.slots.increase_decrease == 'increase' or trigger.slots.raise_lower == 'raise'  %}
@@ -290,8 +294,9 @@ action:
               {% endif %}"
             target:
               entity_id: "{{ target_musicplayer_device }}"
-          - set_conversation_response: >-
-              "{% if trigger.slots.up_down == 'down' or trigger.slots.up_down == 'up' %}
+          - set_conversation_response: |-
+              "
+              {% if trigger.slots.up_down == 'down' or trigger.slots.up_down == 'up' %}
                 The music volume has been turned {{ trigger.slots.up_down }}
               {% endif %}
               {% if trigger.slots.increase_decrease == 'decrease' or trigger.slots.increase_decrease == 'increase' %}
@@ -336,7 +341,8 @@ action:
           - service: media_player.volume_set
             data:
               volume_level: |-
-                "{% if trigger.id == 'set_volume' %} 
+                "
+                {% if trigger.id == 'set_volume' %} 
                   {% if trigger.slots.level.endswith('%') %}
                     {{ (trigger.slots.level |replace('%',' ') | int)/100 }}
                   {% else %}
@@ -354,8 +360,9 @@ action:
           - condition: template
             value_template: "{{target_musicplayer_device != target_mediaplayer_device}}"
         sequence:
-          - service: >-
-              "{% if trigger.slots.up_down == 'down' or trigger.slots.increase_decrease == 'decrease' or trigger.slots.raise_lower == 'lower' %}
+          - service: |-
+              "
+              {% if trigger.slots.up_down == 'down' or trigger.slots.increase_decrease == 'decrease' or trigger.slots.raise_lower == 'lower' %}
                 media_player.volume_down
               {% endif %}
               {% if trigger.slots.up_down == 'up' or trigger.slots.increase_decrease == 'increase' or trigger.slots.raise_lower == 'raise'  %}
@@ -363,8 +370,9 @@ action:
               {% endif %}"
             target:
               entity_id: "{{ target_mediaplayer_device }}"
-          - set_conversation_response: >-
-              "{% if trigger.slots.up_down == 'down' or trigger.slots.up_down == 'up' %}
+          - set_conversation_response: |-
+              "
+              {% if trigger.slots.up_down == 'down' or trigger.slots.up_down == 'up' %}
                 The assist volume has been turned {{ trigger.slots.up_down}}
               {% endif %}
               {% if trigger.slots.increase_decrease == 'decrease' or trigger.slots.increase_decrease == 'increase' %}
@@ -407,7 +415,8 @@ action:
           - service: media_player.volume_set
             data:
               volume_level: |-
-                "{% if trigger.id == 'set_volume' %} 
+                "
+                {% if trigger.id == 'set_volume' %} 
                   {% if trigger.slots.level.endswith('%') %}
                     {{ (trigger.slots.level |replace('%',' ') | int)/100 }}
                   {% else %}
@@ -415,8 +424,9 @@ action:
                   {% endif %}
                 {% endif %}"
             target:
-              entity_id: >-
-                "{% if target_adb_device == 'none' %}
+              entity_id: |-
+                "
+                {% if target_adb_device == 'none' %}
                   {{ target_mediaplayer_device }}
                 {%else %}
                   {{ target_adb_device }}
@@ -428,22 +438,25 @@ action:
             id:
               - adjust_volume
         sequence:
-          - service: >-
-              "{% if trigger.slots.up_down == 'down' or trigger.slots.increase_decrease == 'decrease' or trigger.slots.raise_lower == 'lower' %} 
+          - service: |-
+              "
+              {% if trigger.slots.up_down == 'down' or trigger.slots.increase_decrease == 'decrease' or trigger.slots.raise_lower == 'lower' %} 
                 media_player.volume_down
               {% endif %} 
               {% if trigger.slots.up_down == 'up' or trigger.slots.increase_decrease == 'increase' or trigger.slots.raise_lower == 'raise'  %} 
                 media_player.volume_up 
               {% endif %}"
             target:
-              entity_id: >-
-                "{% if target_adb_device == 'none' %}
+              entity_id: |-
+                "
+                {% if target_adb_device == 'none' %}
                   {{ target_mediaplayer_device }}
                 {%else %}
                   {{ target_adb_device }}
                 {% endif %}"
-          - set_conversation_response: >-
-              "{% if trigger.slots.up_down == 'down' or trigger.slots.up_down == 'up' %}
+          - set_conversation_response: |-
+              "
+              {% if trigger.slots.up_down == 'down' or trigger.slots.up_down == 'up' %}
                 The volume has been turned {{ trigger.slots.up_down }}
               {% endif %}
               {% if trigger.slots.increase_decrease == 'decrease' or trigger.slots.increase_decrease == 'increase' %}
@@ -462,8 +475,9 @@ action:
             data:
               is_volume_muted: true
             target:
-              entity_id: >-
-                "{% if target_adb_device == 'none' %}
+              entity_id: |-
+                "
+                {% if target_adb_device == 'none' %}
                   {{ target_mediaplayer_device }}
                 {%else %}
                   {{ target_adb_device }}
@@ -477,8 +491,9 @@ action:
             data:
               is_volume_muted: false
             target:
-              entity_id: >-
-                "{% if target_adb_device == 'none' %}
+              entity_id: |-
+                "
+                {% if target_adb_device == 'none' %}
                   {{ target_mediaplayer_device }}
                 {%else %}
                   {{ target_adb_device }}
