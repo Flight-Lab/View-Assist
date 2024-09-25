@@ -205,9 +205,9 @@ action:
                           - condition: template
                             value_template: >-
                               "{% if target_satellite_device_type == 'audio_only'%}
-                                  true
+                                true
                               {% else %}
-                                  false
+                                false
                               {% endif %}"
                         then:
                           - set_conversation_response: >-
@@ -236,9 +236,9 @@ action:
               - condition: template
                 value_template: >-
                   "{% if target_satellite_device_type != 'audio_only'%}
-                      true
+                    true
                   {% else %}
-                      false
+                    false
                   {% endif %}"
             then:
               - set_conversation_response: Switching view to {{ trigger.slots.view }} view
@@ -283,22 +283,22 @@ action:
         sequence:
           - service: >-
               "{% if trigger.slots.up_down == 'down' or trigger.slots.increase_decrease == 'decrease' or trigger.slots.raise_lower == 'lower' %}
-                  media_player.volume_down
+                media_player.volume_down
               {% endif %}
               {% if trigger.slots.up_down == 'up' or trigger.slots.increase_decrease == 'increase' or trigger.slots.raise_lower == 'raise'  %}
-                  media_player.volume_up
+                media_player.volume_up
               {% endif %}"
             target:
               entity_id: "{{ target_musicplayer_device }}"
           - set_conversation_response: >-
               "{% if trigger.slots.up_down == 'down' or trigger.slots.up_down == 'up' %}
-                  The music volume has been turned {{ trigger.slots.up_down }}
+                The music volume has been turned {{ trigger.slots.up_down }}
               {% endif %}
               {% if trigger.slots.increase_decrease == 'decrease' or trigger.slots.increase_decrease == 'increase' %}
-                  The music volume has been {{ trigger.slots.increase_decrease }}
+                The music volume has been {{ trigger.slots.increase_decrease }}
               {% endif %}
               {% if trigger.slots.raise_lower == 'lower' or trigger.slots.raise_lower == 'raise' %}
-                  The music volume has been {{ trigger.slots.raise_lower}}ed
+                The music volume has been {{ trigger.slots.raise_lower}}ed
               {% endif %}"
             enabled: true
       - conditions:
@@ -356,22 +356,22 @@ action:
         sequence:
           - service: >-
               "{% if trigger.slots.up_down == 'down' or trigger.slots.increase_decrease == 'decrease' or trigger.slots.raise_lower == 'lower' %}
-                  media_player.volume_down
+                media_player.volume_down
               {% endif %}
               {% if trigger.slots.up_down == 'up' or trigger.slots.increase_decrease == 'increase' or trigger.slots.raise_lower == 'raise'  %}
-                  media_player.volume_up
+                media_player.volume_up
               {% endif %}"
             target:
               entity_id: "{{ target_mediaplayer_device }}"
           - set_conversation_response: >-
               "{% if trigger.slots.up_down == 'down' or trigger.slots.up_down == 'up' %}
-                  The assist volume has been turned {{ trigger.slots.up_down}}
+                The assist volume has been turned {{ trigger.slots.up_down}}
               {% endif %}
               {% if trigger.slots.increase_decrease == 'decrease' or trigger.slots.increase_decrease == 'increase' %}
-                  The assist volume has been {{ trigger.slots.increase_decrease}}ed
+                The assist volume has been {{ trigger.slots.increase_decrease}}ed
               {% endif %}
               {% if trigger.slots.raise_lower == 'lower' or trigger.slots.raise_lower == 'raise' %}
-                  The assist volume has been {{ trigger.slots.raise_lower}}ed
+                The assist volume has been {{ trigger.slots.raise_lower}}ed
               {% endif %}"
             enabled: true
       - conditions:
@@ -417,9 +417,9 @@ action:
             target:
               entity_id: >-
                 "{% if target_adb_device == 'none' %}
-                    {{ target_mediaplayer_device }}
+                  {{ target_mediaplayer_device }}
                 {%else %}
-                    {{ target_adb_device }}
+                  {{ target_adb_device }}
                 {% endif %}"
           - set_conversation_response: The volume was set to {{ trigger.slots.level }}
             enabled: true
@@ -430,27 +430,27 @@ action:
         sequence:
           - service: >-
               "{% if trigger.slots.up_down == 'down' or trigger.slots.increase_decrease == 'decrease' or trigger.slots.raise_lower == 'lower' %} 
-                  media_player.volume_down
+                media_player.volume_down
               {% endif %} 
               {% if trigger.slots.up_down == 'up' or trigger.slots.increase_decrease == 'increase' or trigger.slots.raise_lower == 'raise'  %} 
-                  media_player.volume_up 
+                media_player.volume_up 
               {% endif %}"
             target:
               entity_id: >-
                 "{% if target_adb_device == 'none' %}
-                    {{ target_mediaplayer_device }}
+                  {{ target_mediaplayer_device }}
                 {%else %}
-                    {{ target_adb_device }}
+                  {{ target_adb_device }}
                 {% endif %}"
           - set_conversation_response: >-
               "{% if trigger.slots.up_down == 'down' or trigger.slots.up_down == 'up' %}
-                  The volume has been turned {{ trigger.slots.up_down }}
+                The volume has been turned {{ trigger.slots.up_down }}
               {% endif %}
               {% if trigger.slots.increase_decrease == 'decrease' or trigger.slots.increase_decrease == 'increase' %}
-                  The volume has been {{ trigger.slots.increase_decrease}}ed
+                The volume has been {{ trigger.slots.increase_decrease}}ed
               {% endif %}
               {% if trigger.slots.raise_lower == 'lower' or trigger.slots.raise_lower == 'raise' %}
-                  The volume has been {{ trigger.slots.raise_lower}}ed
+                The volume has been {{ trigger.slots.raise_lower}}ed
               {% endif %}"
             enabled: true
       - conditions:
@@ -464,9 +464,9 @@ action:
             target:
               entity_id: >-
                 "{% if target_adb_device == 'none' %}
-                    {{ target_mediaplayer_device }}
+                  {{ target_mediaplayer_device }}
                 {%else %}
-                    {{ target_adb_device }}
+                  {{ target_adb_device }}
                 {% endif %}"
       - conditions:
           - condition: trigger
@@ -477,11 +477,11 @@ action:
             data:
               is_volume_muted: false
             target:
-              entity_id: |-
+              entity_id: >-
                 "{% if target_adb_device == 'none' %}
-                    {{ target_mediaplayer_device }}
+                  {{ target_mediaplayer_device }}
                 {%else %}
-                    {{ target_adb_device }}
+                  {{ target_adb_device }}
                 {% endif %}"
           - set_conversation_response: "Sound has been restored"
       - conditions:
