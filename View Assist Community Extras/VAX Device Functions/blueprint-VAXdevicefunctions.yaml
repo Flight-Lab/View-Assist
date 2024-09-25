@@ -38,7 +38,7 @@ blueprint:
           description: The command to use to set the music player volume level by step
           default: 
             - turn {up_down} [the | your] (music | music player) [volume]
-            - {raise_lower} [the] (music | music player) [volume]
+            - ({raise_lower}) [the] (music | music player) [volume]
         mute_music_volume:
           name: Mute Volume Command
           description: The command to use to mute the music player
@@ -62,7 +62,7 @@ blueprint:
           description: The command to use to set TTS volume level by step
           default: 
             - turn {up_down} [the | your] (voice | assistant | voice assistant | assist | t t s | TTS | tee tee es | teetee es | text to speech | tex to speech) [volume]
-            - {raise_lower} [the | your] (voice | assistant | voice assistant | assist | t t s | TTS | tee tee es | teetee es | text to speech | tex to speech) [volume]
+            - ({raise_lower}) [the | your] (voice | assistant | voice assistant | assist | t t s | TTS | tee tee es | teetee es | text to speech | tex to speech) [volume]
         mute_tts_volume:
           name: Mute Volume Command
           description: The command to use to mute TTS audio
@@ -81,7 +81,7 @@ blueprint:
       default: 
         - turn {up_down} [the] volume
         - volume {up_down}
-        - {raise_lower} [the] volume
+        - ({raise_lower}) [the] volume
     mute_volume:
       name: Mute Volume Command 
       description: The command to use to mute audio
