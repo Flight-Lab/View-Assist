@@ -38,7 +38,7 @@ blueprint:
           description: The command to use to set the music player volume level by step
           default: 
             - turn {up_down} [the | your] (music | music player) [volume]
-            - ({raise_lower} | {increase_decrease}) [the] (music | music player) [volume]
+            - {raise_lower} [the] (music | music player) [volume]
         mute_music_volume:
           name: Mute Volume Command
           description: The command to use to mute the music player
@@ -62,7 +62,7 @@ blueprint:
           description: The command to use to set TTS volume level by step
           default: 
             - turn {up_down} [the | your] (voice | assistant | voice assistant | assist | t t s | TTS | tee tee es | teetee es | text to speech | tex to speech) [volume]
-            - ({raise_lower} | {increase_decrease}) [the | your] (voice | assistant | voice assistant | assist | t t s | TTS | tee tee es | teetee es | text to speech | tex to speech) [volume]
+            - {raise_lower} [the | your] (voice | assistant | voice assistant | assist | t t s | TTS | tee tee es | teetee es | text to speech | tex to speech) [volume]
         mute_tts_volume:
           name: Mute Volume Command
           description: The command to use to mute TTS audio
@@ -81,8 +81,7 @@ blueprint:
       default: 
         - turn {up_down} [the] volume
         - volume {up_down}
-        - ({raise_lower} | {increase_decrease}) [the] volume
-        - volume ({raise_lower} | {increase_decrease})
+        - {raise_lower} [the] volume
     mute_volume:
       name: Mute Volume Command 
       description: The command to use to mute audio
@@ -282,10 +281,10 @@ action:
             value_template: "{{target_musicplayer_device != target_mediaplayer_device}}"
         sequence:
           - service: >-
-              {% if trigger.slots.up_down == 'down' or trigger.slots.increase_decrease == 'decrease' or trigger.slots.raise_lower == 'lower' %}
+              {% if trigger.slots.up_down == 'down' or trigger.slots.raise_lower == 'lower' %}
                 media_player.volume_down
               {% endif %}
-              {% if trigger.slots.up_down == 'up' or trigger.slots.increase_decrease == 'increase' or trigger.slots.raise_lower == 'raise'  %}
+              {% if trigger.slots.up_down == 'up' or trigger.slots.raise_lower == 'raise'  %}
                 media_player.volume_up
               {% endif %}
             target:
@@ -293,9 +292,6 @@ action:
           - set_conversation_response: >-
               {% if trigger.slots.up_down == 'down' or trigger.slots.up_down == 'up' %}
                 The music volume has been turned {{ trigger.slots.up_down }}
-              {% endif %}
-              {% if trigger.slots.increase_decrease == 'decrease' or trigger.slots.increase_decrease == 'increase' %}
-                The music volume has been {{ trigger.slots.increase_decrease}}ed
               {% endif %}
               {% if trigger.slots.raise_lower == 'lower' or trigger.slots.raise_lower == 'raise' %}
                 The music volume has been {{ trigger.slots.raise_lower}}ed
@@ -355,10 +351,10 @@ action:
             value_template: "{{target_musicplayer_device != target_mediaplayer_device}}"
         sequence:
           - service: >-
-              {% if trigger.slots.up_down == 'down' or trigger.slots.increase_decrease == 'decrease' or trigger.slots.raise_lower == 'lower' %}
+              {% if trigger.slots.up_down == 'down' or trigger.slots.raise_lower == 'lower' %}
                 media_player.volume_down
               {% endif %}
-              {% if trigger.slots.up_down == 'up' or trigger.slots.increase_decrease == 'increase' or trigger.slots.raise_lower == 'raise'  %}
+              {% if trigger.slots.up_down == 'up' or trigger.slots.raise_lower == 'raise'  %}
                 media_player.volume_up
               {% endif %}
             target:
@@ -366,9 +362,6 @@ action:
           - set_conversation_response: >-
               {% if trigger.slots.up_down == 'down' or trigger.slots.up_down == 'up' %}
                 The assist volume has been turned {{ trigger.slots.up_down}}
-              {% endif %}
-              {% if trigger.slots.increase_decrease == 'decrease' or trigger.slots.increase_decrease == 'increase' %}
-                The assist volume has been {{ trigger.slots.increase_decrease}}ed
               {% endif %}
               {% if trigger.slots.raise_lower == 'lower' or trigger.slots.raise_lower == 'raise' %}
                 The assist volume has been {{ trigger.slots.raise_lower}}ed
@@ -429,10 +422,10 @@ action:
               - adjust_volume
         sequence:
           - service: >-
-              {% if trigger.slots.up_down == 'down' or trigger.slots.increase_decrease == 'decrease' or trigger.slots.raise_lower == 'lower' %} 
+              {% if trigger.slots.up_down == 'down' or trigger.slots.raise_lower == 'lower' %} 
                 media_player.volume_down
               {% endif %} 
-              {% if trigger.slots.up_down == 'up' or trigger.slots.increase_decrease == 'increase' or trigger.slots.raise_lower == 'raise'  %} 
+              {% if trigger.slots.up_down == 'up' or trigger.slots.raise_lower == 'raise'  %} 
                 media_player.volume_up 
               {% endif %}
             target:
@@ -445,9 +438,6 @@ action:
           - set_conversation_response: >-
               {% if trigger.slots.up_down == 'down' or trigger.slots.up_down == 'up' %}
                 The volume has been turned {{ trigger.slots.up_down }}
-              {% endif %}
-              {% if trigger.slots.increase_decrease == 'decrease' or trigger.slots.increase_decrease == 'increase' %}
-                The volume has been {{ trigger.slots.increase_decrease}}ed
               {% endif %}
               {% if trigger.slots.raise_lower == 'lower' or trigger.slots.raise_lower == 'raise' %}
                 The volume has been {{ trigger.slots.raise_lower}}ed
