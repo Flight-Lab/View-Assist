@@ -125,6 +125,30 @@ trigger:
     command: !input view_command
     id: view
   - platform: conversation
+    command: !input set_music_volume
+    id: set_music_volume
+  - platform: conversation
+    command: !input adjust_music_volume
+    id: adjust_music_volume
+  - platform: conversation
+    command: !input mute_music_volume
+    id: mute_music_volume
+  - platform: conversation
+    command: !input unmute_music_volume
+    id: unmute_music_volume
+  - platform: conversation
+    command: !input set_tts_volume
+    id: set_tts_volume
+  - platform: conversation
+    command: !input adjust_tts_volume
+    id: adjust_tts_volume
+  - platform: conversation
+    command: !input mute_tts_volume
+    id: mute_tts_volume
+  - platform: conversation
+    command: !input unmute_tts_volume
+    id: unmute_music_volume
+  - platform: conversation
     command: !input set_volume
     id: set_volume
   - platform: conversation
