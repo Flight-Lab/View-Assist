@@ -23,6 +23,50 @@ blueprint:
       name: Do Not Disturb Command 
       description: The command to use to trigger turning off DND mode
       default: "(set do not disturb [mode] [to] off | turn off do not disturb [mode] | end do not disturb [mode] | cancel do not disturb [mode])"
+    music_player_volume:
+      name: __Music Player Volume__
+      icon: mdi:volume-high
+      description: Volume controls for the music player.
+      collapsed: true
+      input:
+        set_music_volume:
+          name: Set Music Volume Command
+          description: The command to use to set music player volume level directly
+          default: "[set | turn | make | change] [the | your] (music | music player) volume [to] {level}"
+        adjust_music_volume:
+          name: Adjust Volume Command
+          description: The command to use to set the music player volume level by step
+          default: turn {up_down} [the | your] (music | music player) volume
+        mute_music_volume:
+          name: Mute Volume Command
+          description: The command to use to mute the music player
+          default: mute [the] (music) [volume]
+        unmute_music_volume:
+          name: Unmute Volume Command
+          description: The command to use to unmute the music player
+          default: unmute [the | your] (music | music player) [volume]
+    tts_player_volume:
+      name: __TTS Player Volume__
+      icon: mdi:volume-high
+      description: Volume controls for the TTS player.
+      collapsed: true
+      input:
+        set_tts_volume:
+          name: Set TTS Volume Command
+          description: The command to use to set TTS volume level directly
+          default: "[set | turn | make | change] [the | your] (voice | assistant | voice assistant | assist | t t s | TTS | tee tee es | teetee es | text to speech | tex to speech) volume [to] {level}"
+        adjust_tts_volume:
+          name: Adjust TTS Volume Command
+          description: The command to use to set TTS volume level by step
+          default: turn {up_down} [the | your] (voice | assistant | voice assistant | assist | t t s | TTS | tee tee es | teetee es | text to speech | tex to speech) volume
+        mute_tts_volume:
+          name: Mute Volume Command
+          description: The command to use to mute TTS audio
+          default: mute [the | your] (voice | assistant | voice assistant | assist | t t s | TTS | tee tee es | teetee es | text to speech | tex to speech) [volume]
+        unmute_tts_volume:
+          name: Unmute Volume Command
+          description: The command to use to unmute TTS audio
+          default: unmute [the | your] (voice | assistant | voice assistant | assist | t t s | TTS | tee tee es | teetee es | text to speech | tex to speech) [volume]
     set_volume:
       name: Set Volume Command 
       description: The command to use to set volume levels level directly
@@ -148,7 +192,7 @@ action:
                           entity_id: " {{ target_satellite_device }} "
                           do_not_disturb: true
             else:
-              - set_conversation_response: "Sorry.  {{ trigger.slots.mode }} is not a valid mode. "
+              - set_conversation_response: "Sorry.  {{ trigger.slots.mode }} is not a valid mode."
       - conditions:
           - condition: trigger
             id:
@@ -172,6 +216,124 @@ action:
                   Sorry.  This device does not have a display
             else:
               - set_conversation_response: "Sorry.  {{ trigger.slots.view }} is not a valid view. "
+      - conditions:
+          - condition: trigger
+            id:
+              - set_music_volume
+          - condition: template
+            value_template: "{{target_musicplayer_device != target_mediaplayer_device}}"
+        sequence:
+          - service: media_player.volume_set
+            data:
+              volume_level:
+                "{% if trigger.id == \"set_music_volume\" %} \n  {% if trigger.slots.level.endswith('%')
+                %}\n    {{ (trigger.slots.level |replace('%',' ') | int)/100 }}\n  {% else
+                %}\n    {{ (trigger.slots.level | int)/10 }}\n  {% endif %}\n{% endif %}"
+            target:
+              entity_id: "{{ target_musicplayer_device }}"
+          - set_conversation_response: Volume set to {{ trigger.slots.level }}
+            enabled: true
+      - conditions:
+          - condition: trigger
+            id:
+              - adjust_music_volume
+          - condition: template
+            value_template: "{{target_musicplayer_device != target_mediaplayer_device}}"
+        sequence:
+          - service:
+              "{% if trigger.slots.up_down == \"down\" %} media_player.volume_down
+              {% endif %} \n{% if trigger.slots.up_down == \"up\" %} media_player.volume_up
+              {% endif %}\n"
+            target:
+              entity_id: "{{ target_musicplayer_device }}"
+          - set_conversation_response:
+              The music volume has been turned {{ trigger.slots.up_down
+              }}
+            enabled: true
+      - conditions:
+          - condition: trigger
+            id:
+              - mute_music_volume
+          - condition: template
+            value_template: "{{target_musicplayer_device != target_mediaplayer_device}}"
+        sequence:
+          - service: media_player.volume_mute
+            data:
+              is_volume_muted: true
+            target:
+              entity_id: "{{ target_musicplayer_device }}"
+      - conditions:
+          - condition: trigger
+            id:
+              - unmute_music_volume
+          - condition: template
+            value_template: "{{target_musicplayer_device != target_mediaplayer_device}}"
+        sequence:
+          - service: media_player.volume_mute
+            data:
+              is_volume_muted: false
+            target:
+              entity_id: "{{ target_musicplayer_device }}"
+          - set_conversation_response: Music sound has been restored
+      - conditions:
+          - condition: trigger
+            id:
+              - set_tts_volume
+          - condition: template
+            value_template: "{{target_musicplayer_device != target_mediaplayer_device}}"
+        sequence:
+          - service: media_player.volume_set
+            data:
+              volume_level:
+                "{% if trigger.id == \"set_tts_volume\" %} \n  {% if trigger.slots.level.endswith('%')
+                %}\n    {{ (trigger.slots.level |replace('%',' ') | int)/100 }}\n  {% else
+                %}\n    {{ (trigger.slots.level | int)/10 }}\n  {% endif %}\n{% endif %}"
+            target:
+              entity_id: "{{ target_mediaplayer_device }}"
+          - set_conversation_response: Volume set to {{ trigger.slots.level }}
+            enabled: true
+      - conditions:
+          - condition: trigger
+            id:
+              - adjust_tts_volume
+          - condition: template
+            value_template: "{{target_musicplayer_device != target_mediaplayer_device}}"
+        sequence:
+          - service:
+              "{% if trigger.slots.up_down == \"down\" %} media_player.volume_down
+              {% endif %} \n{% if trigger.slots.up_down == \"up\" %} media_player.volume_up
+              {% endif %}\n"
+            target:
+              entity_id: "{{ target_mediaplayer_device }}"
+          - set_conversation_response:
+              The assist volume has been turned {{ trigger.slots.up_down
+              }}
+            enabled: true
+      - conditions:
+          - condition: trigger
+            id:
+              - mute_tts_volume
+          - condition: template
+            value_template: "{{target_musicplayer_device != target_mediaplayer_device}}"
+        sequence:
+          - service: media_player.volume_mute
+            data:
+              is_volume_muted: true
+            target:
+              entity_id: "{{ target_mediaplayer_device }}"
+      - conditions:
+          - condition: trigger
+            id:
+              - unmute_tts_volume
+          - condition: template
+            value_template: "{{target_musicplayer_device != target_mediaplayer_device}}"
+        sequence:
+          - service: media_player.volume_mute
+            data:
+              is_volume_muted: false
+            target:
+              entity_id: "{{ target_mediaplayer_device }}"
+          - set_conversation_response: TTS sound has been restored
       - conditions:
           - condition: trigger
             id:
