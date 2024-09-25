@@ -38,7 +38,7 @@ blueprint:
           description: The command to use to set the music player volume level by step
           default: 
             - turn {up_down} [the | your] (music | music player) [volume]
-            - ( {raise_lower} | {increase_decrease} ) [the] (music | music player) [volume]
+            - ({raise_lower} | {increase_decrease}) [the] (music | music player) [volume]
         mute_music_volume:
           name: Mute Volume Command
           description: The command to use to mute the music player
@@ -62,7 +62,7 @@ blueprint:
           description: The command to use to set TTS volume level by step
           default: 
             - turn {up_down} [the | your] (voice | assistant | voice assistant | assist | t t s | TTS | tee tee es | teetee es | text to speech | tex to speech) [volume]
-            - ( {raise_lower} | {increase_decrease} ) [the | your] (voice | assistant | voice assistant | assist | t t s | TTS | tee tee es | teetee es | text to speech | tex to speech) [volume]
+            - ({raise_lower} | {increase_decrease}) [the | your] (voice | assistant | voice assistant | assist | t t s | TTS | tee tee es | teetee es | text to speech | tex to speech) [volume]
         mute_tts_volume:
           name: Mute Volume Command
           description: The command to use to mute TTS audio
@@ -81,8 +81,8 @@ blueprint:
       default: 
         - turn {up_down} [the] volume
         - volume {up_down}
-        - ( {raise_lower} | {increase_decrease} ) [the] volume
-        - volume ( {raise_lower} | {increase_decrease} )
+        - ({raise_lower} | {increase_decrease}) [the] volume
+        - volume ({raise_lower} | {increase_decrease})
     mute_volume:
       name: Mute Volume Command 
       description: The command to use to mute audio
@@ -263,7 +263,7 @@ action:
           - service: media_player.volume_set
             data:
               volume_level: |-
-                {% if trigger.id == 'set_volume' %} 
+                {% if trigger.id == "set_volume" %} 
                   {% if trigger.slots.level.endswith('%') %}
                     {{ (trigger.slots.level |replace('%',' ') | int)/100 }}
                   {% else %}
@@ -295,7 +295,7 @@ action:
                 The music volume has been turned {{ trigger.slots.up_down }}
               {% endif %}
               {% if trigger.slots.increase_decrease == 'decrease' or trigger.slots.increase_decrease == 'increase' %}
-                The music volume has been {{ trigger.slots.increase_decrease }}
+                The music volume has been {{ trigger.slots.increase_decrease}}ed
               {% endif %}
               {% if trigger.slots.raise_lower == 'lower' or trigger.slots.raise_lower == 'raise' %}
                 The music volume has been {{ trigger.slots.raise_lower}}ed
@@ -336,7 +336,7 @@ action:
           - service: media_player.volume_set
             data:
               volume_level: |-
-                {% if trigger.id == 'set_volume' %} 
+                {% if trigger.id == 'set_volume' %}
                   {% if trigger.slots.level.endswith('%') %}
                     {{ (trigger.slots.level |replace('%',' ') | int)/100 }}
                   {% else %}
@@ -407,7 +407,7 @@ action:
           - service: media_player.volume_set
             data:
               volume_level: |-
-                {% if trigger.id == 'set_volume' %} 
+                {% if trigger.id == 'set_volume' %}
                   {% if trigger.slots.level.endswith('%') %}
                     {{ (trigger.slots.level |replace('%',' ') | int)/100 }}
                   {% else %}
