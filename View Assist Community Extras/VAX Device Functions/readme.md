@@ -5,7 +5,7 @@
 > ## **This is an edited version of Dinki's View Assist Device Functions blueprint. This version includes community made features and is __NOT__ supported by Dinki and the View Assist team.**
 
 > [!IMPORTANT]
-> 
+> o
 
 If using stock View Assist device config, this blueprint behaves exactly the same way as the stock Device Functions Blueprint.  
 Features are unlocked automatically when View Assist device config uses different media players for mediaplayer_device & musicplayer_device, and when an adb_device is added.  
