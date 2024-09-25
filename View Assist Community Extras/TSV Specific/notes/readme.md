@@ -41,7 +41,7 @@ Courtesy of @SemiColon:
 
 `/sys/devices/soc/soc:gpio_keys/camera_switches`
 * Camera Enabled/Shutter Open: `1`
-* Camera Disabled/Shutter Closed: `0`
+* Camera Disabled/Shutter Closed: `0`  
 `/sys/devices/soc/soc:gpio_keys/mute_switches`
 * Mic Enabled: `0`
 * Mic Disabled: `1`
