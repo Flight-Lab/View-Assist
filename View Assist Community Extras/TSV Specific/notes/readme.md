@@ -39,15 +39,15 @@ With `light.{deviceID}_screen` set to 100%, the black filter transparency = 100%
 Courtesy of @SemiColon:
 "Unsure if anyone has found this yet, but in order to detect the Hardware Mic and Camera switches, you can read the following files:
 
-/sys/devices/soc/soc:gpio_keys/camera_switches
-Camera Enabled/Shutter Open: 1
-Camera Disabled/Shutter Closed: 0
-/sys/devices/soc/soc:gpio_keys/mute_switches
-Mic Enabled: 0
-Mic Disabled: 1
+`/sys/devices/soc/soc:gpio_keys/camera_switches`
+* Camera Enabled/Shutter Open: `1`
+* Camera Disabled/Shutter Closed: `0`
+`/sys/devices/soc/soc:gpio_keys/mute_switches`
+* Mic Enabled: `0`
+* Mic Disabled: `1`
 
 Could use this to drive the Mute entity in HA, and detect the status of the Camera. 
-Unfortunately, they are GPIO pins, so there is no linux/android events associated with the files changing. I was able to use Tasker with the tick event, to check the file every few seconds."
+Unfortunately, they are GPIO pins, so there is no linux/android events associated with the files changing. I was able to use Tasker with the `tick` event, to check the file every few seconds."
 
 Magisk/root can be achieved by either replacing the boot.img in the zip with `boot_los15_20240602.img` (after renaming it to `boot.img`), or flash this boot.img  in QFIL's partition manager after flashing lineage.
 
