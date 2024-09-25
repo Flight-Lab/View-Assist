@@ -2,7 +2,7 @@ blueprint:
   name: View Assist Extras - Device Functions
   description: Various device functions for the View Assist Satellites  
     VAX edition
-    (View Assist devicefunctions v 1.2.2 E 0.0.2)
+    (View Assist devicefunctions v 1.2.2 E 0.0.3)
   domain: automation
   source_url: https://gist.github.com/Flight-Lab/054a12df123f8b179feb4af7d90443c8
   author: flab
