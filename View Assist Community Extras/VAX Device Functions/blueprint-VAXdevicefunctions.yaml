@@ -261,8 +261,8 @@ action:
         sequence:
           - service: media_player.volume_set
             data:
-              volume_level: >
-                {% if trigger.id == "set_volume" %} 
+              volume_level: |-
+                {% if trigger.id == "set_music_volume" %} 
                   {% if trigger.slots.level.endswith('%') %}
                     {{ (trigger.slots.level |replace('%',' ') | int)/100 }}
                   {% else %}
@@ -331,8 +331,8 @@ action:
         sequence:
           - service: media_player.volume_set
             data:
-              volume_level: >
-                {% if trigger.id == 'set_volume' %}
+              volume_level: |-
+                {% if trigger.id == 'set_tts_volume' %}
                   {% if trigger.slots.level.endswith('%') %}
                     {{ (trigger.slots.level |replace('%',' ') | int)/100 }}
                   {% else %}
@@ -399,7 +399,7 @@ action:
         sequence:
           - service: media_player.volume_set
             data:
-              volume_level: >
+              volume_level: |-
                 {% if trigger.id == 'set_volume' %}
                   {% if trigger.slots.level.endswith('%') %}
                     {{ (trigger.slots.level |replace('%',' ') | int)/100 }}
