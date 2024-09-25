@@ -14,7 +14,6 @@ template:
           view_timeout: "20"
           mode: "normal"
           do_not_disturb: false
-          wakeword_device: "sensor.pyramid_mic_wake"                # Stream Assist        - integration
           adb_device: "media_player.adb_pyramid"                    # Android Debug Bridge - integration
       - name: ViewAssist_Slab
         unique_id: viewassist_slab
@@ -30,7 +29,6 @@ template:
           view_timeout: "20"
           mode: "normal"
           do_not_disturb: false
-          wakeword_device: "sensor.slab_mic_wake"
           adb_device: "media_player.adb_slab"
       - name: ViewAssist_Wedge
         unique_id: viewassist_wedge
@@ -46,7 +44,6 @@ template:
           view_timeout: "20"
           mode: "normal"
           do_not_disturb: false
-          wakeword_device: "sensor.wedge_mic_wake"
           adb_device: "media_player.adb_wedge"
 
 timer:
