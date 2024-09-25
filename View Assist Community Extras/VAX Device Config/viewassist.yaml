@@ -5,17 +5,17 @@ template:
         state: ""
         attributes:
           type: view_audio
-          mic_device: "sensor.pyramid_mic_stt"                      # Stream Assist
-          mediaplayer_device: "media_player.ar_pyramid_audio"       # Air Receiver 
-          musicplayer_device: "media_player.snap_pyramid"           # Snapcast
-          display_device: "sensor.fkbp_browser_path"                # Browser Mod
-          browser_id: "FKBP"                                        # Browser Mod
+          mic_device: "sensor.pyramid_mic_stt"                      # Stream Assist - integration
+          mediaplayer_device: "media_player.ar_pyramid_audio"       # Air Receiver  - app
+          musicplayer_device: "media_player.snap_pyramid"           # Snapcast      - app
+          display_device: "sensor.fkbp_browser_path"                # Browser Mod   - integration
+          browser_id: "FKBP"                                        # Browser Mod   - integration
           timer_device: "timer.viewassist_pyramid"                  # In this file
           view_timeout: "20"
           mode: "normal"
           do_not_disturb: false
-          wakeword_device: "sensor.pyramid_mic_wake"                # Stream Assist
-          adb_device: "media_player.adb_pyramid"                    # Android Debug Bridge
+          wakeword_device: "sensor.pyramid_mic_wake"                # Stream Assist        - integration
+          adb_device: "media_player.adb_pyramid"                    # Android Debug Bridge - integration
       - name: ViewAssist_Slab
         unique_id: viewassist_slab
         state: ""
