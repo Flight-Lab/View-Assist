@@ -1,1 +1,63 @@
+template:
+  - sensor:
+      - name: ViewAssist_Pyramid
+        unique_id: viewassist_pyramid
+        state: ""
+        attributes:
+          type: view_audio
+          mic_device: "sensor.pyramid_mic_stt"                      # Stream Assist
+          mediaplayer_device: "media_player.ar_pyramid_audio"       # Air Receiver 
+          musicplayer_device: "media_player.snap_pyramid"           # Snapcast
+          display_device: "sensor.fkbp_browser_path"                # Browser Mod
+          browser_id: "FKBP"                                        # Browser Mod
+          timer_device: "timer.viewassist_pyramid"                  # In this file
+          view_timeout: "20"
+          mode: "normal"
+          do_not_disturb: false
+          wakeword_device: "sensor.pyramid_mic_wake"                # Stream Assist
+          adb_device: "media_player.adb_pyramid"                    # Android Debug Bridge
+      - name: ViewAssist_Slab
+        unique_id: viewassist_slab
+        state: ""
+        attributes:
+          type: view_audio
+          mic_device: "sensor.slab_mic_stt"
+          mediaplayer_device: "media_player.ar_slab_audio"
+          musicplayer_device: "media_player.snap_slab"
+          display_device: "sensor.fkbs_browser_path"
+          browser_id: "FKBS"
+          timer_device: "timer.viewassist_slab"
+          view_timeout: "20"
+          mode: "normal"
+          do_not_disturb: false
+          wakeword_device: "sensor.slab_mic_wake"
+          adb_device: "media_player.adb_slab"
+      - name: ViewAssist_Wedge
+        unique_id: viewassist_wedge
+        state: ""
+        attributes:
+          type: view_audio
+          mic_device: "sensor.wedge_mic_stt"
+          mediaplayer_device: "media_player.ar_wedge_audio"
+          musicplayer_device: "media_player.snap_wedge"
+          display_device: "sensor.fkbw_browser_path"
+          browser_id: "FKBW"
+          timer_device: "timer.viewassist_wedge"
+          view_timeout: "20"
+          mode: "normal"
+          do_not_disturb: false
+          wakeword_device: "sensor.wedge_mic_wake"
+          adb_device: "media_player.adb_wedge"
 
+timer:
+  viewassist_pyramid:
+  viewassist_slab:
+  viewassist_wedge:
+
+group:
+  viewassist_satellites:
+    name: View Assist Satellites
+    entities:
+      - sensor.viewassist_pyramid
+      - sensor.viewassist_slab
+      - sensor.viewassist_wedge
