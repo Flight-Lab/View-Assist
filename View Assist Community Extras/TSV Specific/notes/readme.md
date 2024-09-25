@@ -9,6 +9,10 @@ https://github.com/pgale/lineage_15.1_Installation_TSV
 ADB persistent on reboot: 
   `adb shell setprop persist.adb.tcp.port 5555`
 
+<!--
+ADB keys https://gist.github.com/arjunv/2bbcca9a1a1c127749f8dcb6d36fb0bc
+-->
+
 
 ## ADB Commands for Screen Brightness Control
 
