@@ -203,7 +203,7 @@ action:
                     sequence:
                       - if:
                           - condition: template
-                            value_template:  |-
+                            value_template: >-
                               "{% if target_satellite_device_type == 'audio_only'%}
                                   true
                               {% else %}
@@ -234,7 +234,7 @@ action:
         sequence:
           - if:
               - condition: template
-                value_template:  |-
+                value_template: >-
                   "{% if target_satellite_device_type != 'audio_only'%}
                       true
                   {% else %}
@@ -281,7 +281,7 @@ action:
           - condition: template
             value_template: "{{target_musicplayer_device != target_mediaplayer_device}}"
         sequence:
-          - service: |-
+          - service: >-
               "{% if trigger.slots.up_down == 'down' or trigger.slots.increase_decrease == 'decrease' or trigger.slots.raise_lower == 'lower' %}
                   media_player.volume_down
               {% endif %}
@@ -290,7 +290,7 @@ action:
               {% endif %}"
             target:
               entity_id: "{{ target_musicplayer_device }}"
-          - set_conversation_response: |-
+          - set_conversation_response: >-
               "{% if trigger.slots.up_down == 'down' or trigger.slots.up_down == 'up' %}
                   The music volume has been turned {{ trigger.slots.up_down }}
               {% endif %}
@@ -354,7 +354,7 @@ action:
           - condition: template
             value_template: "{{target_musicplayer_device != target_mediaplayer_device}}"
         sequence:
-          - service: |-
+          - service: >-
               "{% if trigger.slots.up_down == 'down' or trigger.slots.increase_decrease == 'decrease' or trigger.slots.raise_lower == 'lower' %}
                   media_player.volume_down
               {% endif %}
@@ -363,7 +363,7 @@ action:
               {% endif %}"
             target:
               entity_id: "{{ target_mediaplayer_device }}"
-          - set_conversation_response: |-
+          - set_conversation_response: >-
               "{% if trigger.slots.up_down == 'down' or trigger.slots.up_down == 'up' %}
                   The assist volume has been turned {{ trigger.slots.up_down}}
               {% endif %}
@@ -415,7 +415,7 @@ action:
                   {% endif %}
                 {% endif %}"
             target:
-              entity_id: |-
+              entity_id: >-
                 "{% if target_adb_device == 'none' %}
                     {{ target_mediaplayer_device }}
                 {%else %}
@@ -428,7 +428,7 @@ action:
             id:
               - adjust_volume
         sequence:
-          - service: |-
+          - service: >-
               "{% if trigger.slots.up_down == 'down' or trigger.slots.increase_decrease == 'decrease' or trigger.slots.raise_lower == 'lower' %} 
                   media_player.volume_down
               {% endif %} 
@@ -436,13 +436,13 @@ action:
                   media_player.volume_up 
               {% endif %}"
             target:
-              entity_id: |-
+              entity_id: >-
                 "{% if target_adb_device == 'none' %}
                     {{ target_mediaplayer_device }}
                 {%else %}
                     {{ target_adb_device }}
                 {% endif %}"
-          - set_conversation_response: |-
+          - set_conversation_response: >-
               "{% if trigger.slots.up_down == 'down' or trigger.slots.up_down == 'up' %}
                   The volume has been turned {{ trigger.slots.up_down }}
               {% endif %}
@@ -462,7 +462,7 @@ action:
             data:
               is_volume_muted: true
             target:
-              entity_id: |-
+              entity_id: >-
                 "{% if target_adb_device == 'none' %}
                     {{ target_mediaplayer_device }}
                 {%else %}
