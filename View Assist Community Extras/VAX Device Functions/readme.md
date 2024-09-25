@@ -1,5 +1,11 @@
+# View Assist Extras Device Functions
+ **description**
 
+> [!CAUTION] 
+> ## **This is an edited version of Dinki's View Assist Device Functions blueprint. This version includes community made features and is __NOT__ supported by Dinki and the View Assist team.**
 
+> [!IMPORTANT]
+> 
 
 If using stock View Assist device config, this blueprint behaves exactly the same way as the stock Device Functions Blueprint.  
 Features are unlocked automatically when View Assist device config uses different media players for mediaplayer_device & musicplayer_device, and when an adb_device is added.  
@@ -11,3 +17,13 @@ New features:
 * voice commands for Music Player volume
 * voice commands for TTS Player volume
 * Default volume voice commands target adb_device (if it exists). This controls the devices volume the same way the hardware buttons do.
+
+recommend using media players that have volume control independent from the device volume
+Examples: 
+* Snapcast
+* Air Receiver airtunes audio
+
+
+To-Do:  
+[ ] make formal opt-in switches in the inputs page
+[ ] type real readme
