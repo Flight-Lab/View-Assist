@@ -1,4 +1,4 @@
-# View Assist Extras Device Functions <sub>v 1.2.2 E 0.0.11</sub>
+# View Assist Extras Device Functions <sub>v 1.2.2 e 0.0.11</sub>
  **description**  
 > [!CAUTION] 
 > ## **This is an edited version of Dinki's View Assist Device Functions blueprint. This version includes community made features and is __NOT__ supported by Dinki and the View Assist team.**
