@@ -1,4 +1,4 @@
-# Music Volume Control during Assist & Broadcast
+# Music Volume Control during Assist & Broadcast<sub>v 1.1.1</sub>
 
 > [!CAUTION] 
 > ## **This is __NOT__ an official View Assist blueprint and therefor is NOT supported by Dinki and the View Assist team.**
