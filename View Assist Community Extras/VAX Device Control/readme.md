@@ -1,4 +1,4 @@
-# View Assist Extras Device Control
+# View Assist Extras Device Control <sub>v 1.2.1 e 1.0.2</sub>
  **Controls Device Display & Audio**
 
 > [!CAUTION] 
