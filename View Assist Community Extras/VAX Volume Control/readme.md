@@ -15,7 +15,7 @@ If no speech-to-text (STT) is detected or when text-to-speech (TTS) finishes, th
 **\*Must make new automation for each device.\***
 
 ## Prerequisites:
-To use this blueprint, the mediaplayer_device and musicplayer_device must be separate media_player entities in your View Assist device configuration. These features rely on state changes as triggers, so media players must be stable, always available, and display reliable state changes between idle and playing. Remember to also use the mediaplayer_device media_player in Stream Assist.
+To use this blueprint, the mediaplayer_device and musicplayer_device must use separate media_player entities in your View Assist device configuration. These features rely on state changes as triggers, so media players must be stable, always available, and display reliable state changes between idle and playing. Remember to also use the mediaplayer_device media_player in Stream Assist.
 
 ## Recommended Media Players:
 * **musicplayer_device:** [Snapcast](https://play.google.com/store/apps/details?id=de.badaix.snapcast&hl=en_US) (only exposed by Music Assistant) **FREE**
