@@ -15,6 +15,7 @@ template:
           mode: "normal"
           do_not_disturb: false
           adb_device: "media_player.adb_pyramid"                    # Android Debug Bridge - integration
+          fkb_device: "pyramid"                                     # Fully Kiosk Browser - integration
       - name: ViewAssist_Slab
         unique_id: viewassist_slab
         state: ""
