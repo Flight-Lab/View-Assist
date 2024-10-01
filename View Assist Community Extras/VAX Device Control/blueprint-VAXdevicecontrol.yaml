@@ -104,11 +104,24 @@ blueprint:
           name: Pop-Up Intent Timeout
           description: How long for intent pop-up to stay on screen.
           selector:
-            duration:
+            duration: {}
           default:
             hours: 0
             minutes: 0
             seconds: 10
+    extras_misc_config_edits:
+      name: __Extras__ - Miscellaneous Config Edits
+      icon: mdi:exclamation-thick
+      collapsed: true
+      input:
+        fkb_load_start_url:
+          name: Load Start URL
+          description:
+            Selecting 'true' will load the Fully Kiosk Browser start URL when the Home Assistant server starts up. This is to ensure that Browser Mod is activated.
+            Requires 'fkb_device' in View Assist device config file.
+          selector:
+            boolean: {}
+          default: false
     extras_mediaplayers:
       name: __Extras__ - Dual Media Players
       icon: mdi:volume-high
@@ -151,7 +164,7 @@ blueprint:
           name: Music Mode Timeout Length
           description: Time to wait before turning music mode off after musicplayer_device is paused. Leave set to 0 if no timeout desired.
           selector:
-            duration:
+            duration: {}
           default:
             hours: 00
             minutes: 05
@@ -213,6 +226,7 @@ variables:
   music_mode_auto: !input music_mode_auto
   music_mode_timeout: !input music_mode_timeout
   music_mode_timeout_switch: !input music_mode_timeout_switch
+  fkb_load_start_url: !input fkb_load_start_url
 action:
   - choose:
       - conditions:
@@ -303,6 +317,14 @@ action:
               - service: switch.turn_on
                 target:
                   entity_id: !input micdevice
+          - if:
+              - condition: template
+                value_template: "{{ fkb_load_start_url == true and state_attr (satellite,'fkb_device') != 'none' }}"
+            then:
+              - action: button.press
+                target:
+                  entity_id: button.{{state_attr (satellite,'fkb_device')}}_load_start_url
+                data: {}
       - conditions:
           - condition: trigger
             id:
