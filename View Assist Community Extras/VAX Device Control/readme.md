@@ -1,4 +1,4 @@
-# View Assist Extras Device Control <sub>v 1.2.1 e 1.0.2</sub>
+# View Assist Extras Device Control <sub>v 1.2.1 e 1.0.3</sub>
  **Controls Device Display & Audio**
 
 > [!CAUTION] 
@@ -49,9 +49,14 @@ Setting the AirTunes Audio Latency to 0(ms) in step \#3 allows for a more respon
 > [!note]
 >All features are opt-in. Leaving them untouched is esentially the same as using the stock View Assist Device Control blueprint.
 
-
-**Extra features that do not require separate media_players:**
+**Extra features that do not require any change to the stock View Assist device config file:**
 * The ability to use a toggle to choose between default intent view and @mr.picc010's intent pop-up. (intent pop-up uses BrowserMod)
+
+**Extra features that require changes to the stock View Assist device config file:**
+*On Home Assistant server startup, Fully Kiosk Browser loads the start URL.  
+Requires `fkb_device: ` in config file.  
+The `fkb_device: ` will be the name of the device in the Fully Kiosk Browser integration.  
+E.g. `fkb_device: "pyramid"`
 
 **Checks if separate media_players are used in Extras inputs and automatically enables the following features:** 
 * Set music mode and navigate to music view when the musicplayer_device starts playing. Previously this only happened when playing music using the play music voice command, now this functions when music playback is started from any trigger.
