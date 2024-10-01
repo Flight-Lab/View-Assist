@@ -1,9 +1,10 @@
 Example of View Assist device configuration using packages.
 Includes additional entries needed for some VAX features.
 
-New entries
+New attributes:
 ```
-adb_device: media_player.(name)
+adb_device: "media_player.(name)"
+fkb_device: "(Fully Kiosk Browser device name)" 
 ```
 
 To-Do
