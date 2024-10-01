@@ -184,7 +184,12 @@ action:
                   {% endif %}
                 {% endif %}
             target:
-              entity_id: "{{ target_mediaplayer_device }}"
+              entity_id: >-
+                {% if target_adb_device == 'none' %}
+                  {{ target_mediaplayer_device }}
+                {%else %}
+                  {{ target_adb_device }}
+                {% endif %}
           - set_conversation_response: The volume was set to {{ trigger.slots.level }}
             enabled: true
       - conditions:
@@ -211,7 +216,12 @@ action:
             data:
               is_volume_muted: true
             target:
-              entity_id: "{{ target_mediaplayer_device }}"
+              entity_id: >-
+                {% if target_adb_device == 'none' %}
+                  {{ target_mediaplayer_device }}
+                {%else %}
+                  {{ target_adb_device }}
+                {% endif %}
       - conditions:
           - condition: trigger
             id:
@@ -221,7 +231,12 @@ action:
             data:
               is_volume_muted: false
             target:
-              entity_id: "{{ target_mediaplayer_device }}"
+              entity_id: >-
+                {% if target_adb_device == 'none' %}
+                  {{ target_mediaplayer_device }}
+                {%else %}
+                  {{ target_adb_device }}
+                {% endif %}
           - set_conversation_response: "Sound has been restored"
       - conditions:
           - condition: trigger
@@ -256,5 +271,6 @@ variables:
   target_display_device: "{{ device_id(state_attr(target_satellite_device, 'display_device')) }}"
   target_mediaplayer_device: "{{ state_attr(target_satellite_device, 'mediaplayer_device') }}"
   target_musicplayer_device: "{{ state_attr(target_satellite_device, 'musicplayer_device') }}"
-  target_timer_device: "{{ state_attr(target_satellite_device, 'timer_device') }}"    
-  target_satellite_device_type: "{{ state_attr(target_satellite_device, 'type') }}"              
+  target_timer_device: "{{ state_attr(target_satellite_device, 'timer_device') }}"
+  target_satellite_device_type: "{{ state_attr(target_satellite_device, 'type') }}"
+  target_adb_device: "{{ state_attr(target_satellite_device, 'adb_device') }}"
