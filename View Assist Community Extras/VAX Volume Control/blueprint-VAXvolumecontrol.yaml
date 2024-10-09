@@ -5,7 +5,7 @@ blueprint:
     music volume when TTS ends. Must make new automation for each device. Requires
     the use of separate and unique media_players for mediaplayer_device and musicplayer_device
     entities in View Assist device config. (View Assist Extras - Volume control Assist
-    & Broadcast v 1.1.1)
+    & Broadcast v 1.1.2)
   domain: automation
   source_url: https://gist.github.com/Flight-Lab/ed20af4f6f7a4a5258a668317ae61671
   author: Flab
@@ -65,6 +65,16 @@ blueprint:
                 - automation
           multiple: false
       default: automation.view_assist_broadcast
+    volume_duck:
+      name: Volume Duck %
+      description: Set how much the music volume ducks during assist. 0 will mute the volume, 1 will not decrease the volume at all.
+      selector:
+        number:
+          min: 0
+          max: 1
+          step: 0.01
+          mode: slider
+      default: 0.50
     tts_timeout: 
       name: TTS Timeout
       description: How long to wait after TTS failure for volume to reset. Setting too short may cut off long TTS responses.
@@ -107,7 +117,7 @@ trigger:
     entity_id: 
       - !input stt
     to: vad-end
-    id: stt end
+    id: stt_end
   - alias: silence
     platform: state
     entity_id: 
@@ -123,6 +133,7 @@ trigger:
 variables:
   musicplayer_device: !input musicplayer_device
   stt_silence_alert: !input stt_silence_alert
+  volume_duck: !input volume_duck
 condition: []
 action:
   - choose:
@@ -138,7 +149,7 @@ action:
           - action: media_player.volume_set
             metadata: {}
             data:
-              volume_level: "{{ initial_volume | float * 0.5 }}"
+              volume_level: "{{ initial_volume | float * volume_duck }}"
             target:
               entity_id: !input musicplayer_device
       - conditions:
@@ -153,7 +164,7 @@ action:
           - action: media_player.volume_set
             metadata: {}
             data:
-              volume_level: "{{ lowered_volume | float * 2 }}"
+              volume_level: "{{ lowered_volume | float / volume_duck }}"
             target:
               entity_id: !input musicplayer_device
       - conditions:
@@ -169,7 +180,7 @@ action:
             data: !input stt_silence_file
       - conditions:
           - condition: trigger
-            id: stt end
+            id: stt_end
           - condition: state
             entity_id: !input musicplayer_device
             state: playing
@@ -185,7 +196,7 @@ action:
           - action: media_player.volume_set
             metadata: {}
             data:
-              volume_level: "{{ lowered_volume | float * 2 }}"
+              volume_level: "{{ lowered_volume | float / volume_duck }}"
             target:
               entity_id: !input musicplayer_device
       - conditions:
@@ -204,7 +215,7 @@ action:
           - action: media_player.volume_set
             metadata: {}
             data:
-              volume_level: "{{ initial_volume | float * 0.5 }}"
+              volume_level: "{{ initial_volume | float * volume_duck }}"
             target:
               entity_id: !input musicplayer_device
           - wait_for_trigger:
