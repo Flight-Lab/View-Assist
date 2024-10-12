@@ -1,5 +1,5 @@
 blueprint:
-  name: View Assist Extras - Extended Device Control - Display & Audio
+  name: View Assist Community Contributions - Extended Device Control - Display & Audio
   description: __Optional Extended Features:__
     - Decreases music volume when triggered by wake-word or broadcast, raises
     music volume when TTS ends.
