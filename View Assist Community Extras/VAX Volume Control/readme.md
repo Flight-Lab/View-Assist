@@ -3,7 +3,7 @@
 > Repeat, this blueprint has been superceded by:
 > [Device Control - Display & Audio]()
 
-# Music Volume Control during Assist & Broadcast<sub>v 1.1.2</sub>
+# Music Volume Control during Assist & Broadcast<sub>v 1.1.4</sub>
 
 > [!CAUTION] 
 > ## **This is __NOT__ an official View Assist blueprint and therefor is NOT supported by Dinki and the View Assist team.**
