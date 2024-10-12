@@ -5,7 +5,7 @@ Page is a work in progress
 This blueprint extends features for enhanced control of View Assist device display and audio playback. 
 
 > [!note]    
-> **Must create a new automation for each device.**
+> **Must create a new automation for each device.**        
 > Some features require edits and/or additions in the View Assist device configuration yaml file. 
 
 __Optional Extended Features Summary:__
