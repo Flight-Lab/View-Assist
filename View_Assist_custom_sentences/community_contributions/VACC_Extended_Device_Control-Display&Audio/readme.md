@@ -90,11 +90,12 @@ This also lets you set permanant default levels to each channel or mute certain 
 
 <!--
 
-Bring Wall Panel features up to parity with FKB
-
 ADB instructions
 
-soundplayer_device
+Display Brightness control using ADB
 
+Bring Wall Panel features up to parity with FKB
+
+soundplayer_device
 
 -->
