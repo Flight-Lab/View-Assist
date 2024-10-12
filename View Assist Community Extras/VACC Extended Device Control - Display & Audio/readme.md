@@ -19,10 +19,7 @@ This blueprint enhances the control of View Assist device displays and audio pla
 <details>
 <summary>Blueprint Input Page Screenshots:</summary>
     
-![EDC-Blueprint-Input-Page-1](https://github.com/user-attachments/assets/bb310654-fbe3-4a16-94c6-03b5d0ebbae0)
-    
-![EDC-Blueprint-Input-Page-2](https://github.com/user-attachments/assets/88bfef88-1c99-4666-a1b0-ebdb845410fc)
-</details>
+![VACC-EDC-1](https://github.com/user-attachments/assets/f0461fe4-73fe-4ef9-9c07-1859dd171ea1)
 
 ## Included Features: 
 
