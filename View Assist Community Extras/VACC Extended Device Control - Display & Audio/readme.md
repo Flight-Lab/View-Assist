@@ -18,8 +18,13 @@ __Optional Extended Features Summary:__
  
 > [!note]
 >All features are opt-in and will not work unless the required device config changes are made.
+<details>
+<summary>Blueprint Input Page Screen Shots:</summary>
+![EDC-Blueprint-Input-Page-1](https://github.com/user-attachments/assets/bb310654-fbe3-4a16-94c6-03b5d0ebbae0)    
+![EDC-Blueprint-Input-Page-2](https://github.com/user-attachments/assets/88bfef88-1c99-4666-a1b0-ebdb845410fc)
+</details>
 
-## contains: 
+## Contains: 
 
 **Extra features that do not require any change to the stock View Assist device config file:**
   * Assist Audio Feedback:
@@ -83,12 +88,6 @@ Setting the AirTunes Audio Latency to 0(ms) in step \#3 allows for a more respon
 </details>
 
 [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://gist.github.com/Flight-Lab/6ddb640f756791d59b6fd9be93375eee)
-
-<details>
-<summary>Blueprint Input Page Screen Shots:</summary>
-![EDC-Blueprint-Input-Page-1](https://github.com/user-attachments/assets/bb310654-fbe3-4a16-94c6-03b5d0ebbae0)    
-![EDC-Blueprint-Input-Page-2](https://github.com/user-attachments/assets/88bfef88-1c99-4666-a1b0-ebdb845410fc)
-</details>
 
 <!-- 
 notes for future edits:
