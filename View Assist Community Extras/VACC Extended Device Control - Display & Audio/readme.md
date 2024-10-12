@@ -47,7 +47,8 @@ E.g. `fkb_device: "pyramid"`
 
 
 > [!IMPORTANT]
-> Most of the extra features REQUIRE the mediaplayer_device and musicplayer_device in your View Assist device config file to use separate media_player entities. These features rely on using media_player state change as a trigger, so the media players must also be stable, remain available, and display reliable state changes between idle & playing. Remember to also use the mediaplayer_device media_player in Stream Assist.
+> Most of the extra features REQUIRE the mediaplayer_device and musicplayer_device in your View Assist device config file to use separate media_player entities. These features rely on using media_player state change as a trigger, so the media players must also be stable, remain available, and display reliable state changes between idle & playing.        
+> Remember to also use the mediaplayer_device media_player in Stream Assist.
 
 ## Recommended Media Players:
 * **musicplayer_device:** [Snapcast](https://play.google.com/store/apps/details?id=de.badaix.snapcast&hl=en_US) (only exposed by Music Assistant) **FREE**
@@ -56,7 +57,7 @@ E.g. `fkb_device: "pyramid"`
 
 <summary>AirReceiver Setup:</summary>
 
-1) In AirReceiver settings, make sure both Airplay <sub>IOS Media Receiver</sub> and AirTunes Audio <sub>AirPort Express Speaker</sub> are selected. The media_player entity we want to use is only made when both of these are checked.
+1) In AirReceiver settings, make sure both Airplay <sub>IOS Media Receiver</sub> and AirTunes Audio <sub>AirPort Express Speaker</sub> are selected. The media_player entity we want to use is only made when both of these are checked.        
 (You do not need the other options selected for this but they will not harm anything if you choose to. I do, however, recommend unchecking them as they will create even more media player entities. One even creates a media server.)
 
 3) Scroll down and select Advanced Settings.
