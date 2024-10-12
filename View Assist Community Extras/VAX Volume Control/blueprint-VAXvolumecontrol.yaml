@@ -4,7 +4,9 @@ blueprint:
     __WARNING__
 
     __This blueprint has now been merged with another and is no longer being developed.__
+    
     __Repeat, this blueprint has been superceded by Device Control - Display & Audio__
+    
     Decreases music volume when triggered by wake-word or broadcast, raises
     music volume when TTS ends. Must make new automation for each device. Requires
     the use of separate and unique media_players for mediaplayer_device and musicplayer_device
