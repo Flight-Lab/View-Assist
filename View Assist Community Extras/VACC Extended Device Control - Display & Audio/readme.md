@@ -21,6 +21,8 @@ This blueprint enhances the control of View Assist device displays and audio pla
     
 ![VACC-EDC-1](https://github.com/user-attachments/assets/f0461fe4-73fe-4ef9-9c07-1859dd171ea1)
 
+</details>
+
 ## Included Features: 
 
 ### No Changes to Stock View Assist Device Configuration Needed:
