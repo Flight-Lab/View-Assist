@@ -1,6 +1,6 @@
 Page is a work in progress
 
-# View Assist Extras - Extended Device Control - Display & Audio
+# View Assist Community Contributions - Extended Device Control - Display & Audio
 
 This blueprint extends features for enhanced control of View Assist device display and audio playback. 
 
@@ -83,6 +83,12 @@ Setting the AirTunes Audio Latency to 0(ms) in step \#3 allows for a more respon
 </details>
 
 [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://gist.github.com/Flight-Lab/6ddb640f756791d59b6fd9be93375eee)
+
+<details>
+<summary>Blueprint Input Page Screen Shots:</summary>
+![EDC-Blueprint-Input-Page-1](https://github.com/user-attachments/assets/bb310654-fbe3-4a16-94c6-03b5d0ebbae0)
+![EDC-Blueprint-Input-Page-2](https://github.com/user-attachments/assets/88bfef88-1c99-4666-a1b0-ebdb845410fc)
+</details>
 
 <!-- 
 notes for future edits:
