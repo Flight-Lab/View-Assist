@@ -34,7 +34,7 @@ This blueprint enhances the control of View Assist device displays and audio pla
     - Fully Kiosk Browser automatically loads the start URL on server startup.  
     - Requires setting `fkb_device:` in the config file, which should match the device name in the Fully Kiosk Browser integration.      (e.g., `fkb_device: "pyramid"`)
 
-### Separate Media Players Required:
+### Features Requiring Separate Media Players:
 For the following features, separate media players must be defined for `mediaplayer_device` and `musicplayer_device` in the config:
 - **Auto Music Mode:**
     - Switches to music mode and navigates to the music view when `musicplayer_device` starts playing. This applies even when playback starts from any sources other than just voice commands.
