@@ -18,7 +18,9 @@ This blueprint enhances the control of View Assist device displays and audio pla
 > All features are opt-in and most require corresponding device configuration changes.
 <details>
 <summary>Blueprint Input Page Screenshots:</summary>
-![EDC-Blueprint-Input-Page-1](https://github.com/user-attachments/assets/bb310654-fbe3-4a16-94c6-03b5d0ebbae0)        
+    
+![EDC-Blueprint-Input-Page-1](https://github.com/user-attachments/assets/bb310654-fbe3-4a16-94c6-03b5d0ebbae0)
+    
 ![EDC-Blueprint-Input-Page-2](https://github.com/user-attachments/assets/88bfef88-1c99-4666-a1b0-ebdb845410fc)
 </details>
 
