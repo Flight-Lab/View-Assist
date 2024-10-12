@@ -82,9 +82,8 @@ Setting the AirTunes Audio Latency to 0(ms) in step \#3 allows for a more respon
 
 </details>
 
-<!--  
-[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)]()
--->
+[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://gist.github.com/Flight-Lab/6ddb640f756791d59b6fd9be93375eee)
+
 <!-- 
 notes for future edits:
 The general concept is to work like an audio mixer. Each channel is individually controllable and can be played at the same time as any of the other channels. This enables you to do something wild like playing music while an alarm rings and assist tells you what the alarm is for, or something more controlled like having your music lower in volume as the alarm increases in volume.  
