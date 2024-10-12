@@ -131,11 +131,6 @@ blueprint:
           selector:
             media: {}
           default:
-            target:
-              entity_id: media_player.ar_pyramid_audio
-            data:
-              media_content_id: media-source://media_source/local/end.mp3
-              media_content_type: audio/mpeg
         stt_silence_alert:
           name: STT Silence Alert
           description: Plays sound when no STT detected.
@@ -148,11 +143,6 @@ blueprint:
           selector:
             media: {}
           default:
-            target:
-              entity_id: media_player.ar_pyramid_audio
-            data:
-              media_content_id: media-source://media_source/local/end.mp3
-              media_content_type: audio/mpeg
     extras_misc_config_edits:
       name: __Extras__ - Miscellaneous Config Edits
       icon: mdi:exclamation-thick
