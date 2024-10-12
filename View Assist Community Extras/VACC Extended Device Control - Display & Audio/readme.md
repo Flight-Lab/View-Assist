@@ -1,89 +1,80 @@
-Page is a work in progress
-
 # View Assist Community Contributions - Extended Device Control - Display & Audio
 
-This blueprint extends features for enhanced control of View Assist device display and audio playback. 
+This blueprint enhances the control of View Assist device displays and audio playback. 
 
 > [!note]    
-> **Must create a new automation for each device.**        
-> Some features require edits and/or additions in the View Assist device configuration yaml file. 
+> **Each device requires its own automation.**        
+> Some features require modifications to the View Assist device configuration YAML file. 
 
-__Optional Extended Features Summary:__
-- Decreases music volume when triggered by wake-word or broadcast, raises
+### Optional Extended Features Summary:
+- Automatically decrease music volume when triggered by wake-word detection or the broadcast automation, and restore
     music volume when TTS ends.
-- Choose and play sound when wake word is detected.
-- Choose and play sound when STT detects silence.
-- Set music mode when musicplayer_device playing.
-- Set normal mode when musicplayer_device idle for set duration.
+- Play a custom sound when wake word is detected.
+- Play a custom sound when STT detects silence.
+- Switch to music mode when `musicplayer_device` is playing.
+- Revert to normal mode when `musicplayer_device` is idle for specified duration.
  
 > [!note]
->All features are opt-in and will not work unless the required device config changes are made.
+> All features are opt-in and most require corresponding device configuration changes.
 <details>
-<summary>Blueprint Input Page Screen Shots:</summary>
-![EDC-Blueprint-Input-Page-1](https://github.com/user-attachments/assets/bb310654-fbe3-4a16-94c6-03b5d0ebbae0)    
+<summary>Blueprint Input Page Screenshots:</summary>
+![EDC-Blueprint-Input-Page-1](https://github.com/user-attachments/assets/bb310654-fbe3-4a16-94c6-03b5d0ebbae0)        
 ![EDC-Blueprint-Input-Page-2](https://github.com/user-attachments/assets/88bfef88-1c99-4666-a1b0-ebdb845410fc)
 </details>
 
-## Contains: 
+## Included Features: 
 
-**Extra features that do not require any change to the stock View Assist device config file:**
-  * Assist Audio Feedback:
-    * Choose and play sound when wake word is detected. (If using, set Stream Assist `STT start media` to `null`)
-    * Choose and play sound when STT detects silence. (If Music Duck is activated, then the sound is not played. This is because the voolume returning to normal signifies the end of listening.)
+### No Changes to Stock View Assist Device Configuration Needed:
+- **Assist Audio Feedback:**
+    - Play a custom sound when wake word is detected (set Stream Assist `STT start media` to `null` if using this feature).
+    - Play a custom sound when STT detects silence (sound is not played if Music Duck is activated, as the volume returning to normal signals the end of listening).
 
-**Extra features that require changes to the stock View Assist device config file:**
-* On Home Assistant server startup, Fully Kiosk Browser loads the start URL.  
-Requires `fkb_device: ` in config file.  
-The `fkb_device: ` will be the name of the device in the Fully Kiosk Browser integration.  
-E.g. `fkb_device: "pyramid"`
+### Features Requiring Configuration Changes:
+- **Home Assistant Startup:**
+    - Fully Kiosk Browser automatically loads the start URL on server startup.  
+    - Requires setting `fkb_device:` in the config file, which should match the device name in the Fully Kiosk Browser integration.      (e.g., `fkb_device: "pyramid"`)
 
-**Requires the use of separate media players for mediaplayer_device & musicplayer_device:** 
-* Auto Music Mode:
-    * Set music mode and navigate to music view when the musicplayer_device starts playing. Previously this only happened when playing music using the play music voice command, now this functions when music playback is started from any trigger.
+### Separate Media Players Required:
+For the following features, separate media players must be defined for `mediaplayer_device` and `musicplayer_device` in the config:
+- **Auto Music Mode:**
+    - Switches to music mode and navigates to the music view when `musicplayer_device` starts playing. This applies even when playback starts from any sources other than just voice commands.
 * Music Mode Timeout:
-    * Music Mode/View timeout sets normal mode and returns to default home page when music playback has been stopped for a user set amount of time. Previously, this would only happen when using the "stop music" voice command.
-* Music Duck:
-    * Decreases music volume (by a user selected percentage of the current volume) when triggered by wake-word or broadcast, restores original music volume when TTS ends.
+- **Music Mode Timeout:**
+    - Automatically returns to normal mode and the home page after a user-defined period of inactivity in music playback.
+- **Music Duck:**
+    - Lowers the music volume by a user-defined percentage when triggered by a wake word or broadcast, and restores the original volume when TTS ends.
 
-
-> [!IMPORTANT]
-> Most of the extra features REQUIRE the mediaplayer_device and musicplayer_device in your View Assist device config file to use separate media_player entities. These features rely on using media_player state change as a trigger, so the media players must also be stable, remain available, and display reliable state changes between idle & playing.        
-> Remember to also use the mediaplayer_device media_player in Stream Assist.
+> [!IMPORTANT]  
+> These features require stable and reliable state changes between idle and playing for both `mediaplayer_device` and `musicplayer_device`. Ensure that the media players are consistently available.
 
 ## Recommended Media Players:
-* **musicplayer_device:** [Snapcast](https://play.google.com/store/apps/details?id=de.badaix.snapcast&hl=en_US) (only exposed by Music Assistant) **FREE**
-* **mediaplayer_device:** [AirReceiver](https://play.google.com/store/apps/details?id=com.softmedia.receiver&hl=en_US) audio (only exposed by Music Assistant) **$2.99**
+* **musicplayer_device:** [Snapcast](https://play.google.com/store/apps/details?id=de.badaix.snapcast&hl=en_US) (exposed via Music Assistant) **FREE**
+* **mediaplayer_device:** [AirReceiver](https://play.google.com/store/apps/details?id=com.softmedia.receiver&hl=en_US) audio (exposed via Music Assistant) **$2.99**
 <details>
 
-<summary>AirReceiver Setup:</summary>
+<summary>AirReceiver Setup Instructions:</summary>
 
 1) In AirReceiver settings, make sure both Airplay <sub>IOS Media Receiver</sub> and AirTunes Audio <sub>AirPort Express Speaker</sub> are selected. The media_player entity we want to use is only made when both of these are checked.        
 (You do not need the other options selected for this but they will not harm anything if you choose to. I do, however, recommend unchecking them as they will create even more media player entities. One even creates a media server.)
 
-3) Scroll down and select Advanced Settings.
+2) Scroll down to "Advanced Settings" and set "AirTunes Audio Latency (ms)" to 0.
 
-4) Set AirTunes Audio Latency (ms) to 0(ms)
+3) Check AirTunes UI [✓]
 
-5) Check AirTunes UI [✓]
-
-The media player entity we want to use will be created by the Music Assistant integration and will be called `media_player.lenovostarview_(last 3 digits of device ip)_audio`  
-ex. `media_player.lenovostarview_180_audio`  
-This media player has volume controls independent from the android device volume controls, just like the Snapcast media player.
-Setting the AirTunes Audio Latency to 0(ms) in step \#3 allows for a more responsive feeling TTS.
+The media player entity we want to use will be created by the Music Assistant integration and will be called `media_player.lenovostarview_(last 3 digits of device ip)_audio`          
+e.g. `media_player.lenovostarview_180_audio`         
+This player operates independently of the device's system volume, similar to Snapcast.
 
 </details>
+
 <details>
 
 <summary>Other Confirmed Working Media Players:</summary>
 
-* [Fully Kiosk Browser](https://play.google.com/store/apps/details?id=de.ozerov.fully&hl=en_US) media player (exposed by Music Assistant) 
-> [!WARNING]
-> If using the FKB media player, it must be the one exposed by Music Assistant or it will go unavailable and will not be able to act as a trigger.
->
-> The FKB media player seems to have a delay between state changes and audio playback. 
-> State will change from idle to playing and then audio playback will begin after a 1-2 second delay.
-> Audio playback will end and then state will change from playing to idle after a 1-2 second delay.
-> These delays lead to a feeling of decreased responsiveness.
+* [Fully Kiosk Browser](https://play.google.com/store/apps/details?id=de.ozerov.fully&hl=en_US) media player (exposed via Music Assistant) 
+    > [!WARNING]
+    > Only use the media player exposed by Music Assistant; others may become unavailable or fail to trigger actions.
+  - There may be a delay between state changes and actual audio playback (1-2 seconds for both start and end of playback).
 
 
 </details>
