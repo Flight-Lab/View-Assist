@@ -95,3 +95,14 @@ notes for future edits:
 The general concept is to work like an audio mixer. Each channel is individually controllable and can be played at the same time as any of the other channels. This enables you to do something wild like playing music while an alarm rings and assist tells you what the alarm is for, or something more controlled like having your music lower in volume as the alarm increases in volume.  
 This also lets you set permanant default levels to each channel or mute certain functions while keeping others enabled.
 -->
+
+<!--
+
+Bring Wall Panel features up to parity with FKB
+
+ADB instructions
+
+soundplayer_device
+
+
+-->
