@@ -14,7 +14,7 @@ blueprint:
 
     __Must make new automation for each device.__
 
-    __Requires the use of separate and unique media_players for mediaplayer_device and musicplayer_device entities in View Assist device config.__
+    __Some features require edits and/or additions to the View Assist device config yaml file.__
 
     (View Assist Extras - Extended Device Control - Display & Audio v 1.0.0)
   domain: automation
