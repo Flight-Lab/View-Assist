@@ -2,29 +2,24 @@ Page is a work in progress
 
 # View Assist Extras - Extended Device Control - Display & Audio
 
-> [!note]    
-> **Must create a new automation for each device.**
-> Some features require edits and/or additions in the View Assist device configuration yaml file.
-
 This blueprint extends features for enhanced control of View Assist device display and audio playback. 
 
-__Optional Extended Features Summary:__
+> [!note]    
+> **Must create a new automation for each device.**
+> Some features require edits and/or additions in the View Assist device configuration yaml file. 
 
+__Optional Extended Features Summary:__
 - Decreases music volume when triggered by wake-word or broadcast, raises
     music volume when TTS ends.
-
 - Choose and play sound when wake word is detected.
-
 - Choose and play sound when STT detects silence.
-
 - Set music mode when musicplayer_device playing.
-
 - Set normal mode when musicplayer_device idle for set duration.
-
-
-## contains:  
+ 
 > [!note]
 >All features are opt-in and will not work unless the required device config changes are made.
+
+## contains: 
 
 **Extra features that do not require any change to the stock View Assist device config file:**
   * Assist Audio Feedback:
