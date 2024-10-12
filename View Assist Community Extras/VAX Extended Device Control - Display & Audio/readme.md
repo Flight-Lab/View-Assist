@@ -10,16 +10,16 @@ This blueprint extends features for enhanced control of View Assist device displ
 
 __Optional Extended Features Summary:__
 
-    - Decreases music volume when triggered by wake-word or broadcast, raises
+- Decreases music volume when triggered by wake-word or broadcast, raises
     music volume when TTS ends.
 
-    - Choose and play sound when wake word is detected.
+- Choose and play sound when wake word is detected.
 
-    - Choose and play sound when STT detects silence.
+- Choose and play sound when STT detects silence.
 
-    - Set music mode when musicplayer_device playing.
+- Set music mode when musicplayer_device playing.
 
-    - Set normal mode when musicplayer_device idle for set duration.
+- Set normal mode when musicplayer_device idle for set duration.
 
 
 ## contains:  
@@ -39,9 +39,9 @@ E.g. `fkb_device: "pyramid"`
 
 **Requires the use of separate media players for mediaplayer_device & musicplayer_device:** 
 * Auto Music Mode:
-*     Set music mode and navigate to music view when the musicplayer_device starts playing. Previously this only happened when playing music using the play music voice command, now this functions when music playback is started from any trigger.
+    * Set music mode and navigate to music view when the musicplayer_device starts playing. Previously this only happened when playing music using the play music voice command, now this functions when music playback is started from any trigger.
 * Music Mode Timeout:
-*     Music Mode/View timeout sets normal mode and returns to default home page when music playback has been stopped for a user set amount of time. Previously, this would only happen when using the "stop music" voice command.
+    * Music Mode/View timeout sets normal mode and returns to default home page when music playback has been stopped for a user set amount of time. Previously, this would only happen when using the "stop music" voice command.
 * Music Duck:
     * Decreases music volume (by a user selected percentage of the current volume) when triggered by wake-word or broadcast, restores original music volume when TTS ends.
 
