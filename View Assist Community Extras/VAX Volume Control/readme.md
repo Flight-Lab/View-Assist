@@ -1,10 +1,13 @@
-# Music Volume Control during Assist & Broadcast<sub>v 1.1.1</sub>
+> [!WARNING]
+> This blueprint has now been merged with another and is no longer being developed.  
+> Repeat, this blueprint has been superceded by:
+> [Device Control - Display & Audio]()
+
+# Music Volume Control during Assist & Broadcast<sub>v 1.1.2</sub>
 
 > [!CAUTION] 
 > ## **This is __NOT__ an official View Assist blueprint and therefor is NOT supported by Dinki and the View Assist team.**
 
-> [!WARNING]
-> This blueprint will eventually be merged into [VAX Device Control](https://github.com/Flight-Lab/View-Assist/blob/Extras/View%20Assist%20Community%20Extras/VAX%20Device%20Control/readme.md)
 
 ## Functionality Overview:  
 When triggered by wake word or the Broadcast automation during music playback, the music volume is reduced by 50%.  
