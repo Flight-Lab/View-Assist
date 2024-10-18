@@ -6,8 +6,7 @@ blueprint:
     "__Optional Extended Features:__ 
     
     - Decreases music volume when triggered
-    by wake-word or broadcast, returns to initial music volume when TTS ends.
-      - option to raise volume gradually.
+    by wake-word or broadcast, returns to initial music volume when TTS ends. (Option to raise volume gradually.)
 
     - Choose and play sound when wake word is detected.
 
