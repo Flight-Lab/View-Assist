@@ -2,8 +2,10 @@
 > This blueprint has now been merged with another and is no longer being developed.  
 > Repeat, this blueprint has been superceded by:
 > [Device Control - Display & Audio]()
+>
+> Remember to double check blueprint inputs everytime you reupload. If you were using this pre v 2.0.0 then you will need to to re-do the inputs. 
 
-# Music Volume Control during Assist & Broadcast<sub>v 1.1.4</sub>
+# Music Volume Control during Assist & Broadcast<sub>v 2.0.0</sub>
 
 > [!CAUTION] 
 > ## **This is __NOT__ an official View Assist blueprint and therefor is NOT supported by Dinki and the View Assist team.**
