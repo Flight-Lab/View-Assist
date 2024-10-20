@@ -24,5 +24,5 @@ Examples:
 
 
 To-Do:  
-[ ] make formal opt-in switches in the inputs page
+[ ] make formal opt-in switches in the inputs page    
 [ ] type real readme
