@@ -1,4 +1,4 @@
-# View Assist Extras Device Functions <sub>v 1.2.2 e 0.0.11</sub>
+# View Assist Extras Device Functions <sub>v 1.2.2 e 0.1.0</sub>
  **description**  
 > [!CAUTION] 
 > ## **This is an edited version of Dinki's View Assist Device Functions blueprint. This version includes community made features and is __NOT__ supported by Dinki and the View Assist team.**
@@ -23,6 +23,8 @@ Examples:
 * Air Receiver airtunes audio
 
 
-To-Do:  
-[ ] make formal opt-in switches in the inputs page    
+[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://gist.github.com/Flight-Lab/054a12df123f8b179feb4af7d90443c8)
+
+
+To-Do:     
 [ ] type real readme
