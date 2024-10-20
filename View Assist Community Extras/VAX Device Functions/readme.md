@@ -28,6 +28,23 @@ Examples:
 
 [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://gist.github.com/Flight-Lab/054a12df123f8b179feb4af7d90443c8)
 
+<!--
+### TSV Specific ADB instructions
+- developer settings:
+  - 
+- connect through to ADB through a wired or wireless connection
+- To keep wireless ADB persistent through device reboots, end Command: 
+  - `adb shell setprop persist.adb.tcp.port 5555`
 
+## ADB Setup
+- Add integration [Android Debug Bridge](https://www.home-assistant.io/integrations/androidtv)
+- Type in Device IP address
+  - Recommend reserving IP adress in your network
+- Submit
+- In your View Assist device config, add:
+  - 'adb_device: "media_player.(name)"` 
+
+-->
 To-Do:     
 [ ] type real readme
+[ ] ADB Isntructions
