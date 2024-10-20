@@ -10,7 +10,7 @@ If using stock View Assist device config, this blueprint behaves exactly the sam
 Features are unlocked automatically when View Assist device config uses different media players for mediaplayer_device & musicplayer_device, and when an adb_device is added.  
 If View Assist device config does not use separate media players, Music Player & TTS Player volume commands cannot be triggered.  
 If View Assist device config does not contain an adb_device, default volume controls will continue to target mediaplayer_device.
-If using separate media players, there is the option to target musicplayer_device with the stock voice commands while musicplayer_device is playing.
+If using separate media players, there is the option to target musicplayer_device with the default voice commands while musicplayer_device is playing.
 
 
 New features:
@@ -18,6 +18,7 @@ New features:
 * voice commands for Music Player volume
 * voice commands for TTS Player volume
 * Default volume voice commands target adb_device (if it exists). This controls the devices volume the same way the hardware buttons do.
+* Option to target musicplayer_device with the default voice commands while musicplayer_device is playing.
 
 recommend using media players that have volume control independent from the device volume
 Examples: 
