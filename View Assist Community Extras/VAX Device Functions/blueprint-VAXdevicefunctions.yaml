@@ -122,16 +122,16 @@ blueprint:
         target_musicplayer_opt_in:
           name: Target musicplayer_device While Music Playing
           description:
-            Target the musicplayer_device with the stock commands while the musicplayer_device is playing.
+            Target the musicplayer_device with the default commands while the musicplayer_device is playing.
             This only works if using separate media players for mediaplayer_device & musicplayer_device.
           selector:
             boolean: {}
           default: false
         target_adb_device_opt_in:
           name: Target ADB Device
-          description: Target the adb_device with stock commands.
+          description: Target the adb_device with default commands.
             This allows setting the device volume directly,
-            the same as if pressing the device's physical volume keys.
+            the same as if using the device hardware volume keys.
           selector:
             boolean: {}
           default: false
