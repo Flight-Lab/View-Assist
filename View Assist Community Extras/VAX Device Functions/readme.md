@@ -17,7 +17,7 @@ New features:
 
 * voice commands for Music Player volume
 * voice commands for TTS Player volume
-* Default volume voice commands target adb_device (if it exists). This controls the devices volume the same way the hardware buttons do.
+* Default volume voice commands target adb_device (if it exists). This controls the device's volume the same way the hardware buttons do.
 * Option to target musicplayer_device with the default voice commands while musicplayer_device is playing.
 
 recommend using media players that have volume control independent from the device volume
