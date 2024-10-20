@@ -39,7 +39,8 @@ This blueprint enhances the control of View Assist device displays and audio pla
 ## Features Requiring Configuration Changes:
 - **Home Assistant Startup:**
     - Fully Kiosk Browser automatically loads the start URL on server startup.  
-    - Requires setting `fkb_device:` in the config file, which should match the device name in the Fully Kiosk Browser integration.      (e.g., `fkb_device: "pyramid"`)
+    - Requires setting `fkb_device:` in the config file, which should match the device name in the Fully Kiosk Browser integration.
+      (e.g., `fkb_device: "pyramid"`)
 
 ---
 
