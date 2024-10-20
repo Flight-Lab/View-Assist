@@ -1,8 +1,8 @@
 blueprint:
   name: View Assist Extras - Device Functions
-  description: Various device functions for the View Assist Satellites  
-    VAX edition
-    (View Assist devicefunctions v 1.2.2 E 0.0.11)
+  description:
+    Various device functions for the View Assist Satellites VAX edition
+    (View Assist devicefunctions v 1.2.2 E 0.1.0)
   domain: automation
   source_url: https://gist.github.com/Flight-Lab/054a12df123f8b179feb4af7d90443c8
   author: flab
@@ -10,90 +10,131 @@ blueprint:
     repeat_command:
       name: Repeat Command
       description: The phrase you want to use to trigger repeating last spoken response
-      default: "(what did you say  | [please] say that again [please] | [please] repeat that [please])"
+      default:
+        (what did you say  | [please] say that again [please] | [please] repeat
+        that [please])
     mode_command:
       name: Mode Command
       description: The command to use to trigger the mode change automation
-      default: "(set mode [to] {mode} | turn on {mode} mode | set [to] {mode} mode)"
+      default: (set mode [to] {mode} | turn on {mode} mode | set [to] {mode} mode)
     view_command:
       name: View Command
       description: The command to use to trigger the view change automation
-      default: "(set view [to] {view} | change [to] {view} view | set [to] {view} view)"
+      default: (set view [to] {view} | change [to] {view} view | set [to] {view} view)
     dnd_command:
-      name: Do Not Disturb Command 
+      name: Do Not Disturb Command
       description: The command to use to trigger turning off DND mode
-      default: "(set do not disturb [mode] [to] off | turn off do not disturb [mode] | end do not disturb [mode] | cancel do not disturb [mode])"
+      default: (set do not disturb [mode] [to] off | turn off do not disturb [mode] | end do not disturb [mode] | cancel do not disturb [mode])
     music_player_volume:
       name: __Music Player Volume__
       icon: mdi:volume-high
       description: Volume controls for the music player.
-      collapsed: true
+        These will only activate if using separate media players for mediaplayer_device & musicplayer_device.
+      collapsed: false
       input:
         set_music_volume:
           name: Set Music Volume Command
           description: The command to use to set music player volume level directly
-          default: "[set | turn | make | change] [the | your] (music | music player) volume [to] {level}"
+          default:
+            "[set | turn | make | change] [the | your] (music | music player)
+            volume [to] {level}"
         adjust_music_volume:
           name: Adjust Volume Command
-          description: The command to use to set the music player volume level by step
-          default: 
-          - "turn {up_down} [the | your] (music | music player) [volume]"
-          - "{raise_lower} [the] (music | music player) [volume]"
+          description:
+            The command to use to set the music player volume level by
+            step
+          default:
+            - turn {up_down} [the | your] (music | music player) [volume]
+            - "{raise_lower} [the] (music | music player) [volume]"
         mute_music_volume:
           name: Mute Volume Command
           description: The command to use to mute the music player
-          default: "mute [the] (music) [volume]"
+          default: mute [the] (music) [volume]
         unmute_music_volume:
           name: Unmute Volume Command
           description: The command to use to unmute the music player
-          default: "unmute [the | your] (music | music player) [volume]"
+          default: unmute [the | your] (music | music player) [volume]
     tts_player_volume:
       name: __TTS Player Volume__
       icon: mdi:volume-high
       description: Volume controls for the TTS player.
-      collapsed: true
+        These will only activate if using separate media players for mediaplayer_device & musicplayer_device.
+      collapsed: false
       input:
         set_tts_volume:
           name: Set TTS Volume Command
           description: The command to use to set TTS volume level directly
-          default: "[set | turn | make | change] [the | your] (voice | assistant | voice assistant | assist | t t s | TTS | tee tee es | teetee es | text to speech | tex to speech) volume [to] {level}"
+          default:
+            "[set | turn | make | change] [the | your] (voice | assistant |
+            voice assistant | assist | t t s | TTS | tee tee es | teetee es | text
+            to speech | tex to speech) volume [to] {level}"
         adjust_tts_volume:
           name: Adjust TTS Volume Command
           description: The command to use to set TTS volume level by step
-          default: 
-          - "turn {up_down} [the | your] (voice | assistant | voice assistant | assist | t t s | TTS | tee tee es | teetee es | text to speech | tex to speech) [volume]"
-          - "{raise_lower} [the | your] (voice | assistant | voice assistant | assist | t t s | TTS | tee tee es | teetee es | text to speech | tex to speech) [volume]"
+          default:
+            - turn {up_down} [the | your] (voice | assistant | voice assistant | assist | t t s | TTS | tee tee es | teetee es | text to speech | tex to speech)
+              [volume]
+            - "{raise_lower} [the | your] (voice | assistant | voice assistant | assist
+              | t t s | TTS | tee tee es | teetee es | text to speech | tex to speech)
+              [volume]"
         mute_tts_volume:
           name: Mute Volume Command
           description: The command to use to mute TTS audio
-          default: "mute [the | your] (voice | assistant | voice assistant | assist | t t s | TTS | tee tee es | teetee es | text to speech | tex to speech) [volume]"
+          default:
+            mute [the | your] (voice | assistant | voice assistant | assist | t t s | TTS | tee tee es | teetee es | text to speech | tex to speech)
+            [volume]
         unmute_tts_volume:
           name: Unmute Volume Command
           description: The command to use to unmute TTS audio
-          default: "unmute [the | your] (voice | assistant | voice assistant | assist | t t s | TTS | tee tee es | teetee es | text to speech | tex to speech) [volume]"
-    set_volume:
-      name: Set Volume Command 
-      description: The command to use to set volume levels level directly
-      default: "[set | turn | make | change] [the] volume [to] {level}"
-    adjust_volume:
-      name: Adjust Volume Command 
-      description: The command to use to set volume levels by step
-      default: 
-      - "turn {up_down} [the] volume"
-      - "volume {up_down}"
-      - "{raise_lower} [the] volume"
-    mute_volume:
-      name: Mute Volume Command 
-      description: The command to use to mute audio
-      default: "mute [the] [volume]"    
-    unmute_volume:
-      name: Unmute Volume Command 
-      description: The command to use to unmute audio
-      default: "unmute [the] [volume]"
-    stop_music:
-      name: Stop Music Command 
-      description: The command to use to stop music playback
-      default: "stop [the] music"        
+          default:
+            unmute [the | your] (voice | assistant | voice assistant | assist | t t s | TTS | tee tee es | teetee es | text to speech | tex to speech)
+            [volume]
+    stock_volume:
+      name: __Stock Volume Commands__
+      icon: mdi:volume-high
+      description: The stock volume commands.
+        Includes non-stock options for media player targeting.
+      collapsed: false
+      input:
+        set_volume:
+          name: Set Volume Command
+          description: The command to use to set volume levels level directly
+          default: "[set | turn | make | change] [the] volume [to] {level}"
+        adjust_volume:
+          name: Adjust Volume Command
+          description: The command to use to set volume levels by step
+          default:
+            - turn {up_down} [the] volume
+            - volume {up_down}
+            - "{raise_lower} [the] volume"
+        mute_volume:
+          name: Mute Volume Command
+          description: The command to use to mute audio
+          default: mute [the] [volume]
+        unmute_volume:
+          name: Unmute Volume Command
+          description: The command to use to unmute audio
+          default: unmute [the] [volume]
+        stop_music:
+          name: Stop Music Command
+          description: The command to use to stop music playback
+          default: stop [the] music
+        target_musicplayer_opt_in:
+          name: Target musicplayer_device While Music Playing
+          description:
+            Target the musicplayer_device with the stock commands while the musicplayer_device is playing.
+            This only works if using separate media players for mediaplayer_device & musicplayer_device.
+          selector:
+            boolean: {}
+          default: false
+        target_adb_device_opt_in:
+          name: Target ADB Device
+          description: Target the adb_device with stock commands.
+            This allows setting the device volume directly,
+            the same as if pressing the device's physical volume keys.
+          selector:
+            boolean: {}
+          default: false
     modes:
       name: Modes
       description: The available modes (do not include do not disturb)
@@ -101,65 +142,67 @@ blueprint:
     views:
       name: Views
       description: The available views as named on your dashboard
-      default: "['clock', 'weather', 'info', 'infopic']"  
-    group_entity: 
+      default: "['clock', 'weather', 'info', 'infopic']"
+    group_entity:
       name: Group Entity
       description: The group entity that holds the list of ViewAssist devices
       selector:
         entity:
           filter:
-            - domain: group
-      default: "group.viewassist_satellites" 
+            - domain:
+                - group
+          multiple: false
+      default: group.viewassist_satellites
 trigger:
-  - platform: conversation
+  - trigger: conversation
     command: !input repeat_command
     id: repeat
-  - platform: conversation
+  - trigger: conversation
     command: !input mode_command
-    id: mode 
-  - platform: conversation
+    id: mode
+  - trigger: conversation
     command: !input dnd_command
     id: dndoff
-  - platform: conversation
+  - trigger: conversation
     command: !input view_command
     id: view
-  - platform: conversation
+  - trigger: conversation
     command: !input set_music_volume
     id: set_music_volume
-  - platform: conversation
+  - trigger: conversation
     command: !input adjust_music_volume
     id: adjust_music_volume
-  - platform: conversation
+  - trigger: conversation
     command: !input mute_music_volume
     id: mute_music_volume
-  - platform: conversation
+  - trigger: conversation
     command: !input unmute_music_volume
     id: unmute_music_volume
-  - platform: conversation
+  - trigger: conversation
     command: !input set_tts_volume
     id: set_tts_volume
-  - platform: conversation
+  - trigger: conversation
     command: !input adjust_tts_volume
     id: adjust_tts_volume
-  - platform: conversation
+  - trigger: conversation
     command: !input mute_tts_volume
     id: mute_tts_volume
-  - platform: conversation
+  - trigger: conversation
     command: !input unmute_tts_volume
     id: unmute_music_volume
-  - platform: conversation
+  - trigger: conversation
     command: !input set_volume
     id: set_volume
-  - platform: conversation
+  - trigger: conversation
     command: !input adjust_volume
     id: adjust_volume
-  - platform: conversation
+  - trigger: conversation
     command: !input mute_volume
     id: mute_volume
-  - platform: conversation
+  - trigger: conversation
     command: !input unmute_volume
     id: unmute_volume
-  - platform: conversation
+  - trigger: conversation
     command: !input stop_music
     id: stop_music
 condition: []
@@ -170,14 +213,15 @@ action:
             id:
               - repeat
         sequence:
-          - set_conversation_response: >-
-              I said {{ state_attr(target_satellite_device, 'last_said')| replace("I said ", "")}}
+          - set_conversation_response:
+              I said {{ state_attr(target_satellite_device, 'last_said')|
+              replace("I said ", "")}}
       - conditions:
           - condition: trigger
             id:
               - dndoff
         sequence:
-          - service: python_script.set_state
+          - action: python_script.set_state
             data:
               entity_id: " {{ target_satellite_device }} "
               do_not_disturb: false
@@ -189,30 +233,28 @@ action:
         sequence:
           - if:
               - condition: template
-                value_template: >-
-                  {{ trigger.slots.mode in modes or trigger.slots.mode in ['do not disturb'] }}
+                value_template:
+                  "{{ trigger.slots.mode in modes or trigger.slots.mode in ['do
+                  not disturb'] }}"
             then:
               - set_conversation_response: Setting mode to {{ trigger.slots.mode }}
                 enabled: true
               - choose:
                   - conditions:
                       - condition: template
-                        value_template: >-
-                          "{{ trigger.slots.mode in modes }}"
+                        value_template: '"{{ trigger.slots.mode in modes }}"'
                     sequence:
                       - if:
                           - condition: template
-                            value_template: >-
-                              {% if target_satellite_device_type == 'audio_only'%}
-                                true
-                              {% else %}
-                                false
-                              {% endif %}
+                            value_template:
+                              "{% if target_satellite_device_type == 'audio_only'%}\n
+                              \ true\n{% else %}\n  false\n{% endif %}"
                         then:
-                          - set_conversation_response: >-
-                              Sorry. {{ trigger.slots.mode }} is not a valid mode for this device.
+                          - set_conversation_response:
+                              Sorry. {{ trigger.slots.mode }} is not a
+                              valid mode for this device.
                         else:
-                          - service: python_script.set_state
+                          - action: python_script.set_state
                             data:
                               entity_id: " {{ target_satellite_device }} "
                               mode: "{{ trigger.slots.mode }}"
@@ -220,12 +262,14 @@ action:
                       - condition: template
                         value_template: "{{ trigger.slots.mode in ['do not disturb'] }}"
                     sequence:
-                      - service: python_script.set_state
+                      - action: python_script.set_state
                         data:
                           entity_id: " {{ target_satellite_device }} "
                           do_not_disturb: true
             else:
-              - set_conversation_response: Sorry.  {{ trigger.slots.mode }} is not a valid mode. Please try {{ modes }}.
+              - set_conversation_response:
+                  Sorry.  {{ trigger.slots.mode }} is not a valid
+                  mode. Please try {{ modes }}.
       - conditions:
           - condition: trigger
             id:
@@ -233,12 +277,9 @@ action:
         sequence:
           - if:
               - condition: template
-                value_template: >-
-                  {% if target_satellite_device_type != 'audio_only'%}
-                    true
-                  {% else %}
-                    false
-                  {% endif %}
+                value_template:
+                  "{% if target_satellite_device_type != 'audio_only'%}\n  true\n{%
+                  else %}\n  false\n{% endif %}"
             then:
               - set_conversation_response: Switching view to {{ trigger.slots.view }} view
                 enabled: true
@@ -247,11 +288,10 @@ action:
                   path: "{{ trigger.slots.view }}"
                 target:
                   device_id: "{{target_display_device}}"
-            else:        
-              - set_conversation_response: >-
-                  Sorry. This device does not have a display
             else:
-              - set_conversation_response: Sorry.  {{ trigger.slots.view }} is not a valid view. Please try {{ views }}.
+              - set_conversation_response:
+                  Sorry.  {{ trigger.slots.view }} is not a valid
+                  view. Please try {{ views }}.
       - conditions:
           - condition: trigger
             id:
@@ -259,16 +299,12 @@ action:
           - condition: template
             value_template: "{{target_musicplayer_device != target_mediaplayer_device}}"
         sequence:
-          - service: media_player.volume_set
+          - action: media_player.volume_set
             data:
-              volume_level: |-
-                {% if trigger.id == "set_music_volume" %} 
-                  {% if trigger.slots.level.endswith('%') %}
-                    {{ (trigger.slots.level |replace('%',' ') | int)/100 }}
-                  {% else %}
-                    {{ (trigger.slots.level | int)/10 }}
-                  {% endif %}
-                {% endif %}
+              volume_level:
+                "{% if trigger.id == \"set_music_volume\" %} \n  {% if trigger.slots.level.endswith('%')
+                %}\n    {{ (trigger.slots.level |replace('%',' ') | int)/100 }}\n  {% else
+                %}\n    {{ (trigger.slots.level | int)/10 }}\n  {% endif %}\n{% endif %}"
             target:
               entity_id: "{{ target_musicplayer_device }}"
           - set_conversation_response: Volume set to {{ trigger.slots.level }}
@@ -280,22 +316,19 @@ action:
           - condition: template
             value_template: "{{target_musicplayer_device != target_mediaplayer_device}}"
         sequence:
-          - service: >-
-              {% if trigger.slots.up_down == 'down' or trigger.slots.raise_lower == 'lower' %}
-                media_player.volume_down
-              {% endif %}
-              {% if trigger.slots.up_down == 'up' or trigger.slots.raise_lower == 'raise'  %}
-                media_player.volume_up
-              {% endif %}
+          - action:
+              "{% if trigger.slots.up_down == 'down' or trigger.slots.raise_lower
+              == 'lower' %}\n  media_player.volume_down\n{% endif %} {% if trigger.slots.up_down
+              == 'up' or trigger.slots.raise_lower == 'raise'  %}\n  media_player.volume_up\n{%
+              endif %}"
             target:
               entity_id: "{{ target_musicplayer_device }}"
-          - set_conversation_response: >-
-              {% if trigger.slots.up_down == 'down' or trigger.slots.up_down == 'up' %}
-                The music volume has been turned {{ trigger.slots.up_down }}
-              {% endif %}
-              {% if trigger.slots.raise_lower == 'lower' or trigger.slots.raise_lower == 'raise' %}
-                The music volume has been {{ trigger.slots.raise_lower}}ed
-              {% endif %}
+          - set_conversation_response:
+              "{% if trigger.slots.up_down == 'down' or trigger.slots.up_down
+              == 'up' %}\n  The music volume has been turned {{ trigger.slots.up_down }}\n{%
+              endif %} {% if trigger.slots.raise_lower == 'lower' or trigger.slots.raise_lower
+              == 'raise' %}\n  The music volume has been {{ trigger.slots.raise_lower}}ed\n{%
+              endif %}"
             enabled: true
       - conditions:
           - condition: trigger
@@ -304,7 +337,7 @@ action:
           - condition: template
             value_template: "{{target_musicplayer_device != target_mediaplayer_device}}"
         sequence:
-          - service: media_player.volume_mute
+          - action: media_player.volume_mute
             data:
               is_volume_muted: true
             target:
@@ -316,7 +349,7 @@ action:
           - condition: template
             value_template: "{{target_musicplayer_device != target_mediaplayer_device}}"
         sequence:
-          - service: media_player.volume_mute
+          - action: media_player.volume_mute
             data:
               is_volume_muted: false
             target:
@@ -329,16 +362,12 @@ action:
           - condition: template
             value_template: "{{target_musicplayer_device != target_mediaplayer_device}}"
         sequence:
-          - service: media_player.volume_set
+          - action: media_player.volume_set
             data:
-              volume_level: |-
-                {% if trigger.id == 'set_tts_volume' %}
-                  {% if trigger.slots.level.endswith('%') %}
-                    {{ (trigger.slots.level |replace('%',' ') | int)/100 }}
-                  {% else %}
-                    {{ (trigger.slots.level | int)/10 }}
-                  {% endif %}
-                {% endif %}
+              volume_level:
+                "{% if trigger.id == 'set_tts_volume' %}\n  {% if trigger.slots.level.endswith('%')
+                %}\n    {{ (trigger.slots.level |replace('%',' ') | int)/100 }}\n  {% else
+                %}\n    {{ (trigger.slots.level | int)/10 }}\n  {% endif %}\n{% endif %}"
             target:
               entity_id: "{{ target_mediaplayer_device }}"
           - set_conversation_response: Volume set to {{ trigger.slots.level }}
@@ -350,22 +379,19 @@ action:
           - condition: template
             value_template: "{{target_musicplayer_device != target_mediaplayer_device}}"
         sequence:
-          - service: >-
-              {% if trigger.slots.up_down == 'down' or trigger.slots.raise_lower == 'lower' %}
-                media_player.volume_down
-              {% endif %}
-              {% if trigger.slots.up_down == 'up' or trigger.slots.raise_lower == 'raise'  %}
-                media_player.volume_up
-              {% endif %}
+          - action:
+              "{% if trigger.slots.up_down == 'down' or trigger.slots.raise_lower
+              == 'lower' %}\n  media_player.volume_down\n{% endif %} {% if trigger.slots.up_down
+              == 'up' or trigger.slots.raise_lower == 'raise'  %}\n  media_player.volume_up\n{%
+              endif %}"
             target:
               entity_id: "{{ target_mediaplayer_device }}"
-          - set_conversation_response: >-
-              {% if trigger.slots.up_down == 'down' or trigger.slots.up_down == 'up' %}
-                The assist volume has been turned {{ trigger.slots.up_down}}
-              {% endif %}
-              {% if trigger.slots.raise_lower == 'lower' or trigger.slots.raise_lower == 'raise' %}
-                The assist volume has been {{ trigger.slots.raise_lower}}ed
-              {% endif %}
+          - set_conversation_response:
+              "{% if trigger.slots.up_down == 'down' or trigger.slots.up_down
+              == 'up' %}\n  The assist volume has been turned {{ trigger.slots.up_down}}\n{%
+              endif %} {% if trigger.slots.raise_lower == 'lower' or trigger.slots.raise_lower
+              == 'raise' %}\n  The assist volume has been {{ trigger.slots.raise_lower}}ed\n{%
+              endif %}"
             enabled: true
       - conditions:
           - condition: trigger
@@ -374,7 +400,7 @@ action:
           - condition: template
             value_template: "{{target_musicplayer_device != target_mediaplayer_device}}"
         sequence:
-          - service: media_player.volume_mute
+          - action: media_player.volume_mute
             data:
               is_volume_muted: true
             target:
@@ -386,7 +412,7 @@ action:
           - condition: template
             value_template: "{{target_musicplayer_device != target_mediaplayer_device}}"
         sequence:
-          - service: media_player.volume_mute
+          - action: media_player.volume_mute
             data:
               is_volume_muted: false
             target:
@@ -397,21 +423,19 @@ action:
             id:
               - set_volume
         sequence:
-          - service: media_player.volume_set
+          - action: media_player.volume_set
             data:
-              volume_level: |-
-                {% if trigger.id == 'set_volume' %}
-                  {% if trigger.slots.level.endswith('%') %}
-                    {{ (trigger.slots.level |replace('%',' ') | int)/100 }}
-                  {% else %}
-                    {{ (trigger.slots.level | int)/10 }}
-                  {% endif %}
-                {% endif %}
+              volume_level:
+                "{% if trigger.id == 'set_volume' %}\n  {% if trigger.slots.level.endswith('%')
+                %}\n    {{ (trigger.slots.level |replace('%',' ') | int)/100 }}\n  {% else
+                %}\n    {{ (trigger.slots.level | int)/10 }}\n  {% endif %}\n{% endif %}"
             target:
-              entity_id: >-
-                {% if target_adb_device == 'none' %}
+              entity_id: >
+                {% if is_state(musicplayer_device, 'playing') and musicplayer_device != mediaplayer_device and target_musicplayer_opt_in == true %}
+                  {{ musicplayer_device }}
+                {% elif target_adb_device == 'none' %}
                   {{ target_mediaplayer_device }}
-                {%else %}
+                {% elif target_adb_device_opt_in == true %}
                   {{ target_adb_device }}
                 {% endif %}
           - set_conversation_response: The volume was set to {{ trigger.slots.level }}
@@ -421,41 +445,42 @@ action:
             id:
               - adjust_volume
         sequence:
-          - service: >-
-              {% if trigger.slots.up_down == 'down' or trigger.slots.raise_lower == 'lower' %} 
-                media_player.volume_down
-              {% endif %} 
-              {% if trigger.slots.up_down == 'up' or trigger.slots.raise_lower == 'raise'  %} 
-                media_player.volume_up 
-              {% endif %}
+          - action:
+              "{% if trigger.slots.up_down == 'down' or trigger.slots.raise_lower
+              == 'lower' %} \n  media_player.volume_down\n{% endif %}  {% if trigger.slots.up_down
+              == 'up' or trigger.slots.raise_lower == 'raise'  %} \n  media_player.volume_up
+              \n{% endif %}"
             target:
-              entity_id: >-
-                {% if target_adb_device == 'none' %}
+              entity_id: >
+                {% if is_state(musicplayer_device, 'playing') and musicplayer_device != mediaplayer_device and target_musicplayer_opt_in == true %}
+                  {{ musicplayer_device }}
+                {% elif target_adb_device == 'none' %}
                   {{ target_mediaplayer_device }}
-                {%else %}
+                {% elif target_adb_device_opt_in == true %}
                   {{ target_adb_device }}
                 {% endif %}
-          - set_conversation_response: >-
-              {% if trigger.slots.up_down == 'down' or trigger.slots.up_down == 'up' %}
-                The volume has been turned {{ trigger.slots.up_down }}
-              {% endif %}
-              {% if trigger.slots.raise_lower == 'lower' or trigger.slots.raise_lower == 'raise' %}
-                The volume has been {{ trigger.slots.raise_lower}}ed
-              {% endif %}
+          - set_conversation_response:
+              "{% if trigger.slots.up_down == 'down' or trigger.slots.up_down
+              == 'up' %}\n  The volume has been turned {{ trigger.slots.up_down }}\n{% endif
+              %} {% if trigger.slots.raise_lower == 'lower' or trigger.slots.raise_lower
+              == 'raise' %}\n  The volume has been {{ trigger.slots.raise_lower}}ed\n{%
+              endif %}"
             enabled: true
       - conditions:
           - condition: trigger
             id:
               - mute_volume
         sequence:
-          - service: media_player.volume_mute
+          - action: media_player.volume_mute
             data:
               is_volume_muted: true
             target:
-              entity_id: >-
-                {% if target_adb_device == 'none' %}
+              entity_id: >
+                {% if is_state(musicplayer_device, 'playing') and musicplayer_device != mediaplayer_device and target_musicplayer_opt_in == true %}
+                  {{ musicplayer_device }}
+                {% elif target_adb_device == 'none' %}
                   {{ target_mediaplayer_device }}
-                {%else %}
+                {% elif target_adb_device_opt_in == true %}
                   {{ target_adb_device }}
                 {% endif %}
       - conditions:
@@ -463,17 +488,19 @@ action:
             id:
               - unmute_volume
         sequence:
-          - service: media_player.volume_mute
+          - action: media_player.volume_mute
             data:
               is_volume_muted: false
             target:
-              entity_id: >-
-                {% if target_adb_device == 'none' %}
+              entity_id: >
+                {% if is_state(musicplayer_device, 'playing') and musicplayer_device != mediaplayer_device and target_musicplayer_opt_in == true %}
+                  {{ musicplayer_device }}
+                {% elif target_adb_device == 'none' %}
                   {{ target_mediaplayer_device }}
-                {%else %}
+                {% elif target_adb_device_opt_in == true %}
                   {{ target_adb_device }}
                 {% endif %}
-          - set_conversation_response: "Sound has been restored"
+          - set_conversation_response: Sound has been restored
       - conditions:
           - condition: trigger
             id:
@@ -491,21 +518,28 @@ action:
           - action: timer.finish
             target:
               entity_id: "{{ target_timer_device }}"
-            data: {}           
+            data: {}
           - set_conversation_response: Music stopped
 variables:
   modes: !input modes
   views: !input views
   group_entity: !input group_entity
-  target_satellite_device: |-
-    {% for sat in expand(group_entity) %}
-      {% if device_id(sat.attributes.mic_device)  == trigger.device_id %}
-        {{ sat.entity_id }}
-      {% endif %}
-    {% endfor %}
-  target_display_device: "{{ device_id(state_attr(target_satellite_device, 'display_device')) }}"
-  target_mediaplayer_device: "{{ state_attr(target_satellite_device, 'mediaplayer_device') }}"
-  target_musicplayer_device: "{{ state_attr(target_satellite_device, 'musicplayer_device') }}"
+  target_musicplayer_opt_in: !input target_musicplayer_opt_in
+  target_adb_device_opt_in: !input target_adb_device_opt_in
+  target_satellite_device:
+    "{% for sat in expand(group_entity) %}\n  {% if device_id(sat.attributes.mic_device)
+    \ == trigger.device_id %}\n    {{ sat.entity_id }}\n  {% endif %}\n{% endfor %}"
+  target_display_device:
+    "{{ device_id(state_attr(target_satellite_device, 'display_device'))
+    }}"
+  target_mediaplayer_device:
+    "{{ state_attr(target_satellite_device, 'mediaplayer_device')
+    }}"
+  target_musicplayer_device:
+    "{{ state_attr(target_satellite_device, 'musicplayer_device')
+    }}"
   target_adb_device: "{{ state_attr(target_satellite_device, 'adb_device') }}"
   target_timer_device: "{{ state_attr(target_satellite_device, 'timer_device') }}"
-  target_satellite_device_type: "{{ state_attr(target_satellite_device, 'type') }}"
+  target_satellite_device_type: "{{ state_attr(target_satellite_device, 'type')
+    }}"
+
