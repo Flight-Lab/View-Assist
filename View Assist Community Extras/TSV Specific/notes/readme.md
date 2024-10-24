@@ -9,10 +9,10 @@ https://github.com/pgale/lineage_15.1_Installation_TSV
 ADB persistent on reboot: 
   `adb shell setprop persist.adb.tcp.port 5555`
 
-<!--
+
 ADB keys https://gist.github.com/arjunv/2bbcca9a1a1c127749f8dcb6d36fb0bc
 
-
+<!--
 Deadman, on hiding navbar:
 If there’s not an option under settings > system > buttons then you’ll have to use a prop for it qemu.hw.mainkeys=1
 -->
