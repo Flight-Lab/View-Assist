@@ -276,7 +276,13 @@ triggers:
       - !input wake
     to: end
     from: start
-    id: wake
+    id: wake_sa
+  - trigger: state
+    entity_id:
+      - !input wake
+    to: detected
+    from: listening
+    id: wake_hassmic
   - trigger: state
     entity_id:
       - !input broadcast
@@ -374,8 +380,12 @@ actions:
               entity_id: !input satellite
               mode: normal
       - conditions:
-          - condition: trigger
-            id: wake
+          - condition: or
+            conditions:
+              - condition: trigger
+                id: wake_sa
+              - condition: trigger
+                id: wake_hassmic
         sequence:
           - if:
               - condition: template
@@ -394,13 +404,29 @@ actions:
                   - wait_for_trigger:
                       - trigger: template
                         value_template: "{{ states(stt_sensor) == 'no-text-recognized' }}"
-                    timeout:
-                      hours: 0
-                      minutes: 0
-                      seconds: 30
-                      milliseconds: 0
-                  - action: media_player.play_media
-                    data: !input stt_silence_file
+                        id: no_text
+                      - trigger: template
+                        value_template: "{{ states(stt_sensor) == 'end' }}"
+                        id: end
+                      - trigger: template
+                        value_template: "{{ states(stt_sensor) == 'error-error' }}"
+                        id: error
+                      - trigger: template
+                        value_template: "{{ states(stt_sensor) == 'stt-listening' }}"
+                        id: listening
+                      - trigger: template
+                        value_template: "{{ states(stt_sensor) == 'intent-processing' }}"
+                        id: processing
+                      - trigger: template
+                        value_template: "{{ states(stt_sensor) == 'tts-speaking' }}"
+                        id: speaking
+                  - choose:
+                      - conditions: "{{ wait.trigger.id == 'no_text' or wait.trigger.id == 'error' }}"
+                        sequence:
+                          - action: media_player.play_media
+                            data: !input stt_silence_file
+                      - conditions: "{{ wait.trigger.id == 'end' or wait.trigger.id == 'listening' or wait.trigger.id == 'processing' or wait.trigger.id == 'speaking' }}"
+                        sequence:
               - conditions:
                   - condition: state
                     entity_id: !input musicplayer_device
@@ -420,7 +446,7 @@ actions:
                   - wait_for_trigger:
                       - trigger: template
                         value_template:
-                          "{{ states(stt_sensor) in ['no-text-recognized', 'end']
+                          "{{ states(stt_sensor) in ['no-text-recognized', 'end', 'error-error', 'wake_word-listening']
                           }}"
                     timeout:
                       hours: 0
@@ -430,7 +456,7 @@ actions:
                   - choose:
                       - conditions:
                           - condition: template
-                            value_template: "{{ states(stt_sensor) == 'no-text-recognized' }}"
+                            value_template: "{{ states(stt_sensor) in ['no-text-recognized', 'error-error'] }}"
                         sequence:
                           - if:
                               - condition: template
@@ -470,7 +496,7 @@ actions:
                                       volume_level: "{{ initial_volume }}"
                       - conditions:
                           - condition: template
-                            value_template: "{{ states(stt_sensor) == 'end' }}"
+                            value_template: "{{ states(stt_sensor) in ['end', 'wake_word-listening'] }}"
                         sequence:
                           - wait_for_trigger:
                               - entity_id: !input mediaplayer_device
