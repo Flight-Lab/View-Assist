@@ -335,12 +335,22 @@ actions:
                 target:
                   entity_id: button.{{state_attr (satellite,'fkb_device')}}_load_start_url
                 data: {}
-          - action: media_player.media_pause
-            target:
-              entity_id:
-                - "{{mediaplayer_device}}"
-                - "{{musicplayer_device}}"
-            data: {}
+          - if:
+              - condition: template
+                value_template: "{{ is_state(mediaplayer_device, 'off') }}"
+            then:
+              - action: media_player.media_pause
+                target:
+                  entity_id: "{{mediaplayer_device}}"
+                data: {}
+          - if:
+              - condition: template
+                value_template: "{{ is_state(musicplayer_device, 'off') }}"
+            then:
+              - action: media_player.media_pause
+                target:
+                  entity_id: "{{mediaplayer_device}}"
+                data: {}
       - conditions:
           - condition: trigger
             id:
