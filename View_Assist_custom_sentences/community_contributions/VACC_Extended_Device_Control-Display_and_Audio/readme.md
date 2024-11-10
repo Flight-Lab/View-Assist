@@ -1,5 +1,5 @@
 ---
-# View Assist Community Contributions - Extended Device Control - Display & Audio <sub>v1.0.3</sub> 
+# View Assist Community Contributions - Extended Device Control - Display & Audio <sub>v1.0.5</sub> 
 This blueprint enhances the control of View Assist device displays and audio playback. 
 
 ---
@@ -101,12 +101,12 @@ This also lets you set permanant default levels to each channel or mute certain 
 <!--
 to do:
 
-add option to pause music instead of ducking volume
-
 ability to add multiple mediaplayers to the music player input (or create a new one to house them)
 The intention is to target other devices in the room, such as a tv or stereo system
 
 using the above, and a new view, turn the View Assist device into a control for an external stereo system
+
+Add new features and abilities to readme & blueprint description
 -->
 
 <!--
