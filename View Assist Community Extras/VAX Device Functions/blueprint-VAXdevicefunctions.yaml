@@ -2,7 +2,7 @@ blueprint:
   name: View Assist Extras - Device Functions
   description:
     Various device functions for the View Assist Satellites VAX edition
-    (View Assist devicefunctions v 1.2.2 E 0.1.0)
+    (View Assist devicefunctions v 1.2.2 E 0.1.1)
   domain: automation
   source_url: https://gist.github.com/Flight-Lab/054a12df123f8b179feb4af7d90443c8
   author: flab
@@ -506,6 +506,7 @@ action:
             id:
               - stop_music
         sequence:
+          - delay: "00:00:01"
           - target:
               entity_id:
                 - "{{ target_musicplayer_device }}"
@@ -542,4 +543,3 @@ variables:
   target_timer_device: "{{ state_attr(target_satellite_device, 'timer_device') }}"
   target_satellite_device_type: "{{ state_attr(target_satellite_device, 'type')
     }}"
-
