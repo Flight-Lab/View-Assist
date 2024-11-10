@@ -22,7 +22,7 @@ blueprint:
     yaml file.__
 
     (View Assist Community Contributions - Extended Device Control - Display & Audio
-    v 1.0.2)"
+    v 1.0.3)"
   domain: automation
   source_url: https://gist.github.com/Flight-Lab/6ddb640f756791d59b6fd9be93375eee
   author: Flab
@@ -461,18 +461,33 @@ actions:
                       entity_id: !input musicplayer_device
                   - wait_for_trigger:
                       - trigger: template
-                        value_template:
-                          "{{ states(stt_sensor) in ['no-text-recognized', 'end', 'error-error', 'wake_word-listening']
-                          }}"
+                        value_template: "{{ states(stt_sensor) == 'no-text-recognized' }}"
+                        id: no_text
+                      - trigger: template
+                        value_template: "{{ states(stt_sensor) == 'end' }}"
+                        id: end
+                      - trigger: template
+                        value_template: "{{ states(stt_sensor) == 'error-error' }}"
+                        id: error
+                      - trigger: template
+                        value_template: "{{ states(stt_sensor) == 'wake_word-listening' }}"
+                        id: wake_word_listening
+                      - trigger: template
+                        value_template: "{{ states(stt_sensor) == 'stt-listening' }}"
+                        id: listening
+                      - trigger: template
+                        value_template: "{{ states(stt_sensor) == 'intent-processing' }}"
+                        id: processing
+                      - trigger: template
+                        value_template: "{{ states(stt_sensor) == 'tts-speaking' }}"
+                        id: speaking
                     timeout:
                       hours: 0
                       minutes: 0
                       seconds: 30
                       milliseconds: 0
                   - choose:
-                      - conditions:
-                          - condition: template
-                            value_template: "{{ states(stt_sensor) in ['no-text-recognized', 'error-error'] }}"
+                      - conditions: "{{ wait.trigger.id == 'no_text' or wait.trigger.id == 'error' }}"
                         sequence:
                           - if:
                               - condition: template
@@ -510,9 +525,7 @@ actions:
                                       entity_id: !input musicplayer_device
                                     data:
                                       volume_level: "{{ initial_volume }}"
-                      - conditions:
-                          - condition: template
-                            value_template: "{{ states(stt_sensor) in ['end', 'wake_word-listening'] }}"
+                      - conditions:  "{{ wait.trigger.id == 'end' or wait.trigger.id == 'wake_word-listening' }}"
                         sequence:
                           - wait_for_trigger:
                               - entity_id: !input mediaplayer_device
@@ -520,6 +533,44 @@ actions:
                                 to: idle
                                 trigger: state
                             timeout: !input tts_timeout
+                          - if:
+                              - condition: template
+                                value_template: "{{ volume_step_opt_in == true }}"
+                            then:
+                              - repeat:
+                                  while:
+                                    - condition: template
+                                      value_template: >
+                                        {% set current_volume = state_attr(musicplayer_device, 'volume_level') | float %}
+                                        {{ current_volume < (initial_volume | float) }}
+                                  sequence:
+                                    - action: media_player.volume_set
+                                      target:
+                                        entity_id: !input musicplayer_device
+                                      data:
+                                        volume_level: >
+                                          {% set ducked_volume = state_attr(musicplayer_device, 'volume_level') | float %}
+                                          {% set increment = volume_step_increment | float %}
+                                          {% set new_volume = ducked_volume + increment %}
+                                          {% if new_volume > (initial_volume | float) %}
+                                            {{ initial_volume }}
+                                          {% else %}
+                                            {{ new_volume }}
+                                          {% endif %}
+                                    - delay:
+                                        seconds: !input volume_step_delay
+                            else:
+                              - if:
+                                  - condition: template
+                                    value_template: "{{ volume_step_opt_in != true }}"
+                                then:
+                                  - action: media_player.volume_set
+                                    target:
+                                      entity_id: !input musicplayer_device
+                                    data:
+                                      volume_level: "{{ initial_volume }}"
+                      - conditions: "{{ wait.trigger.id == 'listening' or wait.trigger.id == 'processing' or wait.trigger.id == 'speaking' }}"
+                        sequence:
                           - if:
                               - condition: template
                                 value_template: "{{ volume_step_opt_in == true }}"
