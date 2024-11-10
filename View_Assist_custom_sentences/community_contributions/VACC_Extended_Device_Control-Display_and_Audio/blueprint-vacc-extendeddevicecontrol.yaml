@@ -22,7 +22,7 @@ blueprint:
     yaml file.__
 
     (View Assist Community Contributions - Extended Device Control - Display & Audio
-    v 1.0.3)"
+    v 1.0.4)"
   domain: automation
   source_url: https://gist.github.com/Flight-Lab/6ddb640f756791d59b6fd9be93375eee
   author: Flab
@@ -487,7 +487,7 @@ actions:
                       seconds: 30
                       milliseconds: 0
                   - choose:
-                      - conditions: "{{ wait.trigger.id == 'no_text' or wait.trigger.id == 'error' }}"
+                      - conditions: "{{ wait.trigger.id == 'no_text' or wait.trigger.id == 'error' or wait.trigger.id == 'listening' or wait.trigger.id == 'processing' or wait.trigger.id == 'speaking' }}"
                         sequence:
                           - if:
                               - condition: template
@@ -533,44 +533,6 @@ actions:
                                 to: idle
                                 trigger: state
                             timeout: !input tts_timeout
-                          - if:
-                              - condition: template
-                                value_template: "{{ volume_step_opt_in == true }}"
-                            then:
-                              - repeat:
-                                  while:
-                                    - condition: template
-                                      value_template: >
-                                        {% set current_volume = state_attr(musicplayer_device, 'volume_level') | float %}
-                                        {{ current_volume < (initial_volume | float) }}
-                                  sequence:
-                                    - action: media_player.volume_set
-                                      target:
-                                        entity_id: !input musicplayer_device
-                                      data:
-                                        volume_level: >
-                                          {% set ducked_volume = state_attr(musicplayer_device, 'volume_level') | float %}
-                                          {% set increment = volume_step_increment | float %}
-                                          {% set new_volume = ducked_volume + increment %}
-                                          {% if new_volume > (initial_volume | float) %}
-                                            {{ initial_volume }}
-                                          {% else %}
-                                            {{ new_volume }}
-                                          {% endif %}
-                                    - delay:
-                                        seconds: !input volume_step_delay
-                            else:
-                              - if:
-                                  - condition: template
-                                    value_template: "{{ volume_step_opt_in != true }}"
-                                then:
-                                  - action: media_player.volume_set
-                                    target:
-                                      entity_id: !input musicplayer_device
-                                    data:
-                                      volume_level: "{{ initial_volume }}"
-                      - conditions: "{{ wait.trigger.id == 'listening' or wait.trigger.id == 'processing' or wait.trigger.id == 'speaking' }}"
-                        sequence:
                           - if:
                               - condition: template
                                 value_template: "{{ volume_step_opt_in == true }}"
