@@ -1,7 +1,7 @@
 > [!WARNING]
 > This blueprint has now been merged with another and is no longer being developed.  
 > Repeat, this blueprint has been superceded by:
-> [Device Control - Display & Audio]()
+> [Device Control - Display & Audio](https://github.com/Flight-Lab/View-Assist/tree/Extras/View_Assist_custom_sentences/community_contributions/VACC_Extended_Device_Control-Display_and_Audio)
 >
 > Remember to double check blueprint inputs everytime you reupload. If you were using this pre v 2.0.0 then you will need to to re-do the inputs. 
 
