@@ -227,6 +227,24 @@ button_card_templates:
             return `${weather_icon}`;
           } catch { return  ""} 
         ]]]
+      var_menu_enabled: |-
+        [[[
+          try {
+            return hass.states[variables.var_assistsat_entity].attributes.enable_menu;
+          } catch { return false; }
+        ]]]
+      var_menu_active: |-
+        [[[
+          try {
+            return hass.states[variables.var_assistsat_entity].attributes.menu_active;
+          } catch { return false; }
+        ]]]
+      var_menu_items: |-
+        [[[
+          try {
+            return hass.states[variables.var_assistsat_entity].attributes.menu_items;
+          } catch { return []; }
+        ]]]
   body_template:
     template: assist_template
     show_state: false
@@ -333,6 +351,15 @@ button_card_templates:
 
                   try {
                     list = hass.states[variables.var_assistsat_entity].attributes.status_icons;
+                    
+                    // Add menu button if enabled and show_menu_button is true
+                    if (hass.states[variables.var_assistsat_entity].attributes.enable_menu && 
+                        hass.states[variables.var_assistsat_entity].attributes.show_menu_button) {
+                      buttonList.push({
+                        type: "custom:button-card",
+                        template: "menu"
+                      });
+                    }
                   } catch (error) {
                     list = ""; // Set list to an empty string if an error occurs
                   }
@@ -548,5 +575,17 @@ button_card_templates:
       service_data:
         device: '[[[ return variables.var_assistsat_entity ]]]'
         path: /view-assist/clock
+  menu:
+    type: custom:button-card
+    template: icon_template
+    icon: mdi:menu
+    tap_action:
+      action: call-service
+      service: view_assist.toggle_menu
+      service_data:
+        entity_id: '[[[ return variables.var_assistsat_entity ]]]'
+        show: >-
+          [[[ return
+          !states[variables.var_assistsat_entity].attributes.menu_active ]]]
 views:
   - title: Home
