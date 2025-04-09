@@ -347,33 +347,101 @@ button_card_templates:
               cards: |-
                 [[[{
                   const buttonList = [];
-                  let list;
-
+                  
                   try {
-                    list = hass.states[variables.var_assistsat_entity].attributes.status_icons;
+                    // Get the current path - either from entity attribute or from URL
+                    let currentPath = "";
+                    if (hass.states[variables.var_assistsat_entity].attributes.current_path) {
+                      currentPath = hass.states[variables.var_assistsat_entity].attributes.current_path;
+                    } else if (window.location.pathname) {
+                      currentPath = window.location.pathname;
+                    }
+                    
+                    // Extract view name from path
+                    let currentView = "";
+                    const pathMatch = currentPath.match(/\/view-assist\/([^\/]+)/);
+                    if (pathMatch && pathMatch[1]) {
+                      currentView = pathMatch[1];
+                    }
+                    
+                    // Define the desired order for all possible icons
+                    const iconOrder = [
+                      "home",
+                      "weather",
+                      
+                      // System/state icons (typically go after navigation icons)
+                      "dnd",
+                      "hold",
+                      "cycle",
+                      "mic",
+                      "mediaplayer",
+                      "menu"
+                    ];
+                    
+                    // Get all available icons
+                    const statusIcons = hass.states[variables.var_assistsat_entity].attributes.status_icons || [];
+                    const menuItems = hass.states[variables.var_assistsat_entity].attributes.menu_items || [];
+                    const menuActive = hass.states[variables.var_assistsat_entity].attributes.menu_active || false;
+                    
+                    // Build the complete icon list with any icons that should be shown
+                    let visibleIcons = [];
                     
                     // Add menu button if enabled and show_menu_button is true
                     if (hass.states[variables.var_assistsat_entity].attributes.enable_menu && 
                         hass.states[variables.var_assistsat_entity].attributes.show_menu_button) {
-                      buttonList.push({
-                        type: "custom:button-card",
-                        template: "menu"
+                      visibleIcons.push("menu");
+                    }
+                    
+                    // Add status icons
+                    statusIcons.forEach(icon => {
+                      if (!visibleIcons.includes(icon)) {
+                        visibleIcons.push(icon);
+                      }
+                    });
+                    
+                    // Add menu items if menu is active
+                    if (menuActive) {
+                      menuItems.forEach(item => {
+                        if (!visibleIcons.includes(item)) {
+                          visibleIcons.push(item);
+                        }
                       });
                     }
+                    
+                    // Filter out current view
+                    visibleIcons = visibleIcons.filter(icon => icon !== currentView);
+                    
+                    // Sort icons according to the defined order
+                    visibleIcons.sort((a, b) => {
+                      const indexA = iconOrder.indexOf(a);
+                      const indexB = iconOrder.indexOf(b);
+                      
+                      // If both icons are in the order list, sort by their position
+                      if (indexA !== -1 && indexB !== -1) {
+                        return indexA - indexB;
+                      }
+                      
+                      // If only one is in the order list, prioritize it
+                      if (indexA !== -1) return -1;
+                      if (indexB !== -1) return 1;
+                      
+                      // If neither is in the order list, keep their relative order
+                      return 0;
+                    });
+                    
+                    // Create buttons for each visible icon
+                    visibleIcons.forEach(icon => {
+                      buttonList.push({
+                        type: "custom:button-card",
+                        template: icon
+                      });
+                    });
                   } catch (error) {
-                    list = ""; // Set list to an empty string if an error occurs
+                    console.error("Error processing status icons:", error);
                   }
-
-                  if (list) {
-                    for (let i = 0; i < list.length; i++) {
-                      buttonList.push({
-                        type: "custom:button-card",
-                        template: list[i]
-                      });
-                    }
-                  }
-
-                  return buttonList.reverse();
+      
+                  // Return buttonList without reversing - ordering is now handled by the sort
+                  return buttonList;
                 }]]]
       shader: ''
   assist_template:
@@ -584,8 +652,6 @@ button_card_templates:
       service: view_assist.toggle_menu
       service_data:
         entity_id: '[[[ return variables.var_assistsat_entity ]]]'
-        show: >-
-          [[[ return
-          !states[variables.var_assistsat_entity].attributes.menu_active ]]]
+        show: '[[[ return !states[variables.var_assistsat_entity].attributes.menu_active ]]]'
 views:
   - title: Home
