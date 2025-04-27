@@ -240,6 +240,37 @@ button_card_templates:
             return `${weather_icon}`;
           } catch { return  ""} 
         ]]]
+  responsive_base:
+    variables:
+      var_orientation: |-
+        [[[ 
+          if (!window.view_assist_globals) {
+            window.view_assist_globals = {
+              orientation: window.innerHeight > window.innerWidth ? "portrait" : "landscape",
+              is_small_screen: window.innerWidth < 600
+            };
+            
+            window.addEventListener('resize', () => {
+              const newOrientation = window.innerHeight > window.innerWidth ? "portrait" : "landscape";
+              const newSmallScreen = window.innerWidth < 600;
+              
+              if (window.view_assist_globals.orientation !== newOrientation || 
+                  window.view_assist_globals.is_small_screen !== newSmallScreen) {
+                window.view_assist_globals.orientation = newOrientation;
+                window.view_assist_globals.is_small_screen = newSmallScreen;
+                
+                const event = new Event('view-assist-screen-change');
+                window.dispatchEvent(event);
+              }
+            });
+          }
+          
+          return window.view_assist_globals.orientation;
+        ]]]
+      var_is_small_screen: |-
+        [[[
+          return window.view_assist_globals?.is_small_screen || false;
+        ]]]
   body_template:
     template: assist_template
     show_state: false
