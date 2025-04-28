@@ -243,9 +243,9 @@ button_card_templates:
   responsive_base:
     variables:
       var_orientation: |-
-        [[[ 
-          if (!window.view_assist_globals) {
-            window.view_assist_globals = {
+        [[[
+          if (!window.viewAssistResponsive) {
+            window.viewAssistResponsive = {
               orientation: window.innerHeight > window.innerWidth ? "portrait" : "landscape",
               is_small_screen: window.innerWidth < 600
             };
@@ -254,10 +254,10 @@ button_card_templates:
               const newOrientation = window.innerHeight > window.innerWidth ? "portrait" : "landscape";
               const newSmallScreen = window.innerWidth < 600;
               
-              if (window.view_assist_globals.orientation !== newOrientation || 
-                  window.view_assist_globals.is_small_screen !== newSmallScreen) {
-                window.view_assist_globals.orientation = newOrientation;
-                window.view_assist_globals.is_small_screen = newSmallScreen;
+              if (window.viewAssistResponsive.orientation !== newOrientation || 
+                  window.viewAssistResponsive.is_small_screen !== newSmallScreen) {
+                window.viewAssistResponsive.orientation = newOrientation;
+                window.viewAssistResponsive.is_small_screen = newSmallScreen;
                 
                 const event = new Event('view-assist-screen-change');
                 window.dispatchEvent(event);
@@ -265,11 +265,7 @@ button_card_templates:
             });
           }
           
-          return window.view_assist_globals.orientation;
-        ]]]
-      var_is_small_screen: |-
-        [[[
-          return window.view_assist_globals?.is_small_screen || false;
+          return window.viewAssistResponsive.orientation;
         ]]]
   body_template:
     template: assist_template
