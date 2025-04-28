@@ -1,43 +1,79 @@
 type: custom:button-card
 variables:
-  clockcardversion: 1.2.1
+  clockcardversion: 1.2.2
   var_background: >-
     [[[ try {return
-    hass.states[variables.var_assistsat_entity].attributes.background} catch {
-    return ""}]]]  
+    hass.states[variables.var_assistsat_entity].attributes.background}
+    catch { return ""}]]]
 template:
   - variable_template
+  - responsive_base
   - body_template
+triggers_update: all
 styles:
   grid:
-    - grid-template-areas: |
-        "title status"  
-        "time time"
-        "date date"
-        "assist assist"
-    - grid-template-rows: 15vh 50vh 8vh 20vh
+    - grid-template-areas: |-
+        [[[
+          if (window.viewAssistResponsive.orientation === "portrait") {
+            return `"title status"  
+                    "time time"
+                    "date date"
+                    "assist assist"`;
+          } else {
+            return `"title status"  
+                    "time time"
+                    "date date"
+                    "assist assist"`;
+          }
+        ]]]
+    - grid-template-rows: |-
+        [[[
+          if (window.viewAssistResponsive.orientation === "portrait") {
+            return "15vh 35vh 0vh 25vh";
+          } else {
+            return "15vh 50vh 8vh 20vh";
+          }
+        ]]]
     - grid-template-columns: 1fr 1fr
   card:
     - background: >-
-        [[[ return `center / cover no-repeat url(${variables.var_background})`
-        ]]]
+        [[[ return `center / cover no-repeat
+        url(${variables.var_background})` ]]]
     - background-size: cover
+    - position: relative
   custom_fields:
     title:
       - display: grid
     time:
       - display: grid
       - justify-self: center
+      - align-self: center
       - z-index: 1
-      - font-size: 55vh
+      - font-size: |-
+          [[[
+            if (window.viewAssistResponsive.orientation === "portrait") {
+              return window.viewAssistResponsive.is_small_screen ? "30vh" : "35vh";
+            } else {
+              return "55vh";
+            }
+          ]]]
       - font-weight: bold
       - color: white
+      - padding-top: 0
+      - margin-top: 0
     date:
       - display: grid
       - justify-self: center
       - align-self: center
       - z-index: 1
-      - font-size: 15vh
+      - font-size: |-
+          [[[
+            if (window.viewAssistResponsive.orientation === "portrait") {
+              return window.viewAssistResponsive.is_small_screen ? "8vh" : "10vh";
+            } else {
+              return "15vh";
+            }
+          ]]]
       - width: max-content
     night:
       - position: absolute
@@ -48,8 +84,9 @@ styles:
       - overflow: hidden
       - display: >-
           [[[ try {if
-          (hass.states[variables.var_assistsat_entity].attributes.mode ===
-          "night") return "block"; else return "none";} catch { return  "none"}
+          (hass.states[variables.var_assistsat_entity].attributes.mode
+          === "night") return "block"; else return "none";} catch {
+          return  "none"}
            ]]]      
       - z-index: 2
     shader:
@@ -58,34 +95,53 @@ styles:
       - height: 100%
       - width: 100%
       - background-color: rgba(0,0,0,0.15)
+    event_listener:
+      - display: none !important
 custom_fields:
   title:
     card:
       type: custom:button-card
-      icon: "[[[ return variables.var_weather_icon ]]]"
-      name: "[[[ return variables.var_weather_temperature ]]]"
+      icon: '[[[ return variables.var_weather_icon ]]]'
+      name: '[[[ return variables.var_weather_temperature ]]]'
+      template: null
       tap_action:
         action: call-service
         service: view_assist.navigate
         service_data:
-          device: "[[[ return variables.var_assistsat_entity ]]]"
+          device: '[[[ return variables.var_assistsat_entity ]]]'
           path: /view-assist/weather
       styles:
         card:
           - background-color: transparent
           - border-width: 0px
           - width: 100%
-          - top: "-5%"
+          - top: '-5%'
           - left: 5%
         grid:
-          - grid-template-areas: "\"i n\""
+          - grid-template-areas: '"i n"'
         name:
-          - font-size: 15vh
+          - font-size: |-
+              [[[
+                // Direct check of globals
+                if (window.viewAssistResponsive.orientation === "portrait") {
+                  return window.viewAssistResponsive.is_small_screen ? "10vh" : "10vh";
+                } else {
+                  return "15vh";
+                }
+              ]]]
           - color: white
         icon:
-          - width: 13vh
+          - width: |-
+              [[[
+                // Direct check of globals
+                if (window.viewAssistResponsive.orientation === "portrait") {
+                  return window.viewAssistResponsive.is_small_screen ? "8vh" : "10vh";
+                } else {
+                  return "13vh";
+                }
+              ]]]
           - color: white
-  time: "[[[ return variables.var_current_time ]]]"
-  date: "[[[ return variables.var_date_short ]]]"
+  time: '[[[ return variables.var_current_time ]]]'
+  date: '[[[ return variables.var_date_short ]]]'
   night: .
-  shader: ""
+  shader: ''
