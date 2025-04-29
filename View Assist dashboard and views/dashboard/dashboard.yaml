@@ -383,122 +383,271 @@ button_card_templates:
 
                   return buttonList.reverse();
                 }]]]
-  assist_template:
-    styles:
-      card: null
-      custom_fields:
-        assistbar:
-          - display: >-
-              [[[ if (variables.var_assist_prompt == "flashing bar" &
-              variables.var_assisting == "true") return "block"; else return
-              "none"; ]]]
-          - justify-self: center
-          - height: 10vh
-          - position: absolute
-          - width: 100%
-          - z-index: 1
-          - bottom: 0%
-          - animation: >-
-              [[[ if (variables.var_assisting_text.includes("How")) return
-              "pulse 2s infinite"; else return "pulse2 2s infinite"]]]        
-          - height: 10px
-        filterblur:
-          - display: >-
-              [[[ if (variables.var_assist_prompt == "blur pop up" &
-              variables.var_assisting == "true") return "block"; else return
-              "none"; ]]]       
-          - top: 0px
-          - left: 0px
-          - position: absolute
-          - height: 150%
-          - width: 150%
-          - backdrop-filter: brightness(100%)
-          - overflow: hidden
-          - color: transparent
-          - z-index: 0
-          - animation: '[[[ return "brightness .1s ease-in-out forwards" ]]]      '
-        assistblur:
-          - display: >-
-              [[[ if (variables.var_assist_prompt == "blur pop up" &
-              variables.var_assisting == "true") return "block"; else return
-              "none"; ]]]           
-          - position: absolute
-          - vertical-align: middle
-          - justify-self: center
-          - justify-content: center
-          - align-self: center
-          - z-index: 10
-          - opacity: 0
-          - animation: '[[[ return "growFromCenter .4s ease-in-out forwards" ]]]'
-          - font-family: '"Roboto", sans-serif'
-    extra_styles: |
-      @keyframes pulse {
-        0%, 100% {
-          background-color: #f56a3f;
-        }
-        50% {
-          background-color: #9e42b0;
-        }
+type: custom:button-card
+variables:
+  alarmcardversion: 1.1.0
+  var_display_timer_name: |-
+    [[[
+      var assistbid = localStorage.getItem("view_assist_sensor");
+      var alarm_name = hass.states[assistbid].attributes.display_timer_name;
+      try {return `${alarm_name}`;} catch { return "" }
+    ]]]
+  var_display_timer_expire: |-
+    [[[
+      var assistbid = localStorage.getItem("view_assist_sensor");
+      var alarm_name = hass.states[assistbid].attributes.display_timer_expire;
+      try {return `${alarm_name}`;} catch { return "" }
+    ]]]
+  var_display_timer_type: |-
+    [[[
+      var assistbid = localStorage.getItem("view_assist_sensor");
+      var alarm_name = hass.states[assistbid].attributes.display_timer_type;
+      try {return `${alarm_name}`;} catch { return "" }
+    ]]]
+  var_time: |-
+    [[[ 
+      if (variables.var_display_timer_type === 'timer') {
+        return `<viewassist-countdown expires='${variables.var_display_timer_expire}'></viewassist-countdown>`;
+      } else {
+        return `<viewassist-clock server_time=true></viewassist-clock>`;
       }
-      @keyframes pulse2 {
-        0%, 100% {
-          background-color: #03A9F4;
-        }
-        50% {
-          background-color: #cfe2f3;
-        }
-      }      
-      @keyframes growFromCenter {
-        75% {
-          transform: scale(0);
-          opacity: 0;
-        }
-        100% {
-          transform: scale(1);
-          opacity: 1;
-        }
-      }
-      @keyframes brightness {
-        100% { backdrop-filter: brightness(50%) blur(10px); z-index:9; }
-      }    
-    custom_fields:
-      assistbar: .
-      filterblur: .
-      assistblur:
+    ]]]
+template:
+  - variable_template
+  - responsive_base
+  - body_template
+triggers_update: all
+styles:
+  grid:
+    - grid-template-areas: |-
+        [[[
+          if (window.viewAssistResponsive.orientation === "portrait") {
+            return `"title status"
+                    "display_timer_name display_timer_name"
+                    "time time"
+                    "snooze dismiss"
+                    "assist assist"`;
+          } else {
+            return `"title status"
+                    "display_timer_name display_timer_name"
+                    "time time"
+                    "snooze dismiss"
+                    "assist assist"`;
+          }
+        ]]]
+    - grid-template-rows: |-
+        [[[
+          if (window.viewAssistResponsive.orientation === "portrait") {
+            return window.viewAssistResponsive.is_small_screen ? 
+              ".5fr min-content min-content min-content min-content" : 
+              ".5fr min-content min-content min-content min-content";
+          } else {
+            return ".5fr min-content min-content min-content min-content";
+          }
+        ]]]
+    - grid-template-columns: 1fr 1fr
+  card:
+    - background-size: cover
+    - background-color: "#24292c"
+  custom_fields:
+    display_timer_name:
+      - justify-self: center
+      - z-index: 1
+      - font-size: |-
+          [[[
+            if (window.viewAssistResponsive.orientation === "portrait") {
+              return window.viewAssistResponsive.is_small_screen ? "6vh" : "8vh";
+            } else {
+              return "10vh";
+            }
+          ]]]
+      - position: grid
+      - color: white
+      - align-content: end
+    time:
+      - justify-self: center
+      - z-index: 1
+      - font-size: |-
+          [[[
+            if (window.viewAssistResponsive.orientation === "portrait") {
+              return window.viewAssistResponsive.is_small_screen ? "20vh" : "25vh";
+            } else {
+              return "35vh";
+            }
+          ]]]
+      - font-weight: bold
+      - position: grid
+      - color: white
+    snooze:
+      - justify-self: center
+      - align-self: center
+      - z-index: 1
+      - font-size: |-
+          [[[
+            if (window.viewAssistResponsive.orientation === "portrait") {
+              return window.viewAssistResponsive.is_small_screen ? "8vh" : "10vh";
+            } else {
+              return "15vh";
+            }
+          ]]]
+      - width: max-content
+      - position: grid
+      - top: |-
+          [[[
+            if (window.viewAssistResponsive.orientation === "portrait") {
+              return "80%";
+            } else {
+              return "70%";
+            }
+          ]]]
+    dismiss:
+      - justify-self: center
+      - align-self: center
+      - z-index: 1
+      - font-size: |-
+          [[[
+            if (window.viewAssistResponsive.orientation === "portrait") {
+              return window.viewAssistResponsive.is_small_screen ? "8vh" : "10vh";
+            } else {
+              return "15vh";
+            }
+          ]]]
+      - width: max-content
+      - position: grid
+      - top: |-
+          [[[
+            if (window.viewAssistResponsive.orientation === "portrait") {
+              return "80%";
+            } else {
+              return "70%";
+            }
+          ]]]
+custom_fields:
+  title: " "
+  display_timer_name: "[[[ return variables.var_display_timer_name ]]]"
+  time: |-
+    [[[ 
+      return variables.var_time; 
+    ]]]
+  snooze:
+    card:
+      type: custom:button-card
+      name: Snooze
+      show_icon: false
+      show_name: true
+      tap_action:
+        action: call-service
+        service: view_assist.broadcast_event
+        service_data:
+          event_name: viewassist
+          event_data:
+            command: snooze alarm
+            entity_id: "[[[ return variables.var_assistsat_entity ]]]"
+            mic_device: >-
+              [[[ return
+              hass.states[variables.var_assistsat_entity].attributes.mic_device
+              ]]]
+      styles:
         card:
-          type: custom:button-card
-          name: '[[[ return variables.var_assisting_text ]]]'
-          show_icon: true
-          icon: >-
-            [[[ if (variables.var_assisting_text.includes("How")) return
-            "mdi:comment-processing-outline"; else return "mdi:dots-horizontal";
-            ]]]  
-          tap_action:
-            action: none
-          styles:
-            card:
-              - display: >-
-                  [[[ if (variables.var_assisting == "true") return "block";
-                  else return "none"; ]]]  
-              - padding: 4vh
-              - padding-top: 2vh
-              - padding-bottom: 2vh
-              - background: white
-              - height: 15vh
-              - width: 45vw
-              - border-radius: 8vh
-            grid:
-              - grid-template-areas: '"i n"'
-              - grid-template-columns: 1fr 4fr
-              - grid-template-rows: 1fr
-            icon:
-              - color: rgb(3,169,244)
-              - width: 10vw
-            name:
-              - color: black
-              - text-align: start
-              - font-size: 5vh
-              - font-weight: bold
+          - display: flex
+          - justify-content: center
+          - align-items: center
+          - width: |-
+              [[[
+                if (window.viewAssistResponsive.orientation === "portrait") {
+                  return window.viewAssistResponsive.is_small_screen ? "25vw" : "28vw";
+                } else {
+                  return "30vw";
+                }
+              ]]]
+          - height: |-
+              [[[
+                if (window.viewAssistResponsive.orientation === "portrait") {
+                  return window.viewAssistResponsive.is_small_screen ? "8vh" : "9vh";
+                } else {
+                  return "10vh";
+                }
+              ]]]
+          - border-radius: |-
+              [[[
+                if (window.viewAssistResponsive.orientation === "portrait") {
+                  return window.viewAssistResponsive.is_small_screen ? "7vw" : "7vw";
+                } else {
+                  return "5vw";
+                }
+              ]]]
+          - border: none
+          - background-color: white
+        name:
+          - font-size: |-
+              [[[
+                if (window.viewAssistResponsive.orientation === "portrait") {
+                  return window.viewAssistResponsive.is_small_screen ? "3vh" : "4vh";
+                } else {
+                  return "5vh";
+                }
+              ]]]
+          - color: black
+          - font-weight: bold
+          - text-align: center
+  dismiss:
+    card:
+      type: custom:button-card
+      name: Dismiss
+      show_icon: false
+      show_name: true
+      tap_action:
+        action: call-service
+        service: view_assist.broadcast_event
+        service_data:
+          event_name: viewassist
+          event_data:
+            command: dismiss alarm
+            entity_id: "[[[ return variables.var_assistsat_entity ]]]"
+      styles:
+        card:
+          - display: flex
+          - justify-content: center
+          - align-items: center
+          - width: |-
+              [[[
+                if (window.viewAssistResponsive.orientation === "portrait") {
+                  return window.viewAssistResponsive.is_small_screen ? "25vw" : "28vw";
+                } else {
+                  return "30vw";
+                }
+              ]]]
+          - height: |-
+              [[[
+                if (window.viewAssistResponsive.orientation === "portrait") {
+                  return window.viewAssistResponsive.is_small_screen ? "8vh" : "9vh";
+                } else {
+                  return "10vh";
+                }
+              ]]]
+          - border-radius: |-
+              [[[
+                if (window.viewAssistResponsive.orientation === "portrait") {
+                  return window.viewAssistResponsive.is_small_screen ? "4vh" : "4.5vh";
+                } else {
+                  return "5vh";
+                }
+              ]]]
+          - color: white
+          - border: none
+          - background-color: "#2899f3"
+        name:
+          - font-size: |-
+              [[[
+                if (window.viewAssistResponsive.orientation === "portrait") {
+                  return window.viewAssistResponsive.is_small_screen ? "3vh" : "4vh";
+                } else {
+                  return "5vh";
+                }
+              ]]]
+          - color: white
+          - font-weight: bold
+          - text-align: center
   icon_template:
     template: variable_template
     aspect_ratio: 1/1
