@@ -1,23 +1,23 @@
 type: custom:button-card
 variables:
-  alarmcardversion: 1.0.1
+  alarmcardversion: 1.1.0
   var_display_timer_name: |-
     [[[
       var assistbid = localStorage.getItem("view_assist_sensor");
       var alarm_name = hass.states[assistbid].attributes.display_timer_name;
-      try {return `${alarm_name}`;} catch { return  ""}
+      try {return `${alarm_name}`;} catch { return "" }
     ]]]
   var_display_timer_expire: |-
     [[[
       var assistbid = localStorage.getItem("view_assist_sensor");
       var alarm_name = hass.states[assistbid].attributes.display_timer_expire;
-      try {return `${alarm_name}`;} catch { return  ""}
+      try {return `${alarm_name}`;} catch { return "" }
     ]]]
   var_display_timer_type: |-
     [[[
       var assistbid = localStorage.getItem("view_assist_sensor");
       var alarm_name = hass.states[assistbid].attributes.display_timer_type;
-      try {return `${alarm_name}`;} catch { return  ""}
+      try {return `${alarm_name}`;} catch { return "" }
     ]]]
   var_time: |-
     [[[ 
@@ -29,16 +29,37 @@ variables:
     ]]]
 template:
   - variable_template
+  - responsive_base
   - body_template
+triggers_update: all
 styles:
   grid:
-    - grid-template-areas: |
-        "title status"
-        "display_timer_name display_timer_name"
-        "time time"
-        "snooze dismiss"
-        "assist assist"
-    - grid-template-rows: .5fr min-content min-content min-content min-content
+    - grid-template-areas: |-
+        [[[
+          if (window.viewAssistResponsive.orientation === "portrait") {
+            return `"title status"
+                    "display_timer_name display_timer_name"
+                    "time time"
+                    "snooze dismiss"
+                    "assist assist"`;
+          } else {
+            return `"title status"
+                    "display_timer_name display_timer_name"
+                    "time time"
+                    "snooze dismiss"
+                    "assist assist"`;
+          }
+        ]]]
+    - grid-template-rows: |-
+        [[[
+          if (window.viewAssistResponsive.orientation === "portrait") {
+            return window.viewAssistResponsive.is_small_screen ? 
+              ".5fr min-content min-content min-content min-content" : 
+              ".5fr min-content min-content min-content min-content";
+          } else {
+            return ".5fr min-content min-content min-content min-content";
+          }
+        ]]]
     - grid-template-columns: 1fr 1fr
   card:
     - background-size: cover
@@ -47,14 +68,28 @@ styles:
     display_timer_name:
       - justify-self: center
       - z-index: 1
-      - font-size: 10vh
+      - font-size: |-
+          [[[
+            if (window.viewAssistResponsive.orientation === "portrait") {
+              return window.viewAssistResponsive.is_small_screen ? "6vh" : "8vh";
+            } else {
+              return "10vh";
+            }
+          ]]]
       - position: grid
       - color: white
       - align-content: end
     time:
       - justify-self: center
       - z-index: 1
-      - font-size: 35vh
+      - font-size: |-
+          [[[
+            if (window.viewAssistResponsive.orientation === "portrait") {
+              return window.viewAssistResponsive.is_small_screen ? "20vh" : "25vh";
+            } else {
+              return "35vh";
+            }
+          ]]]
       - font-weight: bold
       - position: grid
       - color: white
@@ -62,18 +97,46 @@ styles:
       - justify-self: center
       - align-self: center
       - z-index: 1
-      - font-size: 15vh
+      - font-size: |-
+          [[[
+            if (window.viewAssistResponsive.orientation === "portrait") {
+              return window.viewAssistResponsive.is_small_screen ? "8vh" : "10vh";
+            } else {
+              return "15vh";
+            }
+          ]]]
       - width: max-content
       - position: grid
-      - top: 70%
+      - top: |-
+          [[[
+            if (window.viewAssistResponsive.orientation === "portrait") {
+              return "80%";
+            } else {
+              return "70%";
+            }
+          ]]]
     dismiss:
       - justify-self: center
       - align-self: center
       - z-index: 1
-      - font-size: 15vh
+      - font-size: |-
+          [[[
+            if (window.viewAssistResponsive.orientation === "portrait") {
+              return window.viewAssistResponsive.is_small_screen ? "8vh" : "10vh";
+            } else {
+              return "15vh";
+            }
+          ]]]
       - width: max-content
       - position: grid
-      - top: 70%
+      - top: |-
+          [[[
+            if (window.viewAssistResponsive.orientation === "portrait") {
+              return "80%";
+            } else {
+              return "70%";
+            }
+          ]]]
 custom_fields:
   title: " "
   display_timer_name: "[[[ return variables.var_display_timer_name ]]]"
@@ -104,13 +167,41 @@ custom_fields:
           - display: flex
           - justify-content: center
           - align-items: center
-          - width: 30vw
-          - height: 10vh
-          - border-radius: 5vw
+          - width: |-
+              [[[
+                if (window.viewAssistResponsive.orientation === "portrait") {
+                  return window.viewAssistResponsive.is_small_screen ? "25vw" : "28vw";
+                } else {
+                  return "30vw";
+                }
+              ]]]
+          - height: |-
+              [[[
+                if (window.viewAssistResponsive.orientation === "portrait") {
+                  return window.viewAssistResponsive.is_small_screen ? "8vh" : "9vh";
+                } else {
+                  return "10vh";
+                }
+              ]]]
+          - border-radius: |-
+              [[[
+                if (window.viewAssistResponsive.orientation === "portrait") {
+                  return window.viewAssistResponsive.is_small_screen ? "7vw" : "7vw";
+                } else {
+                  return "5vw";
+                }
+              ]]]
           - border: none
           - background-color: white
         name:
-          - font-size: 5vh
+          - font-size: |-
+              [[[
+                if (window.viewAssistResponsive.orientation === "portrait") {
+                  return window.viewAssistResponsive.is_small_screen ? "3vh" : "4vh";
+                } else {
+                  return "5vh";
+                }
+              ]]]
           - color: black
           - font-weight: bold
           - text-align: center
@@ -133,14 +224,42 @@ custom_fields:
           - display: flex
           - justify-content: center
           - align-items: center
-          - width: 30vw
-          - height: 10vh
-          - border-radius: 5vh
+          - width: |-
+              [[[
+                if (window.viewAssistResponsive.orientation === "portrait") {
+                  return window.viewAssistResponsive.is_small_screen ? "25vw" : "28vw";
+                } else {
+                  return "30vw";
+                }
+              ]]]
+          - height: |-
+              [[[
+                if (window.viewAssistResponsive.orientation === "portrait") {
+                  return window.viewAssistResponsive.is_small_screen ? "8vh" : "9vh";
+                } else {
+                  return "10vh";
+                }
+              ]]]
+          - border-radius: |-
+              [[[
+                if (window.viewAssistResponsive.orientation === "portrait") {
+                  return window.viewAssistResponsive.is_small_screen ? "4vh" : "4.5vh";
+                } else {
+                  return "5vh";
+                }
+              ]]]
           - color: white
           - border: none
           - background-color: "#2899f3"
         name:
-          - font-size: 5vh
+          - font-size: |-
+              [[[
+                if (window.viewAssistResponsive.orientation === "portrait") {
+                  return window.viewAssistResponsive.is_small_screen ? "3vh" : "4vh";
+                } else {
+                  return "5vh";
+                }
+              ]]]
           - color: white
           - font-weight: bold
           - text-align: center
