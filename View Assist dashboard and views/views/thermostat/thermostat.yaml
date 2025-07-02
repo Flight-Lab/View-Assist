@@ -1,47 +1,429 @@
 type: custom:button-card
 variables:
-  thermostatversion: 1.0.1
-  var_climate_device: >-
-    [[[ try {return
-    hass.states[variables.var_assistsat_entity].attributes.climate} catch {
-    return ""}]]]
+  thermostatversion: 2.4.0
+  var_climate_device: |-
+    [[[
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlClimate = urlParams.get('climate');
+      if (urlClimate) return urlClimate;
+
+      // Check voice assistant attributes
+      try {
+        const voiceClimate = hass.states[variables.var_assistsat_entity].attributes.climate;
+        if (voiceClimate) return voiceClimate;
+      } catch (e) {}
+
+      // Find first available climate device
+      for (const entityId in hass.states) {
+        if (entityId.startsWith('climate.')) {
+          const state = hass.states[entityId].state;
+          if (state !== 'unavailable' && state !== 'unknown') {
+            return entityId;
+          }
+        }
+      }
+      return "";
+    ]]]
+  var_all_climate_devices: |-
+    [[[
+      const devices = [];
+      for (const entityId in hass.states) {
+        if (entityId.startsWith('climate.')) {
+          const state = hass.states[entityId];
+          if (state.state !== 'unavailable' && state.state !== 'unknown') {
+            devices.push({
+              entity_id: entityId,
+              name: state.attributes.friendly_name || entityId.replace('climate.', ''),
+              hvac_mode: state.state
+            });
+          }
+        }
+      }
+      return devices.sort((a, b) => a.name.localeCompare(b.name));
+    ]]]
+  var_has_multiple_climate: "[[[ return variables.var_all_climate_devices.length > 1; ]]]"
+  var_is_portrait: "[[[ return window.viewAssistResponsive?.orientation === \"portrait\"; ]]]"
+  var_set_hold_mode: |-
+    [[[
+      if (variables.var_current_view === 'thermostat' && variables.var_assistsat_entity && !window.thermostatHoldModeSet) {
+        window.thermostatHoldModeSet = true;
+        hass.callService('view_assist', 'set_state', {
+          entity_id: variables.var_assistsat_entity,
+          mode: 'hold'
+        });
+      }
+      return '';
+    ]]]
 template:
   - variable_template
   - body_template
 styles:
+  grid:
+    - grid-template-areas: |-
+        [[[
+          if (!variables.var_climate_device) {
+            return `"status status" "title_card title_card" "no_climate no_climate"`;
+          }
+          
+          if (variables.var_has_multiple_climate) {
+            return variables.var_is_portrait ? 
+              `"status status" "title_card title_card" "thermostat thermostat" "thermostat thermostat" "thermostat thermostat" "controls controls"` :
+              `"status status" "title_card title_card" "thermostat controls" "thermostat controls" "thermostat controls"`;
+          }
+          
+          return `"status status" "title_card title_card" "thermostat thermostat" "thermostat thermostat"`;
+        ]]]
+    - grid-template-columns: |-
+        [[[
+          if (variables.var_has_multiple_climate && !variables.var_is_portrait) {
+            return "1fr min-content"; // Use min-content like original for better fit
+          }
+          return "1fr";
+        ]]]
+    - grid-template-rows: |-
+        [[[
+          if (!variables.var_climate_device) {
+            return "auto auto 1fr";
+          }
+          if (variables.var_has_multiple_climate && variables.var_is_portrait) {
+            return "auto auto 1fr 1fr 1fr auto"; // Added title card row
+          }
+          return "auto auto 1fr 1fr 1fr"; // Added title card row for landscape and single device
+        ]]]
   card:
-    - background-color: "#1c1c1c"
-    - background-size: cover
+    - background: |-
+        [[[
+          if (!variables.var_climate_device) {
+            return 'linear-gradient(135deg, #1c1c1c 0%, #2d2d2d 100%)';
+          }
+          
+          const state = hass.states[variables.var_climate_device];
+          const mode = state?.state;
+          
+          switch(mode) {
+            case 'heat': return 'linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%)';
+            case 'cool': return 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)';
+            case 'heat_cool': return 'linear-gradient(135deg, #ff6b6b 0%, #4facfe 100%)';
+            default: return 'linear-gradient(135deg, #1c1c1c 0%, #2d2d2d 100%)';
+          }
+        ]]]
+    - border-radius: 0px
+    - font-family: >-
+        [[[ return `"${variables.var_assistsat_entity_font_style}", sans-serif`;
+        ]]]
   custom_fields:
-    message:
-      - font-size: "[[[ return variables.var_font_size ]]]"
-      - position: relative
-      - padding: 10px
-      - border-radius: 10px
-      - width: 95%
-      - text-align: start
-      - text-wrap: wrap
+    title_card:
+      - display: flex
       - justify-content: center
-      - align-self: center
-      - padding: 2%
+      - align-items: center
+      - padding: 2rem 2rem
+    thermostat:
+      - display: "[[[ return variables.var_climate_device ? \"flex\" : \"none\" ]]]"
+      - justify-content: center
+      - align-items: center
+      - height: 100%
+      - width: 100%
+      - padding: |-
+          [[[
+            return variables.var_is_portrait ? "1vh 0" : "1vh 1vw";
+          ]]]
+    controls:
+      - display: "[[[ return variables.var_has_multiple_climate ? \"flex\" : \"none\" ]]]"
+      - justify-self: |-
+          [[[
+            return variables.var_is_portrait ? "center" : "end";
+          ]]]
+      - align-self: |-
+          [[[
+            return variables.var_is_portrait ? "end" : "center";
+          ]]]
+      - padding: |-
+          [[[
+            return variables.var_is_portrait ? "2vh 2vw" : "2vh 1vw";
+          ]]]
+      - gap: |-
+          [[[
+            return variables.var_is_portrait ? "1vw" : "1.5vh";
+          ]]]
+      - flex-direction: |-
+          [[[
+            return variables.var_is_portrait ? "row" : "column";
+          ]]]
+      - justify-content: center
+      - overflow: auto
+      - max-height: |-
+          [[[
+            return variables.var_is_portrait ? "none" : "70vh";
+          ]]]
+      - width: |-
+          [[[
+            return variables.var_is_portrait ? "100%" : "auto";
+          ]]]
+    no_climate:
+      - display: "[[[ return variables.var_climate_device ? \"none\" : \"flex\" ]]]"
+      - justify-content: center
+      - align-items: center
+      - color: white
+      - text-align: center
 custom_fields:
-  title: ""
-  message:
+  _hold_mode_init: "[[[ return variables.var_set_hold_mode ]]]"
+  title_card:
+    card:
+      type: markdown
+      content: |-
+        [[[
+          if (!variables.var_climate_device) {
+            return "## Climate Control";
+          }
+          
+          const state = hass.states[variables.var_climate_device];
+          const name = state?.attributes?.friendly_name || variables.var_climate_device.replace('climate.', '');
+          
+          return `## ${name}`;
+        ]]]
+      card_mod:
+        style: |
+          ha-card {
+            background: transparent !important;
+            box-shadow: none !important;
+            border: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+          }
+          ha-markdown {
+            color: white !important;
+            text-align: center !important;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.7) !important;
+            font-weight: 600 !important;
+          }
+          ha-markdown h2 {
+            margin: 0 !important;
+            font-size: 3.5rem !important; /* Increased from 2.5rem */
+            font-weight: 700 !important; /* Bolder weight */
+            letter-spacing: 0.05em !important; /* Better spacing */
+          }
+
+          /* Responsive font sizing - MASSIVE TITLES */
+          @media (orientation: portrait) {
+            ha-markdown h2 {
+              font-size: 5rem !important; /* Increased from 3.5rem */
+            }
+          }
+  thermostat:
     card:
       type: thermostat
       entity: "[[[ return variables.var_climate_device ]]]"
-      name: " "
       card_mod:
-        style:
-          .: |
-            .content {
-              transform: scale(1.8);
-            }
-          ha-icon-button:
-            $:
-              mwc-icon-button:
-                $:
-                  button: |
-                    mwc-ripple {
-                      display: none;
-                    }
+        style: |-
+          ha-card {
+            /* TRANSPARENT STYLING */
+            background: transparent !important;
+            backdrop-filter: none !important;
+            border-radius: 1rem !important;
+            box-shadow: none !important;
+            border: none !important;
+            height: 100% !important;
+            
+            /* SIZING AND PLACEMENT CONTROLS - MAXIMUM SIZE */
+            transform: |-
+              [[[
+                if (window.viewAssistResponsive && window.viewAssistResponsive.orientation === "portrait") {
+                  return "scale(2.2)"; // Increased from 1.8 
+                } else {
+                  return "scale(2.0)"; // Increased from 1.7
+                }
+              ]]]
+            /* Remove any size constraints that might limit scaling */
+            max-width: none !important;
+            max-height: none !important;
+            width: auto !important;
+            height: auto !important;
+            transform-origin: center;
+            margin: |-
+              [[[
+                if (window.viewAssistResponsive && window.viewAssistResponsive.orientation === "portrait") {
+                  return "0";
+                } else {
+                  return "2vh 0";
+                }
+              ]]]
+          }
+
+          /* Text styling with white color and shadows for visibility */
+          .name {
+            font-size: |-
+              [[[
+                if (window.viewAssistResponsive && window.viewAssistResponsive.orientation === "portrait") {
+                  return "3vw !important";
+                } else {
+                  return "2.5vh !important";
+                }
+              ]]]
+            color: white !important;
+            text-shadow: 0 0.5vh 1vh rgba(0,0,0,0.7) !important;
+            margin-bottom: |-
+              [[[
+                if (window.viewAssistResponsive && window.viewAssistResponsive.orientation === "portrait") {
+                  return "1vh !important";
+                } else {
+                  return "0.5vh !important";
+                }
+              ]]]
+            font-weight: 600 !important;
+          }
+
+          .info {
+            font-size: |-
+              [[[
+                if (window.viewAssistResponsive && window.viewAssistResponsive.orientation === "portrait") {
+                  return "2.5vh !important";
+                } else {
+                  return "2vh !important";
+                }
+              ]]]
+            color: rgba(255,255,255,0.9) !important;
+            text-shadow: 0 0.25vh 0.5vh rgba(0,0,0,0.5);
+          }
+
+          .current {
+            color: white !important;
+            text-shadow: 0 0.5vh 1vh rgba(0,0,0,0.7);
+            font-size: |-
+              [[[
+                if (window.viewAssistResponsive && window.viewAssistResponsive.orientation === "portrait") {
+                  return "2vh !important";
+                } else {
+                  return "1.8vh !important";
+                }
+              ]]]
+          }
+
+          .target {
+            color: white !important;
+            text-shadow: 0 0.5vh 1vh rgba(0,0,0,0.7);
+            font-size: |-
+              [[[
+                if (window.viewAssistResponsive && window.viewAssistResponsive.orientation === "portrait") {
+                  return "2vh !important";
+                } else {
+                  return "1.8vh !important";
+                }
+              ]]]
+          }
+
+          /* Hide the title completely */
+          .title {
+            display: none !important;
+          }
+
+          /* Hide more info button */
+          .more-info,
+          ha-icon-button[slot="icon-button"],
+          mwc-icon-button {
+            display: none !important;
+          }
+
+          /* Mode buttons styling */
+          .mode-item {
+            background: rgba(255,255,255,0.2) !important;
+            color: white !important;
+            border: 1px solid rgba(255,255,255,0.3) !important;
+            backdrop-filter: blur(5px);
+          }
+
+          .mode-item.selected {
+            background: rgba(255,255,255,0.4) !important;
+            border: 2px solid white !important;
+          }
+  controls:
+    card:
+      type: |-
+        [[[
+          return variables.var_is_portrait ? "horizontal-stack" : "vertical-stack";
+        ]]]
+      cards: |-
+        [[[
+          if (!variables.var_has_multiple_climate) return [];
+          
+          const devices = variables.var_all_climate_devices.slice(0, 4); // Limit to 4
+          const currentDevice = variables.var_climate_device;
+          
+          return devices.map(device => {
+            const isActive = device.entity_id === currentDevice;
+            
+            // Simple icon mapping
+            const iconMap = {
+              'heat': 'mdi:fire',
+              'cool': 'mdi:snowflake', 
+              'heat_cool': 'mdi:autorenew',
+              'off': 'mdi:power'
+            };
+            
+            return {
+              type: "custom:button-card",
+              icon: iconMap[device.hvac_mode] || 'mdi:thermostat',
+              name: device.name.length > 10 ? device.name.substring(0, 10) + '...' : device.name,
+              show_name: true,
+              show_icon: true,
+              tap_action: {
+                action: "call-service",
+                service: "view_assist.navigate",
+                service_data: {
+                  device: variables.var_assistsat_entity,
+                  path: `/view-assist/thermostat?climate=${device.entity_id}`
+                }
+              },
+              styles: {
+                card: [
+                  { "background": isActive ? "rgba(255,255,255,0.4)" : "rgba(255,255,255,0.2)" }, // Increased opacity
+                  { "border": isActive ? "3px solid white" : "2px solid rgba(255,255,255,0.5)" }, // Thicker borders
+                  { "border-radius": "1rem" }, // Increased from 0.75rem
+                  { "padding": "1.5rem" }, // Increased from 1rem
+                  { "min-width": "140px" }, // Increased from 100px
+                  { "max-width": "160px" }, // Increased from 120px
+                  { "height": "140px" }, // Increased from 100px
+                  { "backdrop-filter": "blur(15px)" }, // Stronger blur
+                  { "box-shadow": "0 4px 20px rgba(0,0,0,0.3)" } // Added shadow for depth
+                ],
+                icon: [
+                  { "width": "3.5rem" }, // Increased from 2.5rem
+                  { "height": "3.5rem" }, // Increased from 2.5rem
+                  { "color": "white" },
+                  { "filter": "drop-shadow(0 2px 4px rgba(0,0,0,0.5))" } // Icon shadow
+                ],
+                name: [
+                  { "font-size": "1.4rem" }, // Increased from 1rem
+                  { "color": "white" },
+                  { "margin-top": "0.75rem" }, // Increased from 0.5rem
+                  { "font-weight": "700" }, // Increased from 500 - much bolder
+                  { "text-shadow": "0 2px 8px rgba(0,0,0,0.8)" }, // Strong text shadow
+                  { "line-height": "1.2" }, // Better line spacing
+                  { "letter-spacing": "0.02em" } // Slight letter spacing for clarity
+                ],
+                grid: [
+                  { "grid-template-areas": '"i" "n"' },
+                  { "grid-template-rows": "1fr auto" },
+                  { "gap": "0.5rem" } // Added gap between icon and text
+                ]
+              }
+            };
+          });
+        ]]]
+  no_climate:
+    card:
+      type: markdown
+      content: |
+        ## No Climate Devices Available
+
+        No thermostats found in your Home Assistant setup.
+      card_mod:
+        style: |
+          ha-card {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+          }
