@@ -9,46 +9,57 @@ blueprint:
       default: en
       selector:
         language:
-          languages: [en]
+          languages:
+            - en
+          native_name: false
+          no_sort: false
     increasetemperature:
       name: Increase Temperature
       description: The phrase used to increase the current thermostat temperature set point
-      default: "(increase thermostat | raise thermostat | increase temperature | raise temperature) [by] {amount} (degree | degrees | °)"
+      default:
+        (increase thermostat | raise thermostat | increase temperature | raise
+        temperature) [by] {amount} (degree | degrees | °)
     decreasetemperature:
       name: Decrease Temperature
       description: The phrase used to decrease the current thermostat temperature set point
-      default: "(decrease thermostat | lower thermostat | decrease temperature | lower temperature) [by] {amount} (degree| degrees | °)"
+      default:
+        (decrease thermostat | lower thermostat | decrease temperature | lower
+        temperature) [by] {amount} (degree| degrees | °)
     settemperature:
       name: Set Temperature
       description: The phrase used to set the current thermostat temperature set point
-      default: "(set thermostat | change thermostat | set temperature | change temperature) [to] {amount} [degree | degrees | °]"
+      default:
+        (set thermostat | change thermostat | set temperature | change temperature)
+        [to] {amount} [degree | degrees | °]
     showthermostat:
       name: Show Thermostat
       description: The phrase used to show thermostat
-      default: "show thermostat"
+      default: show thermostat
     thermostat:
       name: Thermostat device
       description: The thermostat device to control (example climate.livingroomtstat)
       selector:
         entity:
           filter:
-            - domain: climate
+            - domain:
+                - climate
+          multiple: false
       default: ""
     view:
       name: View
       description: The View Assist dashboard view to use for thermostat device
-      default: "/view-assist/thermostat"
+      default: /view-assist/thermostat
 trigger:
-  - platform: conversation
+  - trigger: conversation
     command: !input increasetemperature
     id: increasetemperature
-  - platform: conversation
+  - trigger: conversation
     command: !input decreasetemperature
     id: decreasetemperature
-  - platform: conversation
+  - trigger: conversation
     command: !input settemperature
     id: settemperature
-  - platform: conversation
+  - trigger: conversation
     command: !input showthermostat
     id: showthermostat
 condition: []
@@ -64,11 +75,11 @@ action:
       translations:
         en:
           responses:
-            tstat_raise: "Thermostat temperature raised {amount} degree"
-            tstat_lower: "Thermostat temperature lowered {amount} degree"
-            tstat_set: "Thermostat temperature set to {amount} degrees"
-            tstat_show: "Showing thermostat"
-            tstat_display_error: "Sorry.  This device cannot display the thermostat"
+            tstat_raise: Thermostat temperature raised {amount} degree
+            tstat_lower: Thermostat temperature lowered {amount} degree
+            tstat_set: Thermostat temperature set to {amount} degrees
+            tstat_show: Showing thermostat
+            tstat_display_error: Sorry.  This device cannot display the thermostat
   - action: view_assist.set_state
     target:
       entity_id: "{{ target_satellite_device }}"
@@ -82,48 +93,42 @@ action:
         sequence:
           - if:
               - condition: template
-                value_template: >-
-                  {% if states(thermostat) == 'cool' %}
-                  true
-                  {% endif %}
+                value_template: "{% if states(thermostat) == 'cool' %} true {% endif %}"
             then:
               - action: climate.set_temperature
                 data:
-                  temperature: >-
-                    {{ state_attr(thermostat,'temperature')+ amount }}
+                  temperature: "{{ state_attr(thermostat,'temperature')+ amount }}"
                 target:
                   entity_id: "{{ thermostat }}"
           - if:
               - condition: template
-                value_template: >-
-                  {% if states(thermostat) == 'heat' %}
-                  true
-                  {% endif %}
+                value_template: "{% if states(thermostat) == 'heat' %} true {% endif %}"
             then:
               - action: climate.set_temperature
                 data:
-                  temperature: >-
-                    {{ state_attr(thermostat,'temperature') + amount }}
+                  temperature: "{{ state_attr(thermostat,'temperature') + amount }}"
                 target:
                   entity_id: "{{ thermostat }}"
           - if:
               - condition: template
-                value_template: >-
-                  {% if states(thermostat) == 'heat_cool' %}
-                  true
-                  {% endif %}
+                value_template:
+                  "{% if states(thermostat) == 'heat_cool' %} true {% endif
+                  %}"
             then:
               - action: climate.set_temperature
                 data:
-                  target_temp_high: >-
-                    {{ state_attr(thermostat,'target_temp_high') + amount }}
-                  target_temp_low: >-
-                    {{ state_attr(thermostat,'target_temp_low') + amount }}
+                  target_temp_high:
+                    "{{ state_attr(thermostat,'target_temp_high') + amount
+                    }}"
+                  target_temp_low:
+                    "{{ state_attr(thermostat,'target_temp_low') + amount
+                    }}"
                 target:
                   entity_id: "{{ thermostat }}"
           - variables:
-              conversation_response: >-
-                {{ translations[language]['responses']['tstat_raise'].replace("{amount}", amount | string) }}
+              conversation_response:
+                '{{ translations[language][''responses''][''tstat_raise''].replace("{amount}",
+                amount | string) }}'
           - set_conversation_response: "{{ conversation_response }}"
           - action: view_assist.set_state
             target:
@@ -145,48 +150,42 @@ action:
         sequence:
           - if:
               - condition: template
-                value_template: >-
-                  {% if states(thermostat) == 'cool' %}
-                  true
-                  {% endif %}
+                value_template: "{% if states(thermostat) == 'cool' %} true {% endif %}"
             then:
               - action: climate.set_temperature
                 data:
-                  temperature: >-
-                    {{ state_attr(thermostat,'temperature') - amount }}
+                  temperature: "{{ state_attr(thermostat,'temperature') - amount }}"
                 target:
                   entity_id: "{{ thermostat }}"
           - if:
               - condition: template
-                value_template: >-
-                  {% if states(thermostat) == 'heat' %}
-                  true
-                  {% endif %}
+                value_template: "{% if states(thermostat) == 'heat' %} true {% endif %}"
             then:
               - action: climate.set_temperature
                 data:
-                  temperature: >-
-                    {{ state_attr(thermostat,'temperature') - amount }}
+                  temperature: "{{ state_attr(thermostat,'temperature') - amount }}"
                 target:
                   entity_id: "{{ thermostat }}"
           - if:
               - condition: template
-                value_template: >-
-                  {% if states(thermostat) == 'heat_cool' %}
-                  true
-                  {% endif %}
+                value_template:
+                  "{% if states(thermostat) == 'heat_cool' %} true {% endif
+                  %}"
             then:
               - action: climate.set_temperature
                 data:
-                  target_temp_high: >-
-                    {{ state_attr(thermostat,'target_temp_high') - amount }}
-                  target_temp_low: >-
-                    {{ state_attr(thermostat,'target_temp_low') - amount }}
+                  target_temp_high:
+                    "{{ state_attr(thermostat,'target_temp_high') - amount
+                    }}"
+                  target_temp_low:
+                    "{{ state_attr(thermostat,'target_temp_low') - amount
+                    }}"
                 target:
                   entity_id: "{{ thermostat }}"
           - variables:
-              conversation_response: >-
-                {{ translations[language]['responses']['tstat_lower'].replace("{amount}", amount | string) }}
+              conversation_response:
+                '{{ translations[language][''responses''][''tstat_lower''].replace("{amount}",
+                amount | string) }}'
           - set_conversation_response: "{{ conversation_response }}"
           - action: view_assist.set_state
             target:
@@ -208,10 +207,7 @@ action:
         sequence:
           - if:
               - condition: template
-                value_template: >-
-                  {% if states(thermostat) == 'cool' %}
-                  true
-                  {% endif %}
+                value_template: "{% if states(thermostat) == 'cool' %} true {% endif %}"
             then:
               - action: climate.set_temperature
                 data:
@@ -220,10 +216,7 @@ action:
                   entity_id: "{{ thermostat }}"
           - if:
               - condition: template
-                value_template: >-
-                  {% if states(thermostat) == 'heat' %}
-                  true
-                  {% endif %}
+                value_template: "{% if states(thermostat) == 'heat' %} true {% endif %}"
             then:
               - action: climate.set_temperature
                 data:
@@ -231,8 +224,9 @@ action:
                 target:
                   entity_id: "{{ thermostat }}"
           - variables:
-              conversation_response: >-
-                {{ translations[language]['responses']['tstat_set'].replace("{amount}", amount | string) }}
+              conversation_response:
+                '{{ translations[language][''responses''][''tstat_set''].replace("{amount}",
+                amount | string) }}'
           - set_conversation_response: "{{ conversation_response }}"
           - action: view_assist.set_state
             target:
@@ -257,8 +251,9 @@ action:
                 value_template: "{{ target_satellite_device_type != 'audio_only' }}"
             then:
               - variables:
-                  conversation_response: >-
-                    {{ translations[language]['responses']['tstat_show'] }}
+                  conversation_response:
+                    "{{ translations[language]['responses']['tstat_show']
+                    }}"
               - set_conversation_response: "{{ conversation_response }}"
               - action: view_assist.set_state
                 target:
@@ -271,8 +266,9 @@ action:
                   path: "{{ view }}"
             else:
               - variables:
-                  conversation_response: >-
-                    {{ translations[language]['responses']['tstat_display_error'] }}
+                  conversation_response:
+                    "{{ translations[language]['responses']['tstat_display_error']
+                    }}"
               - set_conversation_response: "{{ conversation_response }}"
               - action: view_assist.set_state
                 target:
