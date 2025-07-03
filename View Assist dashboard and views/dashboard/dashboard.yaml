@@ -1,7 +1,7 @@
 button_card_templates:
   variable_template:
     variables:
-      dashboardversion: 1.3.1
+      dashboardversion: 1.4.0
       default_satellite: |-
         [[[ try {
           return hass.states[variables.assist_group].attributes.entity_id
@@ -152,23 +152,30 @@ button_card_templates:
       var_responsive_status_icons_size: |
         [[[
           try {
-            // Get base size from entity attributes
+            // Get base size from entity attributes (user's landscape preference)
             const baseSize = states[variables.var_assistsat_entity].attributes.status_icons_size || "6vw";
             
             // Check if we're in portrait mode and adjust accordingly
             if (window.viewAssistResponsive && window.viewAssistResponsive.orientation === "portrait") {
-              // Convert size values to larger equivalents for portrait
-              const sizeMap = {
-                "6vw": window.viewAssistResponsive.is_small_screen ? "10vw" : "9vw",  // Small -> Large
-                "7vw": window.viewAssistResponsive.is_small_screen ? "12vw" : "10vw", // Medium -> XLarge  
-                "8vw": window.viewAssistResponsive.is_small_screen ? "14vw" : "12vw"  // Large -> XXLarge
-              };
-              return sizeMap[baseSize] || "10vw";
+              
+              // IMPROVED: Consistent scaling factor approach
+              const baseSizeValue = parseFloat(baseSize);
+              let scaleFactor;
+              
+              if (window.viewAssistResponsive.is_small_screen) {
+                scaleFactor = 1.4;  // 40% larger on small portrait screens
+              } else {
+                scaleFactor = 1.3;  // 30% larger on large portrait screens  
+              }
+              
+              const portraitSize = baseSizeValue * scaleFactor;
+              return `${portraitSize}vw`;
             }
             
+            // Return original landscape size unchanged
             return baseSize;
           } catch { 
-            return window.viewAssistResponsive && window.viewAssistResponsive.orientation === "portrait" ? "10vw" : "6vw";
+            return window.viewAssistResponsive && window.viewAssistResponsive.orientation === "portrait" ? "8.4vw" : "6vw";
           }
         ]]]
       var_assistsat_entity_use_24_hour_time: |
@@ -197,7 +204,7 @@ button_card_templates:
           try 
           {
             return states[variables.var_assistsat_entity].attributes.image;
-          } catch { return  ""} 
+          } catch { return  null; } 
         ]]]
       var_font_size: |-
         [[[ 
@@ -213,7 +220,7 @@ button_card_templates:
             const s = states['sensor.pws_temperature_median'].state;
             return s.split('.')[0] + '°';
           } catch {
-            return '';
+            return "--°";
           }
         ]]]
       var_weather_icon: |-
@@ -252,17 +259,17 @@ button_card_templates:
           try
           {
             var condition = states[variables. var_assistsat_entity_weather_entity].state;
-            if (states['sun.sun'] === 'above_horizon') {
+            if (states['sun.sun'].state === 'above_horizon') {
               var weather_icon = weatherIconsDay[condition]; 
             } else {
               var weather_icon = weatherIconsDay[condition];
             }
             
             if (typeof(weather_icon) === 'undefined') { 
-              var weather_icon = "mdi:help" 
+              var weather_icon = "mdi:weather-cloudy-alert" 
             }   
             return `${weather_icon}`;
-          } catch { return  ""} 
+          } catch { return  "mdi:weather-cloudy-alert"} 
         ]]]
       var_current_view: |-
         [[[
@@ -285,6 +292,24 @@ button_card_templates:
             return "";
           } catch { return ""; }
         ]]]
+      var_responsive_font_scale: |-
+        [[[
+          try {
+            // Base font scale multipliers for different screen contexts
+            const responsive = window.viewAssistResponsive;
+            if (!responsive) return 1;
+            
+            if (responsive.orientation === "portrait") {
+              if (responsive.is_small_screen) return 0.85;      // Smaller fonts on small portrait screens
+              if (responsive.is_tablet) return 1.1;            // Slightly larger on portrait tablets
+              return 1.25;                                     // Larger on portrait desktop/large screens
+            } else {
+              if (responsive.is_small_screen) return 0.9;      // Slightly smaller on small landscape
+              if (responsive.is_tablet) return 1.0;           // Standard on landscape tablets
+              return 1.2;                                      // Slightly larger on large landscape
+            }
+          } catch { return 1; }
+        ]]]
   responsive_base:
     variables:
       var_orientation: |-
@@ -298,24 +323,34 @@ button_card_templates:
             };
             
             // Set up resize listener to update orientation and screen size
+            // Debounced resize listener to prevent excessive updates
+            let resizeTimeout;
             window.addEventListener('resize', () => {
-              const newOrientation = window.innerHeight > window.innerWidth ? "portrait" : "landscape";
-              const newSmallScreen = window.innerWidth < 600;
-              const newTablet = window.innerWidth >= 600 && window.innerWidth < 1024;
-              
-              // Only update if something actually changed
-              if (window.viewAssistResponsive.orientation !== newOrientation || 
-                  window.viewAssistResponsive.is_small_screen !== newSmallScreen ||
-                  window.viewAssistResponsive.is_tablet !== newTablet) {
+              clearTimeout(resizeTimeout);
+              resizeTimeout = setTimeout(() => {
+                const oldState = { ...window.viewAssistResponsive };
                 
-                window.viewAssistResponsive.orientation = newOrientation;
-                window.viewAssistResponsive.is_small_screen = newSmallScreen;
-                window.viewAssistResponsive.is_tablet = newTablet;
+                // Update responsive state
+                const newOrientation = window.innerHeight > window.innerWidth ? "portrait" : "landscape";
+                const newSmallScreen = window.innerWidth < 600;
+                const newTablet = window.innerWidth >= 600 && window.innerWidth < 1024;
                 
-                // Dispatch custom event for any components that need to react
-                const event = new Event('view-assist-screen-change');
-                window.dispatchEvent(event);
-              }
+                // Only update if something actually changed
+                if (oldState.orientation !== newOrientation || 
+                    oldState.is_small_screen !== newSmallScreen ||
+                    oldState.is_tablet !== newTablet) {
+                  
+                  window.viewAssistResponsive.orientation = newOrientation;
+                  window.viewAssistResponsive.is_small_screen = newSmallScreen;
+                  window.viewAssistResponsive.is_tablet = newTablet;
+                  
+                  // Dispatch custom event for any components that need to react
+                  const event = new CustomEvent('view-assist-responsive-change', {
+                    detail: window.viewAssistResponsive
+                  });
+                  window.dispatchEvent(event);
+                }
+              }, 150); // 150ms debounce
             });
           }
           
@@ -348,7 +383,6 @@ button_card_templates:
       service: switch.toggle
       service_data:
         entity_id: '[[[ try { return variables.var_mic_switch } catch { return  "" } ]]]'
-    aspect_ratio: 2/1
     styles:
       grid:
         - grid-template-areas: |
@@ -379,6 +413,15 @@ button_card_templates:
               return `"${variables.var_assistsat_entity_font_style}", sans-serif`;
             ]]] 
         - font-weight: 300
+        - aspect-ratio: |-
+            [[[
+              // Dynamic aspect ratio based on orientation
+              if (window.viewAssistResponsive && window.viewAssistResponsive.orientation === "portrait") {
+                return window.viewAssistResponsive.is_small_screen ? "9 / 16" : "3 / 4";
+              } else {
+                return "16 / 9";  // Better than fixed 2/1 for landscape
+              }
+            ]]]
       custom_fields:
         title:
           - position: absolute
@@ -387,12 +430,10 @@ button_card_templates:
           - z-index: 1
           - font-size: |-
               [[[
-                // Responsive title sizing
-                if (window.viewAssistResponsive && window.viewAssistResponsive.orientation === "portrait") {
-                  return window.viewAssistResponsive.is_small_screen ? "150%" : "175%";
-                } else {
-                  return "200%";
-                }
+                // IMPROVED: Use unified scaling instead of hardcoded values
+                const baseSize = 200;  // Base percentage
+                const scale = parseFloat(variables.var_responsive_font_scale);
+                return `${Math.round(baseSize * scale)}%`;
               ]]]
           - font-weight: 400
           - width: max-content
@@ -435,9 +476,8 @@ button_card_templates:
                 margin: 0
                 card_margin: |-
                   [[[
-                    // Enhanced spacing between status icons in portrait mode
                     if (window.viewAssistResponsive && window.viewAssistResponsive.orientation === "portrait") {
-                      return window.viewAssistResponsive.is_small_screen ? "4px" : "6px";
+                      return window.viewAssistResponsive.is_small_screen ? "0.5vh" : "0.75vh";
                     } else {
                       return "0";
                     }
@@ -629,41 +669,52 @@ button_card_templates:
           - min-width: |-
               [[[
                 if (window.viewAssistResponsive && window.viewAssistResponsive.orientation === "portrait") {
-                  return window.viewAssistResponsive.is_small_screen ? "300px" : "350px";
+                  return window.viewAssistResponsive.is_small_screen ? "80vw" : "70vw";
                 } else {
-                  return "400px";
+                  return "50vw";
                 }
               ]]]
     extra_styles: |
       @keyframes pulse {
         0%, 100% {
           background-color: #f56a3f;
+          transform: translateZ(0);
         }
         50% {
           background-color: #9e42b0;
+          transform: translateZ(0);
         }
       }
       @keyframes pulse2 {
         0%, 100% {
           background-color: #03A9F4;
+          transform: translateZ(0);
         }
         50% {
           background-color: #cfe2f3;
+          transform: translateZ(0);
         }
       }      
       @keyframes growFromCenter {
         75% {
-          transform: scale(0);
+          transform: scale(0) translateZ(0);
           opacity: 0;
         }
         100% {
-          transform: scale(1);
+          transform: scale(1) translateZ(0);
           opacity: 1;
         }
       }
       @keyframes brightness {
-        100% { backdrop-filter: brightness(50%) blur(10px); z-index:9; }
-      }    
+        0% {
+          backdrop-filter: brightness(100%) blur(0px);
+          z-index: 8;
+        }
+        100% {
+          backdrop-filter: brightness(50%) blur(10px); 
+          z-index: 9; 
+        }
+      }
     custom_fields:
       assistbar: .
       filterblur: .
@@ -731,17 +782,14 @@ button_card_templates:
               - text-align: start
               - font-size: |-
                   [[[
-                    // Enhanced responsive font size
-                    if (window.viewAssistResponsive && window.viewAssistResponsive.orientation === "portrait") {
-                      return window.viewAssistResponsive.is_small_screen ? "5vh" : "6vh";
-                    } else {
-                      return "5vh";
-                    }
+                    // IMPROVED: Use unified scaling instead of scattered vh calculations
+                    const baseSize = 5;  // Base vh
+                    const scale = parseFloat(variables.var_responsive_font_scale);
+                    return `${Math.round(baseSize * scale * 10) / 10}vh`;
                   ]]]
               - font-weight: bold
   icon_template:
     template: variable_template
-    aspect_ratio: 1/1
     color_type: card
     show_name: false
     size: 90%
@@ -750,6 +798,7 @@ button_card_templates:
       card:
         - background-color: transparent
         - border-width: 0px
+        - aspect-ratio: "1 / 1"
       icon:
         - display: grid
         - color: white
