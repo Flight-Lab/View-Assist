@@ -356,6 +356,226 @@ button_card_templates:
           
           return window.viewAssistResponsive.orientation;
         ]]]
+  body_template_sections:
+    template: assist_template
+    show_state: false
+    show_icon: false
+    show_name: false
+    triggers_update: all
+    tap_action:
+      action: call-service
+      service: view_assist.set_state
+      service_data:
+        entity_id: >-
+          [[[ try { return variables.var_assistsat_entity } catch { return  ""
+          }]]]
+        mode: hold
+    double_tap_action:
+      action: call-service
+      service: view_assist.set_state
+      service_data:
+        entity_id: >-
+          [[[ try { return variables.var_assistsat_entity } catch { return  "" }
+          ]]]
+        mode: normal
+    hold_action:
+      action: call-service
+      service: switch.toggle
+      service_data:
+        entity_id: '[[[ try { return variables.var_mic_switch } catch { return  "" } ]]]'
+    styles:
+      grid:
+        - grid-template-areas: |
+            "title status"  
+            "message message"
+            "assist assist"        
+        - grid-template-rows: min-content 1fr min-content
+        - grid-template-columns: 1fr 1fr
+        - row-gap: .5rem
+      card:
+        - min-height: 200px
+        - height: auto
+        - background: |
+            [[[
+              if (variables.background != null) {
+                return `center / cover no-repeat url(${variables.background})`
+              } else if (variables.var_background != null) {
+                  return `center / cover no-repeat url(${variables.var_background})`
+              } else { 
+                return `center / cover no-repeat ${variables.background_color}`
+              }
+            ]]]        
+        - background-size: cover
+        - border-radius: 12px
+        - overflow: hidden
+        - color: white
+        - font-family: |-
+            [[[
+              return `"${variables.var_assistsat_entity_font_style}", sans-serif`;
+            ]]] 
+        - font-weight: 300
+        - position: relative
+      custom_fields:
+        title:
+          - position: absolute
+          - justify-self: start
+          - align-self: start
+          - z-index: 5
+          - font-size: |-
+              [[[
+                const baseSize = 150;  // Base percentage - smaller for sections
+                const scale = parseFloat(variables.var_responsive_font_scale);
+                return `${Math.round(baseSize * scale)}%`;
+              ]]]
+          - font-weight: 400
+          - width: max-content
+          - margin-left: 4%
+          - margin-top: 2%
+        status:
+          - position: fixed
+          - top: 20px
+          - right: 20px
+          - z-index: 9999
+          - border-radius: 12px
+    custom_fields:
+      title: '[[[ return variables.var_title ]]]'
+      status:
+        card:
+          type: custom:layout-card
+          layout_type: custom:horizontal-layout
+          cards:
+            - type: custom:layout-card
+              layout_type: grid-layout
+              layout:
+                margin: 0
+                card_margin: |-
+                  [[[
+                    if (window.viewAssistResponsive && window.viewAssistResponsive.orientation === "portrait") {
+                      return window.viewAssistResponsive.is_small_screen ? "0.5vh" : "0.75vh";
+                    } else {
+                      return "0";
+                    }
+                  ]]]
+                place-content: end
+                grid-template-columns: |
+                  [[[
+                    // Slightly smaller icons for sections view
+                    const iconSize = parseFloat(variables.var_responsive_status_icons_size) * 0.8;
+                    return `repeat(auto-fit, minmax(max(${iconSize}vw, ${iconSize}vw), ${iconSize}vw))`;
+                  ]]]                
+              cards: |-
+                [[[{
+                  const buttonList = [];
+                  
+                  try {
+                    const vaEntity = variables.var_assistsat_entity;
+                    if (!vaEntity || !hass.states[vaEntity]) {
+                      return [];
+                    }
+                    
+                    const statusIcons = hass.states[vaEntity].attributes.status_icons || [];
+                    const menuItems = hass.states[vaEntity].attributes.menu_items || [];
+                    const menuActive = hass.states[vaEntity].attributes.menu_active || false;
+                    
+                    const currentView = variables.var_current_view;
+                    
+                    function isCurrentView(item) {
+                      if (!currentView) return false;
+                      
+                      if (typeof item === 'string' && !item.includes(':')) {
+                        if (item === currentView) return true;
+                        
+                        const templateViewMap = {
+                          "home": "clock"
+                        };
+                        if (templateViewMap[item] === currentView) return true;
+                        return false;
+                      }
+                      
+                      if (typeof item === 'string' && item.includes(':')) {
+                        const parts = item.split('|');
+                        const typeAndTarget = parts[0];
+                        const [type, target] = typeAndTarget.split(':');
+                        
+                        if (type === 'view') {
+                          const viewName = target.includes('/') ? 
+                            target.split('/').pop() : target;
+                          return viewName === currentView;
+                        }
+                      }
+                      
+                      return false;
+                    }
+                    
+                    const addedItems = new Set();
+                    
+                    function addIconToList(icon, isDynamicItem = false) {
+                      if (icon === "menu") return;
+                      
+                      if (menuActive && isCurrentView(icon)) {
+                        return;
+                      }
+                      
+                      let buttonConfig;
+                      if (isDynamicItem) {
+                        const type = icon.split(':')[0];
+                        buttonConfig = {
+                          type: "custom:button-card",
+                          template: `dynamic_${type}_item`,
+                          variables: {
+                            menu_item: icon,
+                            entity_id: vaEntity
+                          }
+                        };
+                      } else {
+                        buttonConfig = {
+                          type: "custom:button-card",
+                          template: icon
+                        };
+                      }
+                      
+                      const key = icon;
+                      if (addedItems.has(key)) return;
+                      
+                      addedItems.add(key);
+                      buttonList.push(buttonConfig);
+                    }
+                    
+                    if (menuActive) {
+                      const reversedMenuItems = [...menuItems].reverse();
+                      reversedMenuItems.forEach(item => {
+                        if (item !== "menu") {
+                          if (item.includes(':')) {
+                            addIconToList(item, true);
+                          } else {
+                            addIconToList(item, false);
+                          }
+                        }
+                      });
+                    }
+
+                    statusIcons.forEach(icon => {
+                      if (icon !== "menu") {
+                        if (icon.includes(':')) {
+                          addIconToList(icon, true);
+                        } else {
+                          addIconToList(icon, false);
+                        }
+                      }
+                    });
+                    
+                    if (hass.states[vaEntity].attributes.menu_config === "menu_enabled_button_visible" && 
+                        !addedItems.has("menu")) {
+                      buttonList.push({
+                        type: "custom:button-card",
+                        template: "menu"
+                      });
+                    }
+                  } catch (error) {
+                  }
+                  
+                  return buttonList;
+                }]]]
   body_template:
     template: assist_template
     show_state: false
@@ -430,7 +650,6 @@ button_card_templates:
           - z-index: 1
           - font-size: |-
               [[[
-                // IMPROVED: Use unified scaling instead of hardcoded values
                 const baseSize = 200;  // Base percentage
                 const scale = parseFloat(variables.var_responsive_font_scale);
                 return `${Math.round(baseSize * scale)}%`;
@@ -634,27 +853,27 @@ button_card_templates:
               [[[ if (variables.var_assist_prompt == "blur pop up" &
               variables.var_assisting == "true") return "block"; else return
               "none"; ]]]       
-          - top: 0px
-          - left: 0px
-          - position: absolute
-          - height: 150%
-          - width: 150%
+          - position: fixed
+          - top: 0
+          - left: 0
+          - width: 100vw
+          - height: 100vh
           - backdrop-filter: brightness(100%)
           - overflow: hidden
           - color: transparent
-          - z-index: 0
-          - animation: '[[[ return "brightness .1s ease-in-out forwards" ]]]      '
+          - z-index: 9998
+          - animation: '[[[ return "brightness .1s ease-in-out forwards" ]]]'
+          - pointer-events: none
         assistblur:
           - display: >-
               [[[ if (variables.var_assist_prompt == "blur pop up" &
               variables.var_assisting == "true") return "block"; else return
               "none"; ]]]           
-          - position: absolute
-          - vertical-align: middle
-          - justify-self: center
-          - justify-content: center
-          - align-self: center
-          - z-index: 10
+          - position: fixed
+          - top: 50%
+          - left: 50%
+          - transform: translate(-50%, -50%)
+          - z-index: 9999
           - opacity: 0
           - animation: '[[[ return "growFromCenter .4s ease-in-out forwards" ]]]'
           - font-family: '"Roboto", sans-serif'
@@ -697,22 +916,22 @@ button_card_templates:
       }      
       @keyframes growFromCenter {
         75% {
-          transform: scale(0) translateZ(0);
+          transform: translate(-50%, -50%) scale(0) translateZ(0);
           opacity: 0;
         }
         100% {
-          transform: scale(1) translateZ(0);
+          transform: translate(-50%, -50%) scale(1) translateZ(0);
           opacity: 1;
         }
       }
       @keyframes brightness {
         0% {
           backdrop-filter: brightness(100%) blur(0px);
-          z-index: 8;
+          z-index: 9998;
         }
         100% {
           backdrop-filter: brightness(50%) blur(10px); 
-          z-index: 9; 
+          z-index: 9999; 
         }
       }
     custom_fields:
@@ -798,7 +1017,7 @@ button_card_templates:
       card:
         - background-color: transparent
         - border-width: 0px
-        - aspect-ratio: "1 / 1"
+        - aspect-ratio: 1 / 1
       icon:
         - display: grid
         - color: white
