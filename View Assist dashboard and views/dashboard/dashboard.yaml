@@ -343,7 +343,7 @@ button_card_templates:
           
           return window.viewAssistResponsive.orientation;
         ]]]
-  body_template:
+  body_template_base:
     template: assist_template
     show_state: false
     show_icon: false
@@ -370,18 +370,16 @@ button_card_templates:
       service: switch.toggle
       service_data:
         entity_id: '[[[ try { return variables.var_mic_switch } catch { return  "" } ]]]'
-    aspect_ratio: 2/1
     styles:
       grid:
         - grid-template-areas: |
             "title status"  
             "message message"
             "assist assist"        
-        - grid-template-rows: min-content 30vh min-content
+        - grid-template-rows: min-content 1fr min-content
         - grid-template-columns: 1fr 1fr
         - row-gap: .5rem
       card:
-        - min-height: 100vh
         - background: |
             [[[
               if (variables.background != null) {
@@ -393,7 +391,6 @@ button_card_templates:
               }
             ]]]        
         - background-size: cover
-        - border-radius: 0px
         - overflow: hidden
         - color: white
         - font-family: |-
@@ -401,25 +398,29 @@ button_card_templates:
               return `"${variables.var_assistsat_entity_font_style}", sans-serif`;
             ]]] 
         - font-weight: 300
+        - position: relative
       custom_fields:
         title:
           - position: absolute
           - justify-self: start
           - align-self: start
-          - z-index: 1
-          - font-size: 200%
+          - z-index: 5
+          - font-size: |-
+              [[[
+                const baseSize = variables.view_type === 'sections' ? 150 : 200;
+                const scale = parseFloat(variables.var_responsive_font_scale);
+                return `${Math.round(baseSize * scale)}%`;
+              ]]]
           - font-weight: 400
           - width: max-content
-          - margin-left: 2%
-          - margin-top: '-4%'
-        status:
-          - position: absolute
-          - justify-self: end
-          - align-self: end
-          - justify-content: right
-          - top: 0vh
-          - right: 0vw
-          - z-index: 1
+          - margin-left: |-
+              [[[
+                return variables.view_type === 'sections' ? '4%' : '2%';
+              ]]]
+          - margin-top: |-
+              [[[
+                return variables.view_type === 'sections' ? '2%' : '-4%';
+              ]]]
     custom_fields:
       title: '[[[ return variables.var_title ]]]'
       status:
@@ -431,65 +432,76 @@ button_card_templates:
               layout_type: grid-layout
               layout:
                 margin: 0
-                card_margin: 0
-                place-content: end
-                grid-template-columns: |
+                card_margin: |-
                   [[[
-                    return `repeat(auto-fit, minmax(max(${variables.var_assistsat_entity_status_icons_size}, ${variables.var_assistsat_entity_status_icons_size}), ${variables.var_assistsat_entity_status_icons_size}))`
-                  ]]]                
+                    if (variables.view_type === 'sections') {
+                      return '0.5vh';
+                    } else {
+                      return window.viewAssistResponsive?.orientation === "portrait" ? "0.5vh" : "0";
+                    }
+                  ]]]
+                place-content: end
+                grid-template-columns: |-
+                  [[[
+                    const baseIconSize = variables.var_responsive_status_icons_size;
+                    const iconSize = variables.view_type === 'sections' ? 
+                      parseFloat(baseIconSize) * 0.8 + 'vw' : baseIconSize;
+                    
+                    return `repeat(auto-fit, minmax(max(${iconSize}, ${iconSize}), ${iconSize}))`;
+                  ]]]
               cards: |-
                 [[[{
                   const buttonList = [];
-
+                  
                   try {
                     const vaEntity = variables.var_assistsat_entity;
                     if (!vaEntity || !hass.states[vaEntity]) {
                       return [];
                     }
-
+                    
                     const statusIcons = hass.states[vaEntity].attributes.status_icons || [];
                     const menuItems = hass.states[vaEntity].attributes.menu_items || [];
                     const menuActive = hass.states[vaEntity].attributes.menu_active || false;
-
+                    
                     const currentView = variables.var_current_view;
-
+                    
                     function isCurrentView(item) {
                       if (!currentView) return false;
-
+                      
                       if (typeof item === 'string' && !item.includes(':')) {
                         if (item === currentView) return true;
-
+                        
                         const templateViewMap = {
                           "home": "clock"
                         };
                         if (templateViewMap[item] === currentView) return true;
                         return false;
                       }
-
+                      
                       if (typeof item === 'string' && item.includes(':')) {
                         const parts = item.split('|');
                         const typeAndTarget = parts[0];
                         const [type, target] = typeAndTarget.split(':');
-
+                        
                         if (type === 'view') {
                           const viewName = target.includes('/') ? 
                             target.split('/').pop() : target;
                           return viewName === currentView;
                         }
                       }
-
+                      
                       return false;
                     }
-
+                    
                     const addedItems = new Set();
-
+                    
                     function addIconToList(icon, isDynamicItem = false) {
                       if (icon === "menu") return;
-
+                      
                       if (menuActive && isCurrentView(icon)) {
                         return;
                       }
-
+                      
                       let buttonConfig;
                       if (isDynamicItem) {
                         const type = icon.split(':')[0];
@@ -507,14 +519,14 @@ button_card_templates:
                           template: icon
                         };
                       }
-
+                      
                       const key = icon;
                       if (addedItems.has(key)) return;
-
+                      
                       addedItems.add(key);
                       buttonList.push(buttonConfig);
                     }
-
+                    
                     if (menuActive) {
                       const reversedMenuItems = [...menuItems].reverse();
                       reversedMenuItems.forEach(item => {
@@ -537,7 +549,7 @@ button_card_templates:
                         }
                       }
                     });
-
+                    
                     if (hass.states[vaEntity].attributes.menu_config === "menu_enabled_button_visible" && 
                         !addedItems.has("menu")) {
                       buttonList.push({
@@ -547,9 +559,52 @@ button_card_templates:
                     }
                   } catch (error) {
                   }
-
+                  
                   return buttonList;
                 }]]]
+  body_template:
+    template:
+      - variable_template
+      - body_template_base
+    variables:
+      view_type: panel
+    styles:
+      card:
+        - min-height: 100vh
+        - border-radius: 0px
+        - aspect-ratio: |-
+            [[[
+              if (window.viewAssistResponsive && window.viewAssistResponsive.orientation === "portrait") {
+                return window.viewAssistResponsive.is_small_screen ? "9 / 16" : "3 / 4";
+              } else {
+                return "16 / 9";
+              }
+            ]]]
+      grid:
+        - grid-template-rows: min-content 30vh min-content
+      custom_fields:
+        status:
+          - position: absolute
+          - justify-self: end
+          - align-self: end
+          - justify-content: right
+          - top: 1vh
+          - right: 1vw
+          - z-index: 1
+  body_template_sections:
+    template:
+      - variable_template
+      - body_template_base
+    variables:
+      view_type: sections
+    styles:
+      card:
+      custom_fields:
+        status:
+          - position: fixed
+          - top: 1vh
+          - right: 1vw
+          - z-index: 1
   assist_template:
     styles:
       card: null
