@@ -629,60 +629,79 @@ button_card_templates:
               [[[ if (variables.var_assist_prompt == "blur pop up" &
               variables.var_assisting == "true") return "block"; else return
               "none"; ]]]       
-          - top: 0px
-          - left: 0px
-          - position: absolute
-          - height: 150%
-          - width: 150%
+          - position: fixed
+          - top: 0
+          - left: 0
+          - width: 100vw
+          - height: 100vh
           - backdrop-filter: brightness(100%)
           - overflow: hidden
           - color: transparent
-          - z-index: 0
-          - animation: '[[[ return "brightness .1s ease-in-out forwards" ]]]      '
+          - z-index: 9998
+          - animation: '[[[ return "brightness .1s ease-in-out forwards" ]]]'
+          - pointer-events: none
         assistblur:
           - display: >-
               [[[ if (variables.var_assist_prompt == "blur pop up" &
               variables.var_assisting == "true") return "block"; else return
               "none"; ]]]           
-          - position: absolute
-          - vertical-align: middle
-          - justify-self: center
-          - justify-content: center
-          - align-self: center
-          - z-index: 10
+          - position: fixed
+          - top: 50%
+          - left: 50%
+          - transform: translate(-50%, -50%)
+          - z-index: 9999
           - opacity: 0
           - animation: '[[[ return "growFromCenter .4s ease-in-out forwards" ]]]'
           - font-family: '"Roboto", sans-serif'
+          - width: |-
+              [[[
+                return window.viewAssistResponsive?.orientation === "portrait" ? "80vw" : "50vw";
+              ]]]
+          - min-width: |-
+              [[[
+                return window.viewAssistResponsive?.orientation === "portrait" ? "75vw" : "45vw";
+              ]]]
     extra_styles: |
       @keyframes pulse {
         0%, 100% {
           background-color: #f56a3f;
+          transform: translateZ(0);
         }
         50% {
           background-color: #9e42b0;
+          transform: translateZ(0);
         }
       }
       @keyframes pulse2 {
         0%, 100% {
           background-color: #03A9F4;
+          transform: translateZ(0);
         }
         50% {
           background-color: #cfe2f3;
+          transform: translateZ(0);
         }
       }      
       @keyframes growFromCenter {
         75% {
-          transform: scale(0);
+          transform: translate(-50%, -50%) scale(0) translateZ(0);
           opacity: 0;
         }
         100% {
-          transform: scale(1);
+          transform: translate(-50%, -50%) scale(1) translateZ(0);
           opacity: 1;
         }
       }
       @keyframes brightness {
-        100% { backdrop-filter: brightness(50%) blur(10px); z-index:9; }
-      }    
+        0% {
+          backdrop-filter: brightness(100%) blur(0px);
+          z-index: 9998;
+        }
+        100% {
+          backdrop-filter: brightness(50%) blur(10px); 
+          z-index: 9999; 
+        }
+      }
     custom_fields:
       assistbar: .
       filterblur: .
@@ -703,11 +722,8 @@ button_card_templates:
                   [[[ if (variables.var_assisting == "true") return "block";
                   else return "none"; ]]]  
               - padding: 4vh
-              - padding-top: 2vh
-              - padding-bottom: 2vh
               - background: white
               - height: 15vh
-              - width: 45vw
               - border-radius: 8vh
             grid:
               - grid-template-areas: '"i n"'
@@ -715,11 +731,19 @@ button_card_templates:
               - grid-template-rows: 1fr
             icon:
               - color: rgb(3,169,244)
-              - width: 10vw
+              - width: |-
+                  [[[
+                    return window.viewAssistResponsive?.orientation === "portrait" ? "12vw" : "10vw";
+                  ]]]
             name:
               - color: black
               - text-align: start
-              - font-size: 5vh
+              - font-size: |-
+                  [[[
+                    const baseSize = 5;
+                    const scale = parseFloat(variables.var_responsive_font_scale);
+                    return `${Math.round(baseSize * scale * 10) / 10}vh`;
+                  ]]]
               - font-weight: bold
   icon_template:
     template: variable_template
