@@ -152,30 +152,16 @@ button_card_templates:
       var_responsive_status_icons_size: |
         [[[
           try {
-            // Get base size from entity attributes (user's landscape preference)
             const baseSize = states[variables.var_assistsat_entity].attributes.status_icons_size || "6vw";
             
-            // Check if we're in portrait mode and adjust accordingly
+            // Simple portrait adjustment - no complex scaling
             if (window.viewAssistResponsive && window.viewAssistResponsive.orientation === "portrait") {
-              
-              // IMPROVED: Consistent scaling factor approach
-              const baseSizeValue = parseFloat(baseSize);
-              let scaleFactor;
-              
-              if (window.viewAssistResponsive.is_small_screen) {
-                scaleFactor = 1.4;  // 40% larger on small portrait screens
-              } else {
-                scaleFactor = 1.3;  // 30% larger on large portrait screens  
-              }
-              
-              const portraitSize = baseSizeValue * scaleFactor;
-              return `${portraitSize}vw`;
+              return parseFloat(baseSize) * 1.3 + 'vw';
             }
             
-            // Return original landscape size unchanged
             return baseSize;
           } catch { 
-            return window.viewAssistResponsive && window.viewAssistResponsive.orientation === "portrait" ? "8.4vw" : "6vw";
+            return window.viewAssistResponsive?.orientation === "portrait" ? "7.8vw" : "6vw";
           }
         ]]]
       var_assistsat_entity_use_24_hour_time: |
@@ -295,18 +281,13 @@ button_card_templates:
       var_responsive_font_scale: |-
         [[[
           try {
-            // Base font scale multipliers for different screen contexts
             const responsive = window.viewAssistResponsive;
             if (!responsive) return 1;
             
             if (responsive.orientation === "portrait") {
-              if (responsive.is_small_screen) return 0.85;      // Smaller fonts on small portrait screens
-              if (responsive.is_tablet) return 1.1;            // Slightly larger on portrait tablets
-              return 1.25;                                     // Larger on portrait desktop/large screens
+              return responsive.is_small_screen ? 0.85 : 1.1;
             } else {
-              if (responsive.is_small_screen) return 0.9;      // Slightly smaller on small landscape
-              if (responsive.is_tablet) return 1.0;           // Standard on landscape tablets
-              return 1.2;                                      // Slightly larger on large landscape
+              return responsive.is_small_screen ? 0.9 : 1.0;
             }
           } catch { return 1; }
         ]]]
@@ -356,7 +337,7 @@ button_card_templates:
           
           return window.viewAssistResponsive.orientation;
         ]]]
-  body_template_sections:
+  body_template_base:
     template: assist_template
     show_state: false
     show_icon: false
@@ -393,8 +374,6 @@ button_card_templates:
         - grid-template-columns: 1fr 1fr
         - row-gap: .5rem
       card:
-        - min-height: 200px
-        - height: auto
         - background: |
             [[[
               if (variables.background != null) {
@@ -406,7 +385,6 @@ button_card_templates:
               }
             ]]]        
         - background-size: cover
-        - border-radius: 12px
         - overflow: hidden
         - color: white
         - font-family: |-
@@ -423,20 +401,20 @@ button_card_templates:
           - z-index: 5
           - font-size: |-
               [[[
-                const baseSize = 150;  // Base percentage - smaller for sections
+                const baseSize = variables.view_type === 'sections' ? 150 : 200;
                 const scale = parseFloat(variables.var_responsive_font_scale);
                 return `${Math.round(baseSize * scale)}%`;
               ]]]
           - font-weight: 400
           - width: max-content
-          - margin-left: 4%
-          - margin-top: 2%
-        status:
-          - position: fixed
-          - top: 20px
-          - right: 20px
-          - z-index: 9999
-          - border-radius: 12px
+          - margin-left: |-
+              [[[
+                return variables.view_type === 'sections' ? '4%' : '2%';
+              ]]]
+          - margin-top: |-
+              [[[
+                return variables.view_type === 'sections' ? '2%' : '-4%';
+              ]]]
     custom_fields:
       title: '[[[ return variables.var_title ]]]'
       status:
@@ -450,19 +428,21 @@ button_card_templates:
                 margin: 0
                 card_margin: |-
                   [[[
-                    if (window.viewAssistResponsive && window.viewAssistResponsive.orientation === "portrait") {
-                      return window.viewAssistResponsive.is_small_screen ? "0.5vh" : "0.75vh";
+                    if (variables.view_type === 'sections') {
+                      return '0.5vh';
                     } else {
-                      return "0";
+                      return window.viewAssistResponsive?.orientation === "portrait" ? "0.5vh" : "0";
                     }
                   ]]]
                 place-content: end
-                grid-template-columns: |
+                grid-template-columns: |-
                   [[[
-                    // Slightly smaller icons for sections view
-                    const iconSize = parseFloat(variables.var_responsive_status_icons_size) * 0.8;
-                    return `repeat(auto-fit, minmax(max(${iconSize}vw, ${iconSize}vw), ${iconSize}vw))`;
-                  ]]]                
+                    const baseIconSize = variables.var_responsive_status_icons_size;
+                    const iconSize = variables.view_type === 'sections' ? 
+                      parseFloat(baseIconSize) * 0.8 + 'vw' : baseIconSize;
+                    
+                    return `repeat(auto-fit, minmax(max(${iconSize}, ${iconSize}), ${iconSize}))`;
+                  ]]]
               cards: |-
                 [[[{
                   const buttonList = [];
@@ -577,87 +557,26 @@ button_card_templates:
                   return buttonList;
                 }]]]
   body_template:
-    template: assist_template
-    show_state: false
-    show_icon: false
-    show_name: false
-    triggers_update: all
-    tap_action:
-      action: call-service
-      service: view_assist.set_state
-      service_data:
-        entity_id: >-
-          [[[ try { return variables.var_assistsat_entity } catch { return  ""
-          }]]]
-        mode: hold
-    double_tap_action:
-      action: call-service
-      service: view_assist.set_state
-      service_data:
-        entity_id: >-
-          [[[ try { return variables.var_assistsat_entity } catch { return  "" }
-          ]]]
-        mode: normal
-    hold_action:
-      action: call-service
-      service: switch.toggle
-      service_data:
-        entity_id: '[[[ try { return variables.var_mic_switch } catch { return  "" } ]]]'
+    template:
+      - variable_template
+      - body_template_base
+    variables:
+      view_type: panel
     styles:
-      grid:
-        - grid-template-areas: |
-            "title status"  
-            "message message"
-            "assist assist"        
-        - grid-template-rows: min-content 30vh min-content
-        - grid-template-columns: 1fr 1fr
-        - row-gap: .5rem
       card:
         - min-height: 100vh
-        - background: |
-            [[[
-              if (variables.background != null) {
-                return `center / cover no-repeat url(${variables.background})`
-              } else if (variables.var_background != null) {
-                  return `center / cover no-repeat url(${variables.var_background})`
-              } else { 
-                return `center / cover no-repeat ${variables.background_color}`
-              }
-            ]]]        
-        - background-size: cover
         - border-radius: 0px
-        - overflow: hidden
-        - color: white
-        - font-family: |-
-            [[[
-              return `"${variables.var_assistsat_entity_font_style}", sans-serif`;
-            ]]] 
-        - font-weight: 300
         - aspect-ratio: |-
             [[[
-              // Dynamic aspect ratio based on orientation
               if (window.viewAssistResponsive && window.viewAssistResponsive.orientation === "portrait") {
                 return window.viewAssistResponsive.is_small_screen ? "9 / 16" : "3 / 4";
               } else {
-                return "16 / 9";  // Better than fixed 2/1 for landscape
+                return "16 / 9";
               }
             ]]]
+      grid:
+        - grid-template-rows: min-content 30vh min-content
       custom_fields:
-        title:
-          - position: absolute
-          - justify-self: start
-          - align-self: start
-          - z-index: 1
-          - font-size: |-
-              [[[
-                const baseSize = 200;  // Base percentage
-                const scale = parseFloat(variables.var_responsive_font_scale);
-                return `${Math.round(baseSize * scale)}%`;
-              ]]]
-          - font-weight: 400
-          - width: max-content
-          - margin-left: 2%
-          - margin-top: '-4%'
         status:
           - position: absolute
           - justify-self: end
@@ -666,161 +585,25 @@ button_card_templates:
           - top: 0vh
           - right: 0vw
           - z-index: 1
-          - padding-right: |-
-              [[[
-                if (window.viewAssistResponsive && window.viewAssistResponsive.orientation === "portrait") {
-                  return window.viewAssistResponsive.is_small_screen ? "1vw" : "2vw";
-                } else {
-                  return "0";
-                }
-              ]]]
-          - padding-top: |-
-              [[[
-                if (window.viewAssistResponsive && window.viewAssistResponsive.orientation === "portrait") {
-                  return window.viewAssistResponsive.is_small_screen ? "1vh" : "1.5vh";
-                } else {
-                  return "0";
-                }
-              ]]]
-    custom_fields:
-      title: '[[[ return variables.var_title ]]]'
-      status:
-        card:
-          type: custom:layout-card
-          layout_type: custom:horizontal-layout
-          cards:
-            - type: custom:layout-card
-              layout_type: grid-layout
-              layout:
-                margin: 0
-                card_margin: |-
-                  [[[
-                    if (window.viewAssistResponsive && window.viewAssistResponsive.orientation === "portrait") {
-                      return window.viewAssistResponsive.is_small_screen ? "0.5vh" : "0.75vh";
-                    } else {
-                      return "0";
-                    }
-                  ]]]
-                place-content: end
-                grid-template-columns: |
-                  [[[
-                    // Use the responsive status icon size instead of base size
-                    const iconSize = variables.var_responsive_status_icons_size;
-                    return `repeat(auto-fit, minmax(max(${iconSize}, ${iconSize}), ${iconSize}))`;
-                  ]]]                
-              cards: |-
-                [[[{
-                  const buttonList = [];
-                  
-                  try {
-                    const vaEntity = variables.var_assistsat_entity;
-                    if (!vaEntity || !hass.states[vaEntity]) {
-                      return [];
-                    }
-                    
-                    const statusIcons = hass.states[vaEntity].attributes.status_icons || [];
-                    const menuItems = hass.states[vaEntity].attributes.menu_items || [];
-                    const menuActive = hass.states[vaEntity].attributes.menu_active || false;
-                    
-                    const currentView = variables.var_current_view;
-                    
-                    function isCurrentView(item) {
-                      if (!currentView) return false;
-                      
-                      if (typeof item === 'string' && !item.includes(':')) {
-                        if (item === currentView) return true;
-                        
-                        const templateViewMap = {
-                          "home": "clock"
-                        };
-                        if (templateViewMap[item] === currentView) return true;
-                        return false;
-                      }
-                      
-                      if (typeof item === 'string' && item.includes(':')) {
-                        const parts = item.split('|');
-                        const typeAndTarget = parts[0];
-                        const [type, target] = typeAndTarget.split(':');
-                        
-                        if (type === 'view') {
-                          const viewName = target.includes('/') ? 
-                            target.split('/').pop() : target;
-                          return viewName === currentView;
-                        }
-                      }
-                      
-                      return false;
-                    }
-                    
-                    const addedItems = new Set();
-                    
-                    function addIconToList(icon, isDynamicItem = false) {
-                      if (icon === "menu") return;
-                      
-                      if (menuActive && isCurrentView(icon)) {
-                        return;
-                      }
-                      
-                      let buttonConfig;
-                      if (isDynamicItem) {
-                        const type = icon.split(':')[0];
-                        buttonConfig = {
-                          type: "custom:button-card",
-                          template: `dynamic_${type}_item`,
-                          variables: {
-                            menu_item: icon,
-                            entity_id: vaEntity
-                          }
-                        };
-                      } else {
-                        buttonConfig = {
-                          type: "custom:button-card",
-                          template: icon
-                        };
-                      }
-                      
-                      const key = icon;
-                      if (addedItems.has(key)) return;
-                      
-                      addedItems.add(key);
-                      buttonList.push(buttonConfig);
-                    }
-                    
-                    if (menuActive) {
-                      const reversedMenuItems = [...menuItems].reverse();
-                      reversedMenuItems.forEach(item => {
-                        if (item !== "menu") {
-                          if (item.includes(':')) {
-                            addIconToList(item, true);
-                          } else {
-                            addIconToList(item, false);
-                          }
-                        }
-                      });
-                    }
-
-                    statusIcons.forEach(icon => {
-                      if (icon !== "menu") {
-                        if (icon.includes(':')) {
-                          addIconToList(icon, true);
-                        } else {
-                          addIconToList(icon, false);
-                        }
-                      }
-                    });
-                    
-                    if (hass.states[vaEntity].attributes.menu_config === "menu_enabled_button_visible" && 
-                        !addedItems.has("menu")) {
-                      buttonList.push({
-                        type: "custom:button-card",
-                        template: "menu"
-                      });
-                    }
-                  } catch (error) {
-                  }
-                  
-                  return buttonList;
-                }]]]
+          - padding-right: 1vw
+          - padding-top: 1vh
+  body_template_sections:
+    template:
+      - variable_template
+      - body_template_base
+    variables:
+      view_type: sections
+    styles:
+      card:
+        - min-height: 200px
+        - height: auto
+        - border-radius: 12px
+      custom_fields:
+        status:
+          - position: fixed
+          - top: 20px
+          - right: 20px
+          - z-index: 9999
   assist_template:
     styles:
       card: null
@@ -831,15 +614,7 @@ button_card_templates:
               variables.var_assisting == "true") return "block"; else return
               "none"; ]]]
           - justify-self: center
-          - height: |-
-              [[[
-                // Responsive height for the assist bar
-                if (window.viewAssistResponsive && window.viewAssistResponsive.orientation === "portrait") {
-                  return window.viewAssistResponsive.is_small_screen ? "8vh" : "10vh";
-                } else {
-                  return "10vh";
-                }
-              ]]]
+          - height: 10vh
           - position: absolute
           - width: 100%
           - z-index: 1
@@ -879,19 +654,11 @@ button_card_templates:
           - font-family: '"Roboto", sans-serif'
           - width: |-
               [[[
-                if (window.viewAssistResponsive && window.viewAssistResponsive.orientation === "portrait") {
-                  return window.viewAssistResponsive.is_small_screen ? "85vw" : "75vw";
-                } else {
-                  return "45vw";
-                }
+                return window.viewAssistResponsive?.orientation === "portrait" ? "80vw" : "50vw";
               ]]]
           - min-width: |-
               [[[
-                if (window.viewAssistResponsive && window.viewAssistResponsive.orientation === "portrait") {
-                  return window.viewAssistResponsive.is_small_screen ? "80vw" : "70vw";
-                } else {
-                  return "50vw";
-                }
+                return window.viewAssistResponsive?.orientation === "portrait" ? "75vw" : "45vw";
               ]]]
     extra_styles: |
       @keyframes pulse {
@@ -953,34 +720,10 @@ button_card_templates:
               - display: >-
                   [[[ if (variables.var_assisting == "true") return "block";
                   else return "none"; ]]]  
-              - padding: |-
-                  [[[
-                    // Enhanced responsive padding for the assist blur card
-                    if (window.viewAssistResponsive && window.viewAssistResponsive.orientation === "portrait") {
-                      return window.viewAssistResponsive.is_small_screen ? "3vh 2vh" : "4vh 3vh";
-                    } else {
-                      return "4vh";
-                    }
-                  ]]]
+              - padding: 4vh
               - background: white
-              - height: |-
-                  [[[
-                    // Enhanced responsive height for the assist blur card
-                    if (window.viewAssistResponsive && window.viewAssistResponsive.orientation === "portrait") {
-                      return window.viewAssistResponsive.is_small_screen ? "14vh" : "16vh";
-                    } else {
-                      return "15vh";
-                    }
-                  ]]]
-              - border-radius: |-
-                  [[[
-                    // Enhanced responsive border radius
-                    if (window.viewAssistResponsive && window.viewAssistResponsive.orientation === "portrait") {
-                      return window.viewAssistResponsive.is_small_screen ? "7vh" : "8vh";
-                    } else {
-                      return "8vh";
-                    }
-                  ]]]
+              - height: 15vh
+              - border-radius: 8vh
             grid:
               - grid-template-areas: '"i n"'
               - grid-template-columns: 1fr 4fr
@@ -989,20 +732,14 @@ button_card_templates:
               - color: rgb(3,169,244)
               - width: |-
                   [[[
-                    // Enhanced responsive icon size
-                    if (window.viewAssistResponsive && window.viewAssistResponsive.orientation === "portrait") {
-                      return window.viewAssistResponsive.is_small_screen ? "10vw" : "12vw";
-                    } else {
-                      return "10vw";
-                    }
+                    return window.viewAssistResponsive?.orientation === "portrait" ? "12vw" : "10vw";
                   ]]]
             name:
               - color: black
               - text-align: start
               - font-size: |-
                   [[[
-                    // IMPROVED: Use unified scaling instead of scattered vh calculations
-                    const baseSize = 5;  // Base vh
+                    const baseSize = 5;
                     const scale = parseFloat(variables.var_responsive_font_scale);
                     return `${Math.round(baseSize * scale * 10) / 10}vh`;
                   ]]]
