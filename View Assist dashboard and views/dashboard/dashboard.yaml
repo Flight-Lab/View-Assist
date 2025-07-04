@@ -153,24 +153,12 @@ button_card_templates:
           try {
             const baseSize = states[variables.var_assistsat_entity].attributes.status_icons_size || "6vw";
             
-            if (window.viewAssistResponsive && window.viewAssistResponsive.orientation === "portrait") {
-              
-              const baseSizeValue = parseFloat(baseSize);
-              let scaleFactor;
-              
-              if (window.viewAssistResponsive.is_small_screen) {
-                scaleFactor = 1.4;  // 40% larger on small portrait screens
-              } else {
-                scaleFactor = 1.3;  // 30% larger on large portrait screens  
-              }
-              
-              const portraitSize = baseSizeValue * scaleFactor;
-              return `${portraitSize}vw`;
+            return parseFloat(baseSize) * 1.3 + 'vw';
             }
             
             return baseSize;
           } catch { 
-            return window.viewAssistResponsive && window.viewAssistResponsive.orientation === "portrait" ? "8.4vw" : "6vw";
+            return window.viewAssistResponsive?.orientation === "portrait" ? "7.8vw" : "6vw";
           }
         ]]]
       var_assistsat_entity_use_24_hour_time: |
@@ -747,7 +735,6 @@ button_card_templates:
               - font-weight: bold
   icon_template:
     template: variable_template
-    aspect_ratio: 1/1
     color_type: card
     show_name: false
     size: 90%
@@ -756,6 +743,7 @@ button_card_templates:
       card:
         - background-color: transparent
         - border-width: 0px
+        - aspect-ratio: 1 / 1
       icon:
         - display: grid
         - color: white
