@@ -1,7 +1,7 @@
 button_card_templates:
   variable_template:
+    dashboardversion: 1.5.0
     variables:
-      dashboardversion: 1.4.0
       default_satellite: |-
         [[[ try {
           return hass.states[variables.assist_group].attributes.entity_id
@@ -142,19 +142,11 @@ button_card_templates:
             return states[variables.var_assistsat_entity].attributes.weather_entity;
           } catch { return  ""} 
         ]]]      
-      var_assistsat_entity_status_icons_size: |
-        [[[ 
-          try 
-          {
-            return states[variables.var_assistsat_entity].attributes.status_icons_size;
-          } catch { return  "6vw"} 
-        ]]]
-      var_responsive_status_icons_size: |
+      var_assistsat_entity_responsive_status_icons_size: |
         [[[
           try {
             const baseSize = states[variables.var_assistsat_entity].attributes.status_icons_size || "6vw";
             
-            // Simple portrait adjustment - no complex scaling
             if (window.viewAssistResponsive && window.viewAssistResponsive.orientation === "portrait") {
               return parseFloat(baseSize) * 1.3 + 'vw';
             }
@@ -200,6 +192,23 @@ button_card_templates:
           }
           catch { return  ""} 
         ]]]
+      var_responsive_font_scale: |-
+        [[[
+          try {
+            const responsive = window.viewAssistResponsive;
+            if (!responsive) return 1;
+            
+            if (responsive.orientation === "portrait") {
+              if (responsive.is_small_screen) return 0.85;      // Smaller fonts on small portrait screens
+              if (responsive.is_tablet) return 1.1;            // Slightly larger on portrait tablets
+              return 1.25;                                     // Larger on portrait desktop/large screens
+            } else {
+              if (responsive.is_small_screen) return 0.9;      // Slightly smaller on small landscape
+              if (responsive.is_tablet) return 1.0;           // Standard on landscape tablets
+              return 1.2;                                      // Slightly larger on large landscape
+            }
+          } catch { return 1; }
+        ]]]
       var_weather_temperature: |-
         [[[ 
           try {
@@ -238,6 +247,7 @@ button_card_templates:
           };
           const weatherIconsNight = {
             ...weatherIconsDay,
+            "clear-night": "mdi:weather-night",
             clear: "mdi:weather-night",
             sunny: "mdi:weather-night",
             partlycloudy: "mdi:weather-night-partly-cloudy",
@@ -248,14 +258,14 @@ button_card_templates:
             if (states['sun.sun'].state === 'above_horizon') {
               var weather_icon = weatherIconsDay[condition]; 
             } else {
-              var weather_icon = weatherIconsDay[condition];
+              var weather_icon = weatherIconsNight[condition];
             }
             
             if (typeof(weather_icon) === 'undefined') { 
-              var weather_icon = "mdi:weather-cloudy-alert" 
+              var weather_icon = "mdi:help" 
             }   
             return `${weather_icon}`;
-          } catch { return  "mdi:weather-cloudy-alert"} 
+          } catch { return  ""} 
         ]]]
       var_current_view: |-
         [[[
@@ -278,24 +288,10 @@ button_card_templates:
             return "";
           } catch { return ""; }
         ]]]
-      var_responsive_font_scale: |-
-        [[[
-          try {
-            const responsive = window.viewAssistResponsive;
-            if (!responsive) return 1;
-            
-            if (responsive.orientation === "portrait") {
-              return responsive.is_small_screen ? 0.85 : 1.1;
-            } else {
-              return responsive.is_small_screen ? 0.9 : 1.0;
-            }
-          } catch { return 1; }
-        ]]]
   responsive_base:
     variables:
       var_orientation: |-
         [[[
-          // Initialize responsive globals if not already present
           if (!window.viewAssistResponsive) {
             window.viewAssistResponsive = {
               orientation: window.innerHeight > window.innerWidth ? "portrait" : "landscape",
@@ -303,20 +299,16 @@ button_card_templates:
               is_tablet: window.innerWidth >= 600 && window.innerWidth < 1024
             };
             
-            // Set up resize listener to update orientation and screen size
-            // Debounced resize listener to prevent excessive updates
             let resizeTimeout;
             window.addEventListener('resize', () => {
               clearTimeout(resizeTimeout);
               resizeTimeout = setTimeout(() => {
                 const oldState = { ...window.viewAssistResponsive };
                 
-                // Update responsive state
                 const newOrientation = window.innerHeight > window.innerWidth ? "portrait" : "landscape";
                 const newSmallScreen = window.innerWidth < 600;
                 const newTablet = window.innerWidth >= 600 && window.innerWidth < 1024;
                 
-                // Only update if something actually changed
                 if (oldState.orientation !== newOrientation || 
                     oldState.is_small_screen !== newSmallScreen ||
                     oldState.is_tablet !== newTablet) {
@@ -325,7 +317,6 @@ button_card_templates:
                   window.viewAssistResponsive.is_small_screen = newSmallScreen;
                   window.viewAssistResponsive.is_tablet = newTablet;
                   
-                  // Dispatch custom event for any components that need to react
                   const event = new CustomEvent('view-assist-responsive-change', {
                     detail: window.viewAssistResponsive
                   });
@@ -437,7 +428,7 @@ button_card_templates:
                 place-content: end
                 grid-template-columns: |-
                   [[[
-                    const baseIconSize = variables.var_responsive_status_icons_size;
+                    const baseIconSize = variables.var_assistsat_entity_responsive_status_icons_size;
                     const iconSize = variables.view_type === 'sections' ? 
                       parseFloat(baseIconSize) * 0.8 + 'vw' : baseIconSize;
                     
@@ -582,11 +573,9 @@ button_card_templates:
           - justify-self: end
           - align-self: end
           - justify-content: right
-          - top: 0vh
-          - right: 0vw
+          - top: 1vh
+          - right: 1vw
           - z-index: 1
-          - padding-right: 1vw
-          - padding-top: 1vh
   body_template_sections:
     template:
       - variable_template
@@ -595,15 +584,12 @@ button_card_templates:
       view_type: sections
     styles:
       card:
-        - min-height: 200px
-        - height: auto
-        - border-radius: 12px
       custom_fields:
         status:
           - position: fixed
-          - top: 20px
-          - right: 20px
-          - z-index: 9999
+          - top: 1vh
+          - right: 1vw
+          - z-index: 1
   assist_template:
     styles:
       card: null
@@ -793,20 +779,17 @@ button_card_templates:
         const typeAndTarget = parts[0];
         const entityId = typeAndTarget.split(':')[1];
         const iconOptions = parts.length > 1 ? parts[1].split(',') : ['help-circle'];
-        
-        // Default icon is first option
+
         let icon = iconOptions[0];
-        
-        // If there are state-dependent options and entity exists
+
         if (iconOptions.length > 1 && hass.states[entityId]) {
           const state = hass.states[entityId].state;
-          
-          // For binary entities like lights, switches
+
           if (state === 'off' && iconOptions[1]) {
             icon = iconOptions[1];
           }
         }
-        
+
         return `mdi:${icon}`;
       ]]]
     tap_action:
@@ -944,4 +927,3 @@ button_card_templates:
           [[[ return
           !states[variables.var_assistsat_entity].attributes.menu_active ]]]
 views:
-  - title: Home
