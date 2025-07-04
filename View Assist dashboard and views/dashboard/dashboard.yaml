@@ -141,14 +141,7 @@ button_card_templates:
             return states[variables.var_assistsat_entity].attributes.weather_entity;
           } catch { return  ""} 
         ]]]      
-      var_assistsat_entity_status_icons_size: |
-        [[[ 
-          try 
-          {
-            return states[variables.var_assistsat_entity].attributes.status_icons_size;
-          } catch { return  "6vw"} 
-        ]]]
-      var_responsive_status_icons_size: |
+      var_assistsat_entity_responsive_status_icons_size: |
         [[[
           try {
             const baseSize = states[variables.var_assistsat_entity].attributes.status_icons_size || "6vw";
@@ -432,7 +425,7 @@ button_card_templates:
                 place-content: end
                 grid-template-columns: |-
                   [[[
-                    const baseIconSize = variables.var_responsive_status_icons_size;
+                    const baseIconSize = variables.var_assistsat_entity_responsive_status_icons_size;
                     const iconSize = variables.view_type === 'sections' ? 
                       parseFloat(baseIconSize) * 0.8 + 'vw' : baseIconSize;
                     
